@@ -1,0 +1,45 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+/* estilização header */
+header {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #23204d;
+}
+.inicioheader {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin: 25px
+}
+
+.hamburguer-menu {
+    width: 30px;
+    height: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 5px;
+}
+.hamburguer-menu span {
+    width: 100%;
+    height: 4px;
+    background-color: #ffd91c;
+    border-radius: 2px;
+}
+
+.logo {
+    height: 40px;
+}
+
