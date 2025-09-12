@@ -7,39 +7,112 @@
 body {
     font-family: 'Poppins', sans-serif;
 }
+
 /* estilização header */
 header {
     width: 100%;
-    height: 60px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #23204d;
+    background-color: #1A2A3C;
 }
-.inicioheader {
+
+.inicio-header {
     display: flex;
     align-items: center;
     gap: 30px;
-    margin: 25px
+    margin: 35px
 }
-
 .hamburguer-menu {
-    width: 30px;
-    height: 25px;
+    width: 40px;
+    height: 30px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
-    gap: 5px;
 }
+
 .hamburguer-menu span {
     width: 100%;
     height: 4px;
-    background-color: #ffd91c;
+    background-color: #F8C10D;
     border-radius: 2px;
+    transition: all 0.5s ease;
 }
 
+/* Animação ao clicar no hamburguer */
+.hamburguer-menu.open span:nth-child(1) {
+    transform: rotate(45deg) translate(9px, 9px);
+}
+
+.hamburguer-menu.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.hamburguer-menu.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(9px, -9px);
+}
 .logo {
-    height: 40px;
+    height: 60px;
 }
 
+.barra-pesquisa {
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.btn-header {
+    background: none;
+    border: none;
+    color: #F8C10D;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn-header:hover {
+    scale: 1.1;
+}
+
+.btn-header ion-icon {
+    font-size: 45px;
+}
+
+.final-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px
+}
+
+.divpesquisar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    width: 235px;
+}
+
+.btn-pesquisar {
+    background: none;
+    border: none;
+    color: #F8C10D;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: all 0.3s ease;
+}
+.btn-pesquisar:hover {
+    scale: 1.1;
+}
+
+.btn-pesquisar ion-icon {
+    font-size: 35px;
+}

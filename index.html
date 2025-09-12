@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +8,32 @@
 
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header>
-        <div class="inicioheader">
-        <div class="hamburguer-menu">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="inicio-header">
+            <div class="hamburguer-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <img src="imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
-        <img src="imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
-    </div>
-    
+        <div class="final-header">
+            <div class="divpesquisar">
+                <button id="pesquisar" class="btn-pesquisar"><ion-icon name="search-sharp"></ion-icon></button>
+                <input type="text" placeholder=" Pesquisar..." class="barra-pesquisa">
+            </div>
+            <button id="minha-conta" class="btn-header"><ion-icon name="person-circle-outline"></ion-icon></button>
+            <button id="carrinho" class="btn-header"><ion-icon name="cart-outline"></ion-icon></button>
+
+        </div>
+
     </header>
 
     <script src="script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
+
 </html>
