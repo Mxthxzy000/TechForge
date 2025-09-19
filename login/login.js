@@ -41,11 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   // Handle forgot password button
-  forgotPasswordButton.addEventListener("click", () => {
-    alert("Funcionalidade de recuperação de senha em desenvolvimento.")
-    // Here you would typically redirect to forgot password page
-    // Example: window.location.href = '/forgot-password';
-  })
+ forgotPasswordButton.addEventListener("click", () => {
+  window.location.href = "cadastro.html"; 
+});
 
   // Add input focus effects
   const inputs = document.querySelectorAll(".input-field")
