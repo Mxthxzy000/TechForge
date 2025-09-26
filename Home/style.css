@@ -1,9 +1,9 @@
 /* links externos */
 
 .fonte-inter {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
 /* reset geral */
@@ -31,6 +31,7 @@ header {
     align-items: center;
     justify-content: space-between;
     background-color: #1a2a3c;
+    z-index: 1000;
 }
 
 .inicio-header {
@@ -42,7 +43,7 @@ header {
 
 .hamburguer-menu {
     width: 35px;
-    height: 24px;
+    height: 25px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -143,24 +144,97 @@ header {
 }
 
 /* dropdown usuário*/
-.usuario-menu {
-    position: relative; /* referência para o dropdown */
-    display: inline-block;
-}
-
 .dropdown-user {
-    position: absolute; /* posiciona em relação ao .usuario-menu */
-    top: 50px;          /* distância do botão */
-    right: 0;           /* alinha à direita do botão */
-    width: 300px;
-    background-color: #0077ff;
+    width: 220px;
     padding: 10px;
-    border-radius: 5px;
-    display: none;      /* começa escondido */
+    border-radius: 6px;
+    background-color: #2B3640;
+    display: flex;
     flex-direction: column;
     gap: 8px;
-    z-index: 200;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    transform: translateY(-250px);
+    transition: transform 0.4s ease;
+}
+.dropdown-user.open{
+transform: translateY(10px);
+transition: transform 0.4s ease;
+}
+
+.menu-usuario {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    background: none;
     color: #fff;
+    font-size: 14px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border: none;
+    outline: none;
+    text-decoration: none;
+}
+
+.menu-usuario:hover {
+    background-color: #213B5B;
+}
+
+.icon-user {
+    font-size: 26px;
+    color: #ffffff;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider-dark {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #777;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+.slider-dark:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.switch input:checked+.slider-dark {
+    background-color: #f8c10d;
+}
+
+.switch input:checked+.slider-dark:before {
+    transform: translateX(20px);
 }
 
 
@@ -180,7 +254,7 @@ nav {
     z-index: 1000;
 }
 
-nav.open{
+nav.open {
     transition: all 0.4s ease;
     transform: translate(0);
 }
@@ -219,14 +293,12 @@ nav ul li a:hover {
 }
 
 /* estilização slider/slides/slide */
-
 .slider {
     margin: 0 auto;
     width: 100%;
-    max-height: 300px;
+    max-height: 250px;
     aspect-ratio: 2 / 1;
     overflow: hidden;
-    border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     position: relative;
     z-index: 1;
@@ -345,7 +417,6 @@ nav ul li a:hover {
     background: #f8c10d;
 }
 
-
 /* estilização footer */
 
 footer {
@@ -354,7 +425,8 @@ footer {
     display: flex;
     background-color: #1a2a3c;
     bottom: 0;
-    flex-wrap: wrap; /* ajuda no mobile */
+    flex-wrap: wrap;
+    /* ajuda no mobile */
     justify-content: center;
     align-items: center;
     margin-top: auto;
@@ -431,6 +503,7 @@ footer {
     color: #f8c10d;
     transform: scale(1.1);
 }
+
 #finalfooter {
     font-size: 16px;
 }
