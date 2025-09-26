@@ -100,3 +100,8 @@ if (forgotPasswordButton) {
 
 // Efeitos de foco nos inputs
 addInputFocusEffects();
+
+const cadastreseBtn = document.getElementById("cadastre-se");
+cadastreseBtn.addEventListener("click", () => {
+  window.location.href = "../Cadastro/cadastro.html";
+});
