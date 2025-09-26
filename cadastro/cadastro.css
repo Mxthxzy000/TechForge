@@ -164,10 +164,10 @@ nav ul li a:hover {
 .container {
     display: flex;
     height: 100vh;
-    width: 977px;
+    width: 1350px;
     height: 447px;
     margin-top: 80px;
-    margin-left: 260px;
+    margin-left: 80px;
     margin-bottom: 80px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 0.5rem;
@@ -199,7 +199,7 @@ nav ul li a:hover {
 
 .login-form-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 1000px;
 }
 
 .login-title {
@@ -218,8 +218,17 @@ nav ul li a:hover {
 
 .input-group {
     display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.input-group .input-field {
+    flex: 1;
+}
+
+.input-group-max {
+    display: flex;
     flex-direction: column;
-    gap: 0.5rem;
 }
 
 .input-label {
@@ -236,6 +245,8 @@ nav ul li a:hover {
     font-size: 1rem;
     background-color: white;
     transition: all 0.2s ease;
+    display: flex;
+    gap: 1rem;
 }
 
 .input-field:focus {
@@ -280,6 +291,21 @@ nav ul li a:hover {
     background-color: #6b7280;
 }
 
+.terms-text {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.terms-link {
+    color: #ffa500;
+    text-decoration: none;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
 /* estilização footer */
 
 footer {
@@ -299,7 +325,7 @@ footer {
     height: 2px;
     width: 100%;
     background-color: #fffbf3;
-    margin: 8px ;
+    margin: 8px;
 }
 
 nav ul li a ion-icon {
