@@ -1,0 +1,363 @@
+/* links externos */
+
+.fonte-inter {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+/* reset geral */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    color: #fffbf3;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* estilização header */
+
+header {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #1a2a3c;
+}
+
+.inicio-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin: 35px;
+}
+
+.hamburguer-menu {
+    width: 35px;
+    height: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: scale 0.3s ease;
+}
+
+.hamburguer-menu:hover {
+    scale: 1.2;
+}
+
+.hamburguer-menu span {
+    width: 100%;
+    height: 4px;
+    background-color: #f8c10d;
+    border-radius: 2px;
+    transition: all 0.4s ease;
+}
+
+.logo {
+    height: 60px;
+}
+
+
+.btn-header {
+    background: none;
+    border: none;
+    color: #f8c10d;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-header:hover {
+    scale: 1.2;
+}
+
+.btn-header ion-icon {
+    font-size: 45px;
+}
+
+.final-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
+}
+
+
+/* Animação do X */
+
+.hamburguer-menu.open span:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+.hamburguer-menu.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.hamburguer-menu.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* estilização navbar*/
+
+nav {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #2B3640;
+    transition: transform 0.4s ease;
+    transform: translate(-100%);
+    position: absolute;
+    margin-top: 80px;
+}
+
+nav.open {
+    transition: all 0.4s ease;
+    transform: translate(0);
+}
+
+nav ul {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+}
+
+nav ul li {
+    list-style: none;
+    width: 100%;
+}
+
+nav ul li a {
+    display: block;
+    width: 100%;
+    padding: 15px 25px;
+    text-decoration: none;
+    color: #fffbf3;
+    font-size: 15px;
+    letter-spacing: 2px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+nav ul li:hover {
+    background-color: #213B5B;
+}
+
+nav ul li a:hover {
+    transform: scale(1.1);
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Left side - Banner */
+.banner-section {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Right side - Login Form */
+.login-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+  padding: 2rem;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #111827;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.login-button {
+  width: 100%;
+  background-color: #10b981;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.login-button:hover {
+  background-color: #059669;
+}
+
+.forgot-password-button {
+  width: 100%;
+  background-color: #9ca3af;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.forgot-password-button:hover {
+  background-color: #6b7280;
+}
+
+/* estilização footer */
+
+footer {
+    width: 100%;
+    padding: 25px 5%;
+    display: flex;
+    background-color: #1a2a3c;
+    bottom: 0;
+    flex-wrap: wrap;
+    /* ajuda no mobile */
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+}
+
+.linha {
+    height: 1px;
+    width: 100%;
+    background-color: #fffbf3;
+    margin: 8px 0;
+}
+
+.container-footer {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 48px;
+    margin-bottom: 60px;
+}
+
+.container-footer h3 {
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.container-footer h3:hover {
+    color: #f8c10d;
+    transform: scale(1.05);
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.container-footer li {
+    list-style: none;
+}
+
+.container-footer li a {
+    text-decoration: none;
+    color: #cececd;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.container-footer li a:hover {
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+}
+
+.links-icon {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.links-icon ion-icon {
+    font-size: 28px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.links-icon ion-icon:hover {
+    color: #f8c10d;
+    transform: scale(1.1);
+}
+
+#finalfooter {
+    font-size: 16px;
+}
