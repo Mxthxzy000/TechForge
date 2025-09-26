@@ -1,59 +1,102 @@
+// Seletores principais
 const hamburguer = document.querySelector(".hamburguer-menu");
-const nav = document.querySelector("nav")
+const nav = document.querySelector("nav");
+const loginForm = document.getElementById("loginForm");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const forgotPasswordButton = document.querySelector(".forgot-password-button");
+const inputs = document.querySelectorAll(".input-field");
 
-hamburguer.addEventListener("click", () => {
-    hamburguer.classList.toggle("open");
-    nav.classList.toggle("open")
-});
+// -----------------------------
+// Funções
+// -----------------------------
 
-document.addEventListener("DOMContentLoaded", () => {
-  const loginForm = document.getElementById("loginForm")
-  const emailInput = document.getElementById("email")
-  const passwordInput = document.getElementById("password")
-  const forgotPasswordButton = document.querySelector(".forgot-password-button")
+/**
+ * Alterna o menu hamburguer
+ */
+const toggleHamburguerMenu = () => {
+  hamburguer.classList.toggle("open");
+  nav.classList.toggle("open");
+};
 
-  // Handle form submission
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault()
+/**
+ * Valida email
+ * @param {string} email 
+ * @returns {boolean}
+ */
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
 
-    const email = emailInput.value.trim()
-    const password = passwordInput.value.trim()
+/**
+ * Trata o envio do formulário de login
+ * @param {Event} e 
+ */
+const handleLoginSubmit = (e) => {
+  e.preventDefault();
 
-    // Basic validation
-    if (!email || !password) {
-      alert("Por favor, preencha todos os campos.")
-      return
-    }
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      alert("Por favor, insira um e-mail válido.")
-      return
-    }
+  // Validação básica
+  if (!email || !password) {
+    alert("Por favor, preencha todos os campos.");
+    return;
+  }
 
-    // Simulate login process
-    console.log("Tentativa de login:", { email, password })
-    alert("Login realizado com sucesso!")
+  // Validação de email
+  if (!isValidEmail(email)) {
+    alert("Por favor, insira um e-mail válido.");
+    return;
+  }
 
-    // Here you would typically send the data to your server
-    // Example: fetch('/api/login', { method: 'POST', body: JSON.stringify({ email, password }) })
-  })
+  // Simulação de login
+  console.log("Tentativa de login:", { email, password });
+  alert("Login realizado com sucesso!");
 
-  // Handle forgot password button
- forgotPasswordButton.addEventListener("click", () => {
-  window.location.href = "cadastro.html"; 
-});
+  // Aqui você enviaria os dados para o servidor, por exemplo:
+  // fetch('/api/login', { method: 'POST', body: JSON.stringify({ email, password }) })
+};
 
-  // Add input focus effects
-  const inputs = document.querySelectorAll(".input-field")
+/**
+ * Redireciona para a página de cadastro ao clicar em "Esqueceu a senha"
+ */
+const handleForgotPassword = () => {
+  window.location.href = "cadastro.html";
+};
+
+/**
+ * Adiciona efeitos de foco nos inputs
+ */
+const addInputFocusEffects = () => {
   inputs.forEach((input) => {
     input.addEventListener("focus", function () {
-      this.parentElement.classList.add("focused")
-    })
+      this.parentElement.classList.add("focused");
+    });
 
     input.addEventListener("blur", function () {
-      this.parentElement.classList.remove("focused")
-    })
-  })
-})
+      this.parentElement.classList.remove("focused");
+    });
+  });
+};
+
+// -----------------------------
+// Event Listeners
+// -----------------------------
+
+// Menu hamburguer
+hamburguer.addEventListener("click", toggleHamburguerMenu);
+
+// Formulário de login
+if (loginForm) {
+  loginForm.addEventListener("submit", handleLoginSubmit);
+}
+
+// Botão "Esqueceu a senha"
+if (forgotPasswordButton) {
+  forgotPasswordButton.addEventListener("click", handleForgotPassword);
+}
+
+// Efeitos de foco nos inputs
+addInputFocusEffects();

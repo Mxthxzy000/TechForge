@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="cadastro.css">
     <title>Login</title>
 </head>
 
@@ -26,44 +26,56 @@
 
     <nav>
         <ul>
-            <li><a href="#">HARDWARES</a></li>
-            <span class="linha"></span>
-            <li><a href="#">OFERTAS</a></li>
-            <span class="linha"></span>
-            <li><a href="#">MONTE SEU PC</a></li>
-            <span class="linha"></span>
-            <li><a href="#">GAMER</a></li>
-            <span class="linha"></span>
-            <li><a href="#">SOBRE NÓS</a></li>
+            <li><a href="/Home/index.html"><ion-icon name="return-down-back-outline"></ion-icon>INÍCIO </a></li>
         </ul>
     </nav>
+
+    <h1 class="login-title">Cadastro</h1>
 
     <div class="container">
         <!-- Left side - Banner -->
         <div class="banner-section">
-            <img src="./image-pc.webp" alt="Banner Image" class="banner-image">
+            <img src="./image.webp" alt="Banner Image" class="banner-image">
         </div>
 
         <!-- Right side - Login Form -->
         <div class="login-section">
             <div class="login-form-container">
-                <h1 class="login-title">Login</h1>
-
                 <form id="loginForm" class="login-form">
                     <div class="input-group">
-                        <label for="email" class="input-label">E-mail</label>
-                        <input type="email" id="email" name="email" class="input-field" required>
+                        <input type="text" id="nome" name="nome" class="input-field" required placeholder="Nome">
+                        <input type="text" id="Sobrenome" name="Sobrenome" class="input-field" required
+                            placeholder="Sobrenome">
                     </div>
 
                     <div class="input-group">
-                        <label for="password" class="input-label">Senha</label>
-                        <input type="password" id="password" name="password" class="input-field" required>
+                        <input type="text" id="nascimento" name="nascimento" class="input-field"
+                            placeholder="Data de Nascimento" maxlength="10">
+                        <input type="text" id="celular" name="celular" class="input-field" maxlength="15"
+                            placeholder="Celular">
                     </div>
 
-                    <button type="submit" class="login-button">Entrar</button>
+                    <div class="input-group-max">
+                        <input type="email" id="email" name="email" class="input-field" required placeholder="E-mail">
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="creatpassword" name="creatpassword" class="input-field" required
+                            placeholder="Crie sua Senha">
+                        <input type="password" id="password" name="password" class="input-field" required
+                            placeholder="Confirme sua Senha">
+                    </div>
+
+                    <div class="terms-text">
+                        <p>Ao criar a conta, declaro que li, entendi e aceito os <a href="#" class="terms-link">Termos
+                                de serviço</a> e as <a href="#" class="terms-link">Políticas de privacidade</a> da
+                            TechForge</p>
+                    </div>
+
+                    <button type="submit" class="login-button">Cadastre-se</button>
 
                     <button type="button" class="forgot-password-button">
-                        Cadastre-se
+                        Login
                     </button>
                 </form>
             </div>
@@ -117,7 +129,7 @@
 
     </footer>
 
-    <script src="login.js"></script>
+    <script src="cadastro.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
