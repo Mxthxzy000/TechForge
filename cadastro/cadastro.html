@@ -43,26 +43,26 @@
             <div class="login-form-container">
                 <form id="loginForm" class="login-form">
                     <div class="input-group">
-                        <input type="text" id="nome" name="nome" class="input-field" required placeholder="Nome">
-                        <input type="text" id="Sobrenome" name="Sobrenome" class="input-field" required
+                        <input type="text" id="nome" name="nomeUsuario" class="input-field" required placeholder="Nome">
+                        <input type="text" id="Sobrenome" name="sobrenomeUsuario" class="input-field" required
                             placeholder="Sobrenome">
                     </div>
 
                     <div class="input-group">
-                        <input type="text" id="nascimento" name="nascimento" class="input-field"
+                        <input type="text" id="nascimento" name="nascimentoUsuario" class="input-field"
                             placeholder="Data de Nascimento" maxlength="10">
-                        <input type="text" id="celular" name="celular" class="input-field" maxlength="15"
+                        <input type="text" id="celular" name="celularUsuario" class="input-field" maxlength="15"
                             placeholder="Celular">
                     </div>
 
                     <div class="input-group-max">
-                        <input type="email" id="email" name="email" class="input-field" required placeholder="E-mail">
+                        <input type="email" id="email" name="emailUsuario" class="input-field" required placeholder="E-mail">
                     </div>
 
                     <div class="input-group">
                         <input type="password" id="creatpassword" name="creatpassword" class="input-field" required
                             placeholder="Crie sua Senha">
-                        <input type="password" id="password" name="password" class="input-field" required
+                        <input type="password" id="password" name="senhaUsuario" class="input-field" required
                             placeholder="Confirme sua Senha">
                     </div>
 
@@ -72,15 +72,16 @@
                             TechForge</p>
                     </div>
 
-                    <button type="submit" class="login-button">Cadastre-se</button>
-
-                    <button type="button" class="forgot-password-button" href="../Login/login.html">
-                        Login
-                    </button>
+                    <div class="login-buttons">
+                        <button type="submit" class="login-button">Cadastre-se</button>
+                        <button type="button" class="forgot-password-button" href="../Login/login.html">Login</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
+
+
 
     <footer>
         <div class="container-footer">
@@ -130,6 +131,7 @@
     </footer>
 
     <script src="cadastro.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
