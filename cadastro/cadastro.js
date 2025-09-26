@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botão esqueci minha senha
     forgotPasswordButton.addEventListener("click", () => {
-        window.location.href = "index.html";
+        window.location.href = "../Login/login.html";
     });
 
     // Estilização ao focar nos inputs
