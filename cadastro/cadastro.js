@@ -59,7 +59,11 @@ function validarCelular(celular) {
 // Validação de senha (iguais)
 function validarSenhas(senha1, senha2) {
     if (senha1 !== senha2) {
-        alert("As senhas não conferem!");
+        Swal.fire({
+            title: "Senhas não conferem!",
+            text: "As senhas digitadas são diferentes.",
+            icon: "warning"
+        });
         return false;
     }
     return true;
@@ -80,7 +84,11 @@ function formatNascimento(e) {
 function validarNascimento(valor) {
     const regexData = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/[0-9]{4}$/;
     if (!regexData.test(valor)) {
-        alert("Data inválida! Use o formato dd/mm/aaaa.");
+        Swal.fire({
+            title: "Data inválida!",
+            text: "Use o formato dd/mm/aaaa.",
+            icon: "error"
+        });
         return false;
     }
 
@@ -95,7 +103,11 @@ function validarNascimento(valor) {
     const idadeReal = mes < 0 || (mes === 0 && dia < 0) ? idade - 1 : idade;
 
     if (idadeReal < 0 || idadeReal > 100) {
-        alert("A idade deve ser entre 0 e 100 anos.");
+        Swal.fire({
+            title: "Idade inválida!",
+            text: "A idade deve ser entre 0 e 100 anos.",
+            icon: "warning"
+        });
         return false;
     }
     return true;
@@ -121,17 +133,29 @@ function handleFormSubmit(e) {
 
     // Validações básicas
     if (!email || !senha || !celular || !nascimento) {
-        alert("Por favor, preencha todos os campos.");
+        Swal.fire({
+            title: "Campos obrigatórios!",
+            text: "Por favor, preencha todos os campos.",
+            icon: "warning"
+        });
         return;
     }
 
     if (!validarEmail(email)) {
-        alert("Por favor, insira um e-mail válido.");
+        Swal.fire({
+            title: "E-mail inválido!",
+            text: "Por favor, insira um e-mail válido.",
+            icon: "error"
+        });
         return;
     }
 
     if (!validarCelular(celular)) {
-        alert("Por favor, insira um número de celular válido.");
+        Swal.fire({
+            title: "Celular inválido!",
+            text: "Por favor, insira um número de celular válido.",
+            icon: "error"
+        });
         return;
     }
 
@@ -139,9 +163,15 @@ function handleFormSubmit(e) {
 
     if (!validarNascimento(nascimento)) return;
 
-    // Simula login/cadastro
+    // Simula login/cadastro bem-sucedido
     console.log("Tentativa de login/cadastro:", { email, senha, celular, nascimento });
-    alert("Cadastro/Login realizado com sucesso!");
+    
+    // SweetAlert2 para sucesso
+    Swal.fire({
+        title: "Cadastro realizado com sucesso!",
+        text: "Bem-vindo à TechForge!",
+        icon: "success"
+    });
 }
 
 // ================================
