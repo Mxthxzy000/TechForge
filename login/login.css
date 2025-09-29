@@ -269,6 +269,13 @@ nav ul li a:hover {
     background-color: #84c60a;
 }
 
+.login-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    width: 100%;
+}
+
 .login-button {
     flex: 1;
     background-color: #9ca3af;
