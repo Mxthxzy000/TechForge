@@ -1,9 +1,5 @@
 <?php
 
-$hostname = "localhost";
-$username = "root";
-$password = "";
-$database = "Techforge_db";
 define ('HOST','localhost');
 define ('USER', 'root');
 define ('PASS', '');

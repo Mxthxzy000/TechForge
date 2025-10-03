@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+=======
 <?php 
     include("../config.php");
 ?>
