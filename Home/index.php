@@ -39,7 +39,7 @@
     </header>
 
     <div class="dropdown-user">
-        <a href="../Login/login.html" class="menu-usuario">
+        <a href="../Login/login.php" class="menu-usuario">
             Minha Conta
             <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
         </a>

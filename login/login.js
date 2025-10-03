@@ -63,7 +63,7 @@ const handleLoginSubmit = (e) => {
  * Redireciona para a página de cadastro ao clicar em "Esqueceu a senha"
  */
 const handleForgotPassword = () => {
-  window.location.href = "cadastro.html";
+  window.location.href = "cadastro.php";
 };
 
 /**
@@ -103,5 +103,5 @@ addInputFocusEffects();
 
 const cadastreseBtn = document.getElementById("cadastre-se");
 cadastreseBtn.addEventListener("click", () => {
-  window.location.href = "../Cadastro/cadastro.html";
+  window.location.href = "../Cadastro/cadastro.php";
 });
