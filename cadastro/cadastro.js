@@ -163,8 +163,7 @@ function handleFormSubmit(e) {
 
     if (!validarNascimento(nascimento)) return;
 
-    // Simula login/cadastro bem-sucedido
-    console.log("Tentativa de login/cadastro:", { email, senha, celular, nascimento });
+    
     
     // SweetAlert2 para sucesso
     Swal.fire({
@@ -191,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Submissão do formulário
     loginForm.addEventListener("submit", handleFormSubmit);
 
-    // Botão esqueci minha senha
+    // Botão FAZER LOGIN
     forgotPasswordButton.addEventListener("click", () => {
         window.location.href = "../Login/login.html";
     });
