@@ -1,3 +1,6 @@
+<?php 
+    include("../config.php");
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -41,7 +44,8 @@
         <!-- Right side - Login Form -->
         <div class="login-section">
             <div class="login-form-container">
-                <form id="loginForm" class="login-form">
+                <form id="loginForm" class="login-form" action="Salvar-usuario.php" method="POST">
+                    <input type="hidden" name="acao" value="cadastrar">
                     <div class="input-group">
                         <input type="text" id="nome" name="nomeUsuario" class="input-field" required placeholder="Nome">
                         <input type="text" id="Sobrenome" name="sobrenomeUsuario" class="input-field" required

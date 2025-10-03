@@ -417,6 +417,173 @@ nav ul li a:hover {
     background: #f8c10d;
 }
 
+/* primeira leva de cards */
+.card1 {
+    background-color: #1a2a3c;
+    width: 275px;
+    height: 125px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    padding: 10px;
+}
+
+.mincard {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+/*imagens card1*/
+#preços-baixos {
+    width: 100px;
+    height: 80px;
+
+}
+
+#serviços-montagem{
+     width: 100px;
+    height: 80px;
+
+}
+
+#excelente-qualidade{
+     width: 100px;
+    height: 80px;
+
+}
+
+#cupons-desconto{
+     width: 100px;
+    height: 80px;
+
+}
+
+#parcelas-12x{
+     width: 100px;
+    height: 80px;
+
+}
+
+/* estilização cards dos produtos */
+.cards-produtos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    padding: 15px;
+    width: 100%;
+}
+
+.card-produto { 
+    width: 275px;
+    height: 450px;
+    border-radius: 20px;
+    background-color: #fff;
+    border: 5px solid #1a2a3c;
+    position: relative;
+    padding: 30px;
+    transition: all 0.3s ease;
+    overflow: visible; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 18px;
+}
+
+.card-produto:hover {
+    box-shadow: 0 0 30px #f8c10d; 
+    scale: 1.05;
+}
+
+.card-produto img {
+    max-width: 80%;
+    height: auto;
+    margin: 10px auto;
+    display: block;
+}
+
+.badge {
+    background-color: #f8c10d;
+    color: #1a2a3c;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.card-info {
+    text-align: center;
+    margin-top: auto;
+}
+
+.card-info h3 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 10px 0 5px;
+    color: #000;
+}
+
+.card-info .descricao {
+    font-size: 0.9rem;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.card-info .preco-antigo {
+    text-decoration: line-through;
+    color: #666;
+    font-size: 0.9rem;
+    margin: 5px 0;
+}
+
+.card-info .preco-atual {
+    color: #1a8f1a;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.card-info .preco-atual span {
+    font-size: 0.9rem;
+    font-weight: normal;
+    color: #333;
+}
+
+.card-info .parcelamento {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Botão escondido até o hover */
+.btn-comprar-produto {
+    transform: translate(-50%, 125%);
+    width: 60%;
+    border-radius: 5px;
+    border: none;
+    background-color: #f8c10d;
+    color: #213B5B;
+    padding: .5rem 1rem;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    opacity: 0;
+    transition: 0.3s ease-out;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.card-produto:hover .btn-comprar-produto {
+    transform: translate(-50%, 50%);
+    opacity: 1;
+}
+
 /* estilização footer */
 
 footer {
