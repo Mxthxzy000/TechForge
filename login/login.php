@@ -26,7 +26,7 @@
 
     <nav>
         <ul>
-            <li><a href="../Home/index.html"><ion-icon name="return-down-back-outline"></ion-icon>INÍCIO </a></li>
+            <li><a href="../Home/index.php"><ion-icon name="return-down-back-outline"></ion-icon>INÍCIO </a></li>
         </ul>
     </nav>
 

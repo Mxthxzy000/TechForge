@@ -29,7 +29,7 @@
 
     <nav>
         <ul>
-            <li><a href="../Home/index.html"><ion-icon name="return-down-back-outline"></ion-icon>INÍCIO </a></li>
+            <li><a href="../Home/index.php"><ion-icon name="return-down-back-outline"></ion-icon>INÍCIO </a></li>
         </ul>
     </nav>
 
@@ -79,7 +79,7 @@
                     <span class="span"></span>
                     <div class="login-buttons">
                         <button type="submit" class="login-button">Cadastre-se</button>
-                        <button type="button" class="forgot-password-button" href="../Login/login.html">Login</button>
+                        <button type="button" class="forgot-password-button" href="../Login/login.php">Login</button>
                     </div>
                 </form>
             </div>

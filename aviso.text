@@ -1,0 +1,14 @@
+Bro eu fiquei muito tempo tentando resolver um negócio simples que eu vou explicar aqui pra te ajudar caso vc tbm tenha. Porque assim
+de verdade é um b.o muito simples de resolver, mas ele é confuso dms kkkkkkk. O arquivo da Techforge normalmente fica na pasta de dentro
+do github, só q pra usar o banco de dados você precisa passar o arquivo pra pasta do htdocs, a questão é que vc não pode só mover o 
+arquivo nem copiar ele pro htdocs, você tem que recortar e colar no htdocs, dps disso fecha o VsCode e vai no Github Desktop e altera o
+lugar do arquivo, feito isso vc volta no htdocs e abre dnv com o VScode, pq se vc voltar a editar aquele mesmo arquivo no code ele cria 
+outro arquivo idêntico na pasta de arquivos do github, isso te faz achar estar editando o htdocs sendo q vc tá mexendo em um outro 
+arquivo completamente aleatório, e vai por mim isso é um baita b.o, eu perdi muito tempo tentando entender pq q qua ndo eu tentava abrir 
+um arquivo ele ficava aparecendo a msg que o git tava encontrando conflito entre 2 versões, e ele sempre apontava pras váriáveis e pra 
+linha 8 do arquivo config.php, nisso eu fiquei com tanto ódio q eu apaguei o config.php e ele ainda dava aquele erro, foi alí q eu 
+resolvi conferir se o arquivo config.php ainda tav a na pasta do htdocs, e ele tava, daí eu troquei a extensão dos arquivos e salvei, e 
+ele n trocou na pasta do htdocs, foi alí que caiu minha ficha de que eu n tava editando a pasta do htdocs no code, e cara eu juro, eu 
+fiquei muito tempo nisso, que raiva.
+
+por: matheus quelindo
