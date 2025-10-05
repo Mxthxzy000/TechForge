@@ -169,7 +169,8 @@ function handleFormSubmit(e) {
     Swal.fire({
         title: "Cadastro realizado com sucesso!",
         text: "Bem-vindo à TechForge!",
-        icon: "success"
+        icon: "success",
+        button:'index.php'
     });
 }
 
