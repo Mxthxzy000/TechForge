@@ -35,7 +35,7 @@
     <div class="container">
         <!-- Left side - Banner -->
         <div class="banner-section">
-            <img src="./image-pc.webp" alt="Banner Image" class="banner-image">
+            <img src="../imagens/image-pc.webp" alt="Banner Image" class="banner-image">
         </div>
 
         <!-- Right side - Login Form -->
