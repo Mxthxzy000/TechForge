@@ -114,6 +114,198 @@ include("../config.php");
             </div>
         </div>
         </div>
+
+        <div class="mincard">
+
+            <div class="card1">
+                <h2>PREÇOS BAIXOS</h2>
+                <img src="../imagens/preçosBaixos.png" alt="preços baixos" id="preços-baixos">
+            </div>
+
+            <div class="card1">
+                <h2>SERVIÇOS DE MONTAGEM</h2>
+                <img src="../imagens/serviçoMontagem.png" alt="serviços de montagem" id="serviços-montagem">
+            </div>
+
+            <div class="card1">
+                <h2>EXCELENTE QUALIDADE</h2>
+                <img src="../imagens/excelenteQualidade.png" alt="excelente qualidade" id="excelente-qualidade">
+            </div>
+
+            <div class="card1">
+                <h2>CUPONS DE DESCONTO</h2>
+                <img src="../imagens/cuponsDesconto.png" alt=" cupons de desconto" id="cupons-desconto">
+            </div>
+
+            <div class="card1">
+                <h2>PARCELAS DE ATÉ 12X</h2>
+                <img src="../imagens/parcelas12x.png" alt="parcelas de até 12x" id="parcelas-12x">
+            </div>
+        </div>
+
+        <div class="cards-produtos">
+            <div class="card-produto">
+                <span class="badge">Mais Vendidos</span>
+                <img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/1/0/100-100000926wof.jpg"
+                    alt="Produto">
+
+                <div class="card-info">
+                    <h3>Processador AMD Ryzen 7 5700X</h3>
+                    <p class="descricao">3.4GHz (4.6GHz Turbo), 8-Cores 16-Threads, AM4</p>
+
+                    <p class="preco-antigo">De: R$ 2.599,99</p>
+                    <p class="preco-atual">R$ 1.299,90 <span>à vista</span></p>
+                    <p class="parcelamento">12x de R$ 127,44 sem juros</p>
+                </div>
+
+                <button class="btn-comprar-produto">Comprar</button>
+            </div>
+            <div class="card-produto">
+                <span class="badge">Mais Vendidos</span>
+                <img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/1/0/100-100000926wof.jpg"
+                    alt="Produto">
+
+                <div class="card-info">
+                    <h3>Processador AMD Ryzen 7 5700X</h3>
+                    <p class="descricao">3.4GHz (4.6GHz Turbo), 8-Cores 16-Threads, AM4</p>
+
+                    <p class="preco-antigo">De: R$ 2.599,99</p>
+                    <p class="preco-atual">R$ 1.299,90 <span>à vista</span></p>
+                    <p class="parcelamento">12x de R$ 127,44 sem juros</p>
+                </div>
+
+                <button class="btn-comprar-produto">Comprar</button>
+            </div>
+            <div class="card-produto">
+                <span class="badge">Mais Vendidos</span>
+                <img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/1/0/100-100000926wof.jpg"
+                    alt="Produto">
+
+                <div class="card-info">
+                    <h3>Processador AMD Ryzen 7 5700X</h3>
+                    <p class="descricao">3.4GHz (4.6GHz Turbo), 8-Cores 16-Threads, AM4</p>
+
+                    <p class="preco-antigo">De: R$ 2.599,99</p>
+                    <p class="preco-atual">R$ 1.299,90 <span>à vista</span></p>
+                    <p class="parcelamento">12x de R$ 127,44 sem juros</p>
+                </div>
+
+                <button class="btn-comprar-produto">Comprar</button>
+            </div>
+            <div class="card-produto">
+                <span class="badge">Mais Vendidos</span>
+                <img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/1/0/100-100000926wof.jpg"
+                    alt="Produto">
+
+                <div class="card-info">
+                    <h3>Processador AMD Ryzen 7 5700X</h3>
+                    <p class="descricao">3.4GHz (4.6GHz Turbo), 8-Cores 16-Threads, AM4</p>
+
+                    <p class="preco-antigo">De: R$ 2.599,99</p>
+                    <p class="preco-atual">R$ 1.299,90 <span>à vista</span></p>
+                    <p class="parcelamento">12x de R$ 127,44 sem juros</p>
+                </div>
+
+                <button class="btn-comprar-produto">Comprar</button>
+            </div>
+            <div class="card-produto">
+                <span class="badge">Mais Vendidos</span>
+                <img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/1/0/100-100000926wof.jpg"
+                    alt="Produto">
+
+                <div class="card-info">
+                    <h3>Processador AMD Ryzen 7 5700X</h3>
+                    <p class="descricao">3.4GHz (4.6GHz Turbo), 8-Cores 16-Threads, AM4</p>
+
+                    <p class="preco-antigo">De: R$ 2.599,99</p>
+                    <p class="preco-atual">R$ 1.299,90 <span>à vista</span></p>
+                    <p class="parcelamento">12x de R$ 127,44 sem juros</p>
+                </div>
+
+                <button class="btn-comprar-produto">Comprar</button>
+            </div>
+            <div class="card-produto">
+                <span class="badge">Mais Vendidos</span>
+                <img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/1/0/100-100000926wof.jpg"
+                    alt="Produto">
+
+                <div class="card-info">
+                    <h3>Processador AMD Ryzen 7 5700X</h3>
+                    <p class="descricao">3.4GHz (4.6GHz Turbo), 8-Cores 16-Threads, AM4</p>
+
+                    <p class="preco-antigo">De: R$ 2.599,99</p>
+                    <p class="preco-atual">R$ 1.299,90 <span>à vista</span></p>
+                    <p class="parcelamento">12x de R$ 127,44 sem juros</p>
+                </div>
+
+                <button class="btn-comprar-produto">Comprar</button>
+            </div>
+            <div class="card-produto">
+                <span class="badge">Mais Vendidos</span>
+                <img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/1/0/100-100000926wof.jpg"
+                    alt="Produto">
+
+                <div class="card-info">
+                    <h3>Processador AMD Ryzen 7 5700X</h3>
+                    <p class="descricao">3.4GHz (4.6GHz Turbo), 8-Cores 16-Threads, AM4</p>
+
+                    <p class="preco-antigo">De: R$ 2.599,99</p>
+                    <p class="preco-atual">R$ 1.299,90 <span>à vista</span></p>
+                    <p class="parcelamento">12x de R$ 127,44 sem juros</p>
+                </div>
+
+                <button class="btn-comprar-produto">Comprar</button>
+            </div>
+            <div class="card-produto">
+                <span class="badge">Mais Vendidos</span>
+                <img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/1/0/100-100000926wof.jpg"
+                    alt="Produto">
+
+                <div class="card-info">
+                    <h3>Processador AMD Ryzen 7 5700X</h3>
+                    <p class="descricao">3.4GHz (4.6GHz Turbo), 8-Cores 16-Threads, AM4</p>
+
+                    <p class="preco-antigo">De: R$ 2.599,99</p>
+                    <p class="preco-atual">R$ 1.299,90 <span>à vista</span></p>
+                    <p class="parcelamento">12x de R$ 127,44 sem juros</p>
+                </div>
+
+                <button class="btn-comprar-produto">Comprar</button>
+            </div>
+            <div class="card-produto">
+                <span class="badge">Mais Vendidos</span>
+                <img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/1/0/100-100000926wof.jpg"
+                    alt="Produto">
+
+                <div class="card-info">
+                    <h3>Processador AMD Ryzen 7 5700X</h3>
+                    <p class="descricao">3.4GHz (4.6GHz Turbo), 8-Cores 16-Threads, AM4</p>
+
+                    <p class="preco-antigo">De: R$ 2.599,99</p>
+                    <p class="preco-atual">R$ 1.299,90 <span>à vista</span></p>
+                    <p class="parcelamento">12x de R$ 127,44 sem juros</p>
+                </div>
+
+                <button class="btn-comprar-produto">Comprar</button>
+            </div>
+            <div class="card-produto">
+                <span class="badge">Mais Vendidos</span>
+                <img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/1/0/100-100000926wof.jpg"
+                    alt="Produto">
+
+                <div class="card-info">
+                    <h3>Processador AMD Ryzen 7 5700X</h3>
+                    <p class="descricao">3.4GHz (4.6GHz Turbo), 8-Cores 16-Threads, AM4</p>
+
+                    <p class="preco-antigo">De: R$ 2.599,99</p>
+                    <p class="preco-atual">R$ 1.299,90 <span>à vista</span></p>
+                    <p class="parcelamento">12x de R$ 127,44 sem juros</p>
+                </div>
+
+                <button class="btn-comprar-produto">Comprar</button>
+            </div>
+        </div>
+
     </main>
 
     <footer>
