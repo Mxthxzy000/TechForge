@@ -166,12 +166,7 @@ function handleFormSubmit(e) {
     
     
     // SweetAlert2 para sucesso
-    Swal.fire({
-        title: "Cadastro realizado com sucesso!",
-        text: "Bem-vindo à TechForge!",
-        icon: "success",
-        button:'index.php'
-    });
+
 }
 
 // ================================

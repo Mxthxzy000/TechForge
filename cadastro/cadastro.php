@@ -44,7 +44,7 @@
         <!-- Right side - Login Form -->
         <div class="login-section">
             <div class="login-form-container">
-                <form id="loginForm" class="login-form" action="Salvar-usuario.php" method="POST">
+                <form id="loginForm" class="login-form" action="salvar_usuario.php" method="POST">
                     <input type="hidden" name="acao" value="cadastrar">
                     <div class="input-group">
                         <input type="text" id="nome" name="nomeUsuario" class="input-field" required placeholder="Nome">
@@ -65,9 +65,9 @@
                     </div>
 
                     <div class="input-group">
-                        <input type="password" id="creatpassword" name="creatpassword" class="input-field" required
+                        <input type="password" id="creatpassword" name="senha" class="input-field" required
                             placeholder="Crie sua Senha">
-                        <input type="password" id="password" name="senhaUsuario" class="input-field" required
+                        <input type="password" id="password" name="senha2" class="input-field" required
                             placeholder="Confirme sua Senha">
                     </div>
 
@@ -78,7 +78,7 @@
                     </div>
                     <span class="span"></span>
                     <div class="login-buttons">
-                        <button type="submit" class="login-button">Cadastre-se</button>
+                        <button type="submit" class="login-button" href="../Home/index.php">Cadastre-se</button>
                         <button type="button" class="forgot-password-button" href="../Login/login.php">Login</button>
                     </div>
                 </form>
