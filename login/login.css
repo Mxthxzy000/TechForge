@@ -33,6 +33,7 @@ header {
     background-color: #1a2a3c;
 }
 
+
 .inicio-header {
     display: flex;
     align-items: center;
@@ -159,6 +160,10 @@ nav ul li:hover {
 
 nav ul li a:hover {
     transform: scale(1.1);
+}
+.voltarInicio {
+    gap: 10px;
+    align-items: center;
 }
 
 .container {

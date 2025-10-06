@@ -62,7 +62,7 @@ include "../config.php";
 
     <nav>
         <ul>
-            <li><a href="#">HARDWARES</a></li>
+            <li><a href="../Catalogo/catalogo.php">HARDWARES</a></li>
             <span class="linha"></span>
             <li><a href="#">OFERTAS</a></li>
             <span class="linha"></span>
@@ -87,7 +87,7 @@ include "../config.php";
                 </div>
 
                 <div class="slide">
-                    <img src="../imagens/banner rick sanchez.png" alt="Slide2">
+                    <img src="../imagens/rick sanchez banner.png" alt="Slide2">
                 </div>
 
                 <div class="slide">
@@ -95,7 +95,7 @@ include "../config.php";
                 </div>
 
                 <div class="slide">
-                    <img src="../imagens/banner vermelho.png" alt="Slide4">
+                    <img src="../imagens/mês da criança.png" alt="Slide4">
                 </div>
 
                 <div class="autonavegar">

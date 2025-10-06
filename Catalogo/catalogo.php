@@ -1,17 +1,21 @@
-<?php
-include "../config.php";
-?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="login.css">
-    <title>Login</title>
-</head>
+    <title>TechForge</title>
 
+    <link rel="stylesheet" href="catalogo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+</head>
 <body>
+
+
     <header>
         <div class="inicio-header">
             <div class="hamburguer-menu">
@@ -22,48 +26,53 @@ include "../config.php";
             <img src="../imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
         <div class="final-header">
-            <button id="minha-conta" class="btn-header"><ion-icon name="person-circle-outline"></ion-icon></button>
+            <div class="divpesquisar">
+                <button id="pesquisar" class="btn-pesquisar"><ion-icon name="search-sharp"></ion-icon></button>
+                <input type="text" placeholder=" Pesquisar..." class="barra-pesquisa">
+            </div>
+            <div class="usuario-menu">
+                <button id="minha-conta" class="btn-header">
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                </button>
+            </div>
             <button id="carrinho" class="btn-header"><ion-icon name="cart-outline"></ion-icon></button>
         </div>
     </header>
 
+    <div class="dropdown-user">
+        <a href="../Login/login.php" class="menu-usuario">
+            Minha Conta
+            <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
+        </a>
+
+        <div class="menu-usuario">
+            <span>Ativar Modo Escuro</span>
+            <label class="switch">
+                <input type="checkbox" id="botao-modo-escuro">
+                <span class="slider-dark"></span>
+            </label>
+        </div>
+
+        <button class="menu-usuario">Sair</button>
+    </div>
+
     <nav>
         <ul>
-            <li><a href="../Home/index.php" ><ion-icon name="arrow-back-circle-outline"></ion-icon>INÍCIO </a></li>
+            <li><a href="../Home/index.php"><ion-icon name="return-down-back-outline"></ion-icon>INÍCIO </a></li>
+            <span class="linha"></span>
+            <li><a href="#">OFERTAS</a></li>
+            <span class="linha"></span>
+            <li><a href="#">MONTE SEU PC</a></li>
+            <span class="linha"></span>
+            <li><a href="#">GAMER</a></li>
+            <span class="linha"></span>
+            <li><a href="#">SOBRE NÓS</a></li>
         </ul>
     </nav>
 
-    <h1 class="login-title">Login</h1>
 
-    <div class="container">
-        <!-- Left side - Banner -->
-        <div class="banner-section">
-            <img src="../imagens/image-pc.webp" alt="Banner Image" class="banner-image">
-        </div>
 
-        <!-- Right side - Login Form -->
-        <div class="login-section">
-            <div class="login-form-container">
-                <form id="loginForm" class="login-form">
-                    <div class="input-group">
-                        <label for="email" class="input-label">E-mail</label>
-                        <input type="email" id="email" name="email" class="input-field" required>
-                    </div>
 
-                    <div class="input-group">
-                        <label for="password" class="input-label">Senha</label>
-                        <input type="password" id="password" name="password" class="input-field" required>
-                    </div>
-                    <span class="span"></span>
-                    <div class="login-buttons">
-                        <button type="submit" class="login-button">Entrar</button>
-                        <button type="button" class="forgot-password-button" id="cadastre-se">Cadastre-se</button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
 
     <footer>
         <div class="container-footer">
@@ -111,12 +120,9 @@ include "../config.php";
         <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
 
     </footer>
-
-    <script src="login.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="catalogo.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
 </body>
-
 </html>
+
