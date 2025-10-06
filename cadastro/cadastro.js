@@ -1,27 +1,20 @@
-// ================================
-// Seletores Globais
-// ================================
 const hamburguer = document.querySelector(".hamburguer-menu");
 const nav = document.querySelector("nav");
 const loginForm = document.getElementById("loginForm");
 const emailInput = document.getElementById("email");
-const creatPasswordInput = document.getElementById("creatpassword");
-const passwordInput = document.getElementById("password");
+const creatPasswordInput = document.getElementById("senhaUsuario1");
+const passwordInput = document.getElementById("senhaUsuario");
 const celularInput = document.getElementById("celular");
 const nascimentoInput = document.getElementById("nascimento");
 const forgotPasswordButton = document.querySelector(".forgot-password-button");
 
-// ================================
-// Funções de UI
-// ================================
 
-// Alterna menu hamburguer
+// Funções de UI
 function toggleMenu() {
     hamburguer.classList.toggle("open");
     nav.classList.toggle("open");
 }
 
-// Adiciona foco estilizado nos inputs
 function handleInputFocus(input) {
     input.addEventListener("focus", function () {
         this.parentElement.classList.add("focused");
@@ -32,14 +25,11 @@ function handleInputFocus(input) {
     });
 }
 
-// ================================
-// Validações
-// ================================
 
-// Validação e formatação de celular
+// Validações
 function formatCelular(e) {
-    let value = e.target.value.replace(/\D/g, ""); // remove tudo que não é número
-    if (value.length > 11) value = value.slice(0, 11); // limita a 11 dígitos
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
 
     if (value.length > 6) {
         e.target.value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
@@ -50,13 +40,11 @@ function formatCelular(e) {
     }
 }
 
-// Regex para celular válido
 function validarCelular(celular) {
     const celularRegex = /^(?:\(?([1-9][0-9])\)?\s?)?(?:((?:9\d|[2-9])\d{3})\-?(\d{4}))$/;
     return celularRegex.test(celular);
 }
 
-// Validação de senha (iguais)
 function validarSenhas(senha1, senha2) {
     if (senha1 !== senha2) {
         Swal.fire({
@@ -69,9 +57,8 @@ function validarSenhas(senha1, senha2) {
     return true;
 }
 
-// Regex e formatação de data de nascimento
 function formatNascimento(e) {
-    let valor = e.target.value.replace(/\D/g, ""); // só números
+    let valor = e.target.value.replace(/\D/g, "");
     if (valor.length > 2 && valor.length <= 4) {
         valor = valor.slice(0, 2) + "/" + valor.slice(2);
     } else if (valor.length > 4) {
@@ -80,7 +67,6 @@ function formatNascimento(e) {
     e.target.value = valor;
 }
 
-// Validação de data de nascimento
 function validarNascimento(valor) {
     const regexData = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/[0-9]{4}$/;
     if (!regexData.test(valor)) {
@@ -92,14 +78,12 @@ function validarNascimento(valor) {
         return false;
     }
 
-    // Verificação de idade <= 100 anos
     const hoje = new Date();
     const partes = valor.split("/");
     const dataNascimento = new Date(`${partes[2]}-${partes[1]}-${partes[0]}`);
     const idade = hoje.getFullYear() - dataNascimento.getFullYear();
     const mes = hoje.getMonth() - dataNascimento.getMonth();
     const dia = hoje.getDate() - dataNascimento.getDate();
-
     const idadeReal = mes < 0 || (mes === 0 && dia < 0) ? idade - 1 : idade;
 
     if (idadeReal < 0 || idadeReal > 100) {
@@ -113,15 +97,13 @@ function validarNascimento(valor) {
     return true;
 }
 
-// Regex de e-mail
 function validarEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
 
-// ================================
-// Formulário de Login
-// ================================
+// Submissão do Formulário
+
 function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -131,8 +113,7 @@ function handleFormSubmit(e) {
     const celular = celularInput.value.trim();
     const nascimento = nascimentoInput.value.trim();
 
-    // Validações básicas
-    if (!email || !senha || !celular || !nascimento) {
+    if (!email || !senha || !celular || !nascimento || !senhaCriada) {
         Swal.fire({
             title: "Campos obrigatórios!",
             text: "Por favor, preencha todos os campos.",
@@ -153,7 +134,7 @@ function handleFormSubmit(e) {
     if (!validarCelular(celular)) {
         Swal.fire({
             title: "Celular inválido!",
-            text: "Por favor, insira um número de celular válido.",
+            text: "Insira um número de celular válido.",
             icon: "error"
         });
         return;
@@ -163,35 +144,29 @@ function handleFormSubmit(e) {
 
     if (!validarNascimento(nascimento)) return;
 
-    
-    
-    // SweetAlert2 para sucesso
-
+    Swal.fire({
+        title: "Cadastro realizado!",
+        text: "Seus dados foram validados com sucesso.",
+        icon: "success",
+        confirmButtonText: "Ok"
+    }).then(() => {
+        loginForm.submit();
+    });
 }
 
-// ================================
 // Eventos
-// ================================
 document.addEventListener("DOMContentLoaded", () => {
-    // Hamburguer menu
     hamburguer.addEventListener("click", toggleMenu);
-
-    // Validação de celular
     celularInput.addEventListener("input", formatCelular);
-
-    // Validação de nascimento
     nascimentoInput.addEventListener("input", formatNascimento);
     nascimentoInput.addEventListener("blur", () => validarNascimento(nascimentoInput.value));
 
-    // Submissão do formulário
     loginForm.addEventListener("submit", handleFormSubmit);
 
-    // Botão FAZER LOGIN
     forgotPasswordButton.addEventListener("click", () => {
         window.location.href = "../Login/login.php";
     });
 
-    // Estilização ao focar nos inputs
     const inputs = document.querySelectorAll(".input-field");
     inputs.forEach((input) => handleInputFocus(input));
 });

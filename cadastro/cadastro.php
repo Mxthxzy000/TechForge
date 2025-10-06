@@ -38,13 +38,13 @@ include "../config.php";
     <div class="container">
         <!-- Left side - Banner -->
         <div class="banner-section">
-            <img src="./image.webp" alt="Banner Image" class="banner-image">
+            <img src="../imagens/image.webp" alt="Banner Image" class="banner-image">
         </div>
 
         <!-- Right side - Login Form -->
         <div class="login-section">
             <div class="login-form-container">
-                <form id="loginForm" class="login-form" action="salvar_usuario.php" method="POST">
+                <form id="loginForm" class="login-form" action="salvar.php" method="POST">
                     <input type="hidden" name="acao" value="cadastrar">
                     <div class="input-group">
                         <input type="text" id="nome" name="nomeUsuario" class="input-field" required placeholder="Nome">
@@ -65,9 +65,9 @@ include "../config.php";
                     </div>
 
                     <div class="input-group">
-                        <input type="password" id="creatpassword" name="senha" class="input-field" required
+                        <input type="password" id="senhaUsuario1" name="senhaUsuario1" class="input-field" required
                             placeholder="Crie sua Senha">
-                        <input type="password" id="password" name="senha2" class="input-field" required
+                        <input type="password" id="senhaUsuario" name="senhaUsuario" class="input-field" required
                             placeholder="Confirme sua Senha">
                     </div>
 
