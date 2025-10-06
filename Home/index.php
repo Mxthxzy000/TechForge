@@ -177,7 +177,7 @@ include "../config.php";
                     $rank++;
                 endwhile;
             else:
-                echo "<p>Nenhum produto encontrado 😢</p>";
+                //echo "Nenhum produto encontrado";
             endif;
             ?>
         </div>

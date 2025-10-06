@@ -38,7 +38,7 @@ include "../config.php";
     <div class="container">
         <!-- Left side - Banner -->
         <div class="banner-section">
-            <img src="./image.webp" alt="Banner Image" class="banner-image">
+            <img src="../imagens/payOfertas.webp" alt="Banner Image" class="banner-image">
         </div>
 
         <!-- Right side - Login Form -->

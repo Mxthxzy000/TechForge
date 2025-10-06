@@ -171,11 +171,11 @@ nav ul li a:hover {
     height: 100vh;
     width: 977px;
     height: 447px;
-    margin-top: 80px;
-    margin-left: 260px;
-    margin-bottom: 80px;
+    margin: 50px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 0.5rem;
+    align-self: center;
+    justify-self: center;
 }
 
 /* Left side - Banner */
