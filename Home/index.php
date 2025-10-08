@@ -1,7 +1,8 @@
 <?php
-include "../config.php";
-session_start()
+include '../config.php'; 
+include '../session.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 

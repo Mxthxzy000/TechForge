@@ -1,6 +1,6 @@
 <?php
 include "../config.php";
-session_start()
+include "logarUsuario.php";
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -48,12 +48,12 @@ session_start()
                 <form id="loginForm" class="login-form">
                     <div class="input-group">
                         <label for="email" class="input-label">E-mail</label>
-                        <input type="email" id="email" name="email" class="input-field" required>
+                        <input type="email" id="email" name="emailUsuario" class="input-field" required>
                     </div>
 
                     <div class="input-group">
                         <label for="password" class="input-label">Senha</label>
-                        <input type="password" id="password" name="password" class="input-field" required>
+                        <input type="password" id="password" name="senhaUsuario" class="input-field" required>
                     </div>
                     <span class="span"></span>
                     <div class="login-buttons">

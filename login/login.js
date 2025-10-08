@@ -1,107 +1,38 @@
-// Seletores principais
-const hamburguer = document.querySelector(".hamburguer-menu");
-const nav = document.querySelector("nav");
-const loginForm = document.getElementById("loginForm");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const forgotPasswordButton = document.querySelector(".forgot-password-button");
-const inputs = document.querySelectorAll(".input-field");
-
-// -----------------------------
-// Funções
-// -----------------------------
-
-/**
- * Alterna o menu hamburguer
- */
-const toggleHamburguerMenu = () => {
-  hamburguer.classList.toggle("open");
-  nav.classList.toggle("open");
-};
-
-/**
- * Valida email
- * @param {string} email 
- * @returns {boolean}
- */
-const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+const emailInput = document.getElementById("email")
+const passwordInput = document.getElementById("password")
 
 /**
  * Trata o envio do formulário de login
- * @param {Event} e 
+ * @param {Event} e
  */
 const handleLoginSubmit = (e) => {
-  e.preventDefault();
-
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
+  const email = emailInput.value.trim()
+  const password = passwordInput.value.trim()
 
   // Validação básica
   if (!email || !password) {
-    alert("Por favor, preencha todos os campos.");
-    return;
+    e.preventDefault()
+    alert("Por favor, preencha todos os campos.")
+    return
   }
 
   // Validação de email
-  if (!isValidEmail(email)) {
-    alert("Por favor, insira um e-mail válido.");
-    return;
+  const isValidEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailPattern.test(email)
   }
 
-  // Simulação de login
-  console.log("Tentativa de login:", { email, password });
-  alert("Login realizado com sucesso!");
+  if (!isValidEmail(email)) {
+    e.preventDefault()
+    alert("Por favor, insira um e-mail válido.")
+    return
+  }
 
-  // Aqui você enviaria os dados para o servidor, por exemplo:
-  // fetch('/api/login', { method: 'POST', body: JSON.stringify({ email, password }) })
-};
+  console.log("[v0] Formulário validado, enviando para logarUsuario.php")
+}
 
-/**
- * Redireciona para a página de cadastro ao clicar em "Esqueceu a senha"
- */
-const handleForgotPassword = () => {
-  window.location.href = "cadastro.php";
-};
-
-/**
- * Adiciona efeitos de foco nos inputs
- */
-const addInputFocusEffects = () => {
-  inputs.forEach((input) => {
-    input.addEventListener("focus", function () {
-      this.parentElement.classList.add("focused");
-    });
-
-    input.addEventListener("blur", function () {
-      this.parentElement.classList.remove("focused");
-    });
-  });
-};
-
-// -----------------------------
-// Event Listeners
-// -----------------------------
-
-// Menu hamburguer
-hamburguer.addEventListener("click", toggleHamburguerMenu);
-
-// Formulário de login
+const loginForm = document.getElementById("loginForm")
 if (loginForm) {
-  loginForm.addEventListener("submit", handleLoginSubmit);
+  loginForm.addEventListener("submit", handleLoginSubmit)
+  console.log("[v0] Event listener adicionado ao formulário de login")
 }
-
-// Botão "Esqueceu a senha"
-if (forgotPasswordButton) {
-  forgotPasswordButton.addEventListener("click", handleForgotPassword);
-}
-
-// Efeitos de foco nos inputs
-addInputFocusEffects();
-
-const cadastreseBtn = document.getElementById("cadastre-se");
-cadastreseBtn.addEventListener("click", () => {
-  window.location.href = "../Cadastro/cadastro.php";
-});
