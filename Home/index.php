@@ -92,7 +92,7 @@ include '../session.php';
 
     <nav>
         <ul>
-            <li><a href="../Catalogo/catalogo.php">HARDWARES</a></li>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a></li>
             <span class="linha"></span>
             <li><a href="#">OFERTAS</a></li>
             <span class="linha"></span>

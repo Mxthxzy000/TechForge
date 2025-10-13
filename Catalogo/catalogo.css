@@ -1,5 +1,4 @@
 /* links externos */
-
 .fonte-inter {
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
@@ -7,7 +6,6 @@
 }
 
 /* reset geral */
-
 * {
     margin: 0;
     padding: 0;
@@ -497,4 +495,128 @@ footer {
 
 #finalfooter {
     font-size: 16px;
+}
+
+
+/* === ADIÇÕES PARA O CATÁLOGO COM FILTRO LATERAL === */
+.container-catalogo {
+    display: flex;
+    gap: 30px;
+    padding: 20px;
+}
+
+.filtro-lateral {
+    width: 280px;
+    background-color: #1a2a3c;
+    border-radius: 16px;
+    padding: 20px;
+    color: #fff;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+    border: 2px solid #1a2a3c;
+}
+
+.filtro-lateral h2 {
+    color: #ffffff;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.filtro-secao {
+    margin-bottom: 25px;
+}
+
+.filtro-secao h3 {
+    margin-bottom: 10px;
+    color: #f8c10d;
+    font-size: 18px;
+}
+
+.filtro-secao label {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.preco-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.preco-inputs input {
+    padding: 6px;
+    border: none;
+    border-radius: 6px;
+}
+
+.btn-filtrar {
+    margin-top: 6px;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    background-color: #f8c10d;
+    color: #1a2a3c;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-filtrar:hover {
+    background-color: #ffdb4d;
+}
+
+/* TAGS */
+#filterTags span {
+    background-color: #f8c10d;
+    color: #1a2a3c;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin: 3px;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+#filterTags span:hover {
+    transform: scale(1.1);
+}
+
+/* SUGESTÕES DE PESQUISA */
+.suggestions-list {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    color: #000;
+    width: 250px;
+    border-radius: 8px;
+    list-style: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1000;
+}
+
+.suggestions-list li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestions-list li:hover {
+    background-color: #f8c10d;
+    color: #1a2a3c;
+}
+
+/* CABEÇALHO DA LISTA */
+.cabecalho-lista {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.cabecalho-lista h2 {
+    color: #f8c10d;
 }
