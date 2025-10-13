@@ -72,7 +72,7 @@ include "../config.php";
 
                     <div class="login-buttons">
                         <button type="submit" class="login-button">Cadastre-se</button>
-                        <button type="button" class="forgot-password-button">Login</button>
+                        <button type="button" class="forgot-password-button" id="fazerlogin">Login</button>
                     </div>
                 </form>
             </div>
@@ -80,7 +80,49 @@ include "../config.php";
     </div>
 
     <footer>
-        <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
+        <div class="container-footer">
+            <ul>
+                <h3>TECHFORGE</h3>
+                <div class="links">
+                    <li><a href="#">Sobre nós</a></li>
+                    <li><a href="#">Política De Privacidade</a></li>
+                    <li><a href="#">Parceiros</a></li>
+                </div>
+            </ul>
+
+            <ul>
+                <h3>AJUDA</h3>
+                <div class="links">
+                    <li><a href="#">Fale Conosco</a></li>
+                    <li><a href="#">Chat Suporte</a></li>
+                    <li><a href="#">Sua Conta</a></li>
+                </div>
+            </ul>
+
+            <ul>
+                <h3>SERVIÇOS</h3>
+                <div class="links">
+                    <li><a href="#">Catálogo</a></li>
+                    <li><a href="#">Suporte</a></li>
+                    <li><a href="#">Como Escolher</a></li>
+                </div>
+            </ul>
+
+            <ul>
+                <h3>SIGA-NOS</h3>
+                <div class="links-icon">
+                    <ion-icon name="logo-instagram"></ion-icon>
+                    <ion-icon name="logo-twitter"></ion-icon>
+                    <ion-icon name="logo-youtube"></ion-icon>
+                    <ion-icon name="logo-linkedin"></ion-icon>
+                </div>
+                <div class="title">
+                    <p>Em Nossas Redes Sociais</p>
+                </div>
+            </ul>
+        </div>
+
+        <p id="finalfooter">©2025 TechForge. Todos os Direitos Reservados | Caçapava SP</p>
     </footer>
 
     <script src="cadastro.js"></script>

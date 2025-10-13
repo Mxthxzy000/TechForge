@@ -1,7 +1,10 @@
 <?php
-include "../config.php";
-include "logarUsuario.php";
+require "../config.php";
+require "../session.php";
+require "../flash.php";
+require "logarUsuario.php";
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -30,13 +33,17 @@ include "logarUsuario.php";
 
     <nav>
         <ul>
-            <li><a href="../Home/index.php" ><ion-icon name="arrow-back-circle-outline"></ion-icon>INÍCIO </a></li>
+            <li><a href="../Home/index.php"><ion-icon name="arrow-back-circle-outline"></ion-icon>INÍCIO</a></li>
         </ul>
     </nav>
+
+    <!-- Mensagens de feedback -->
+    <?php show_flash(); ?>
 
     <h1 class="login-title">Login</h1>
 
     <div class="container">
+    
         <!-- Left side - Banner -->
         <div class="banner-section">
             <img src="../imagens/image-pc.webp" alt="Banner Image" class="banner-image">
@@ -45,7 +52,7 @@ include "logarUsuario.php";
         <!-- Right side - Login Form -->
         <div class="login-section">
             <div class="login-form-container">
-                <form id="loginForm" class="login-form">
+                <form id="loginForm" class="login-form" method="POST" action="login.php">
                     <div class="input-group">
                         <label for="email" class="input-label">E-mail</label>
                         <input type="email" id="email" name="emailUsuario" class="input-field" required>
@@ -55,12 +62,13 @@ include "logarUsuario.php";
                         <label for="password" class="input-label">Senha</label>
                         <input type="password" id="password" name="senhaUsuario" class="input-field" required>
                     </div>
+
                     <span class="span"></span>
+
                     <div class="login-buttons">
                         <button type="submit" class="login-button">Entrar</button>
-                        <button type="button" class="forgot-password-button" id="cadastre-se">Cadastre-se</button>
+                        <button type="button" class="naopossuicontabtn" id="cadastre-se">Cadastre-se</button>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -109,8 +117,7 @@ include "logarUsuario.php";
             </ul>
         </div>
 
-        <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
-
+        <p id="finalfooter">©2025 TechForge. Todos os Direitos Reservados | Caçapava SP</p>
     </footer>
 
     <script src="login.js"></script>
@@ -118,6 +125,11 @@ include "logarUsuario.php";
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
+    <script>
+        // botão de cadastro
+        document.getElementById('cadastre-se').addEventListener('click', () => {
+            window.location.href = '../Cadastro/cadastro.php';
+        });
+    </script>
 </body>
-
 </html>

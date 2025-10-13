@@ -1,5 +1,5 @@
 <?php
-include '../config.php'; 
+include '../config.php';
 include '../session.php';
 ?>
 
@@ -44,23 +44,51 @@ include '../session.php';
     </header>
 
     <div class="dropdown-user">
-        <a href="../Login/login.php" class="menu-usuario">
-            Minha Conta
-            <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
-        </a>
 
-        <div class="menu-usuario">
-            <span>Ativar Modo Escuro</span>
-            <label class="switch">
-                <input type="checkbox" id="botao-modo-escuro">
-                <span class="slider-dark"></span>
-            </label>
-        </div>
+        <?php if (!empty($_SESSION['idUsuario'])): ?>
+            <!-- Linha do nome do usuário como botão -->
+            <a href="../Home/perfil.php" class="menu-usuario" style="justify-content: space-between; align-items: center;">
+                <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
 
-        <button class="menu-usuario">Sair</button>
+                <?php if (!empty($_SESSION['fotoUsuario'])): ?>
+                    <img src="<?php echo $_SESSION['fotoUsuario']; ?>" alt="Foto do Usuário" class="foto-usuario"
+                        style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
+                <?php else: ?>
+                    <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
+                <?php endif; ?>
+            </a>
+
+            <div class="menu-usuario" style="display:flex;align-items:center;gap:8px;">
+                <span>Modo escuro:</span>
+                <label class="switch">
+                    <input type="checkbox" id="botao-modo-escuro">
+                    <span class="slider-dark"></span>
+                </label>
+            </div>
+
+            <form method="POST" action="../logout.php">
+                <button type="submit" class="menu-usuario">
+                    Sair
+                    <ion-icon name="log-out-outline" class="icon-user"></ion-icon>
+                </button>
+            </form>
+
+        <?php else: ?>
+            <a href="../Login/login.php" class="menu-usuario">
+                Fazer Login!
+                <ion-icon name="log-in-outline" class="icon-user"></ion-icon>
+            </a>
+
+            <div class="menu-usuario" style="display:flex;align-items:center;gap:8px;">
+                <span>Modo escuro:</span>
+                <label class="switch">
+                    <input type="checkbox" id="botao-modo-escuro">
+                    <span class="slider-dark"></span>
+                </label>
+            </div>
+        <?php endif; ?>
+
     </div>
-
-
 
     <nav>
         <ul>

@@ -45,3 +45,7 @@ function validarCampos() {
 loginForm.addEventListener("submit", (e) => {
     if(!validarCampos()) e.preventDefault(); // cancela envio se inválido
 });
+
+document.getElementById('fazerlogin').addEventListener('click', function() {
+    window.location.href = '../Login/login.php';
+});

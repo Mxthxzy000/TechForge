@@ -1,5 +1,7 @@
 <?php
-include("../config.php");
+require '../session.php';
+require '../config.php';
+require '../flash.php';
 
 // Recebe os valores de forma segura
 $nome = isset($_POST["nomeUsuario"]) ? trim($_POST["nomeUsuario"]) : '';
@@ -48,19 +50,10 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("ssssss", $nome, $sobrenome, $celular, $email, $senha_hash, $dataNascimento);
 
 if ($stmt->execute()) {
-    echo "<script>
-        Swal.fire('Sucesso!', 'Usuário cadastrado com sucesso!', 'success').then(() => {
-            window.location.href = '../Login/login.php';
-        });
-    </script>";
+    set_flash("success","Conta criada! Faça o Login.");
+    header('Location: ../Login/login.php'); exit;
 } else {
-    echo "<script>
-        Swal.fire('Erro!', 'Erro ao cadastrar: ". addslashes($stmt->error) ."', 'error').then(() => {
-            window.history.back();
-        });
-    </script>";
+    set_flash(' Erro','Não foi possível concluir o cadastro!');
+    header('Location: cadastro.php'); exit;
 }
-
-$stmt->close();
-$conn->close();
 ?>
