@@ -50,50 +50,7 @@ if ($action === 'getFilters') {
     exit;
 }
 
-if ($action === 'filter') {
-    $where = [];
 
-    if (!empty($_GET['line'])) {
-        $lines = explode(',', $_GET['line']);
-        $lines = array_map(fn($v) => "'".$conn->real_escape_string($v)."'", $lines);
-        $where[] = "linhaProduto IN (".implode(',', $lines).")";
-    }
-
-    if (!empty($_GET['type'])) {
-        $types = explode(',', $_GET['type']);
-        $types = array_map(fn($v) => "'".$conn->real_escape_string($v)."'", $types);
-        $where[] = "tipoProduto IN (".implode(',', $types).")";
-    }
-
-    if (!empty($_GET['tag'])) {
-        $t = $conn->real_escape_string($_GET['tag']);
-        $where[] = "tagsProduto LIKE '%$t%'";
-    }
-
-    if (!empty($_GET['price_min'])) $where[] = "valorProduto >= ".(float)$_GET['price_min'];
-    if (!empty($_GET['price_max'])) $where[] = "valorProduto <= ".(float)$_GET['price_max'];
-
-    if (!empty($_GET['categoria']) && $_GET['categoria'] === 'promocoes') $where[] = "quantidadeProduto > 100";
-
-    $sql = "SELECT * FROM produtos";
-    if ($where) $sql .= " WHERE ".implode(" AND ", $where);
-
-    $res = $conn->query($sql);
-    $produtos = [];
-
-    if ($res) {
-        while ($r = $res->fetch_assoc()) {
-            $pct = calcDiscountPercent($r['quantidadeProduto']);
-            $desc = $r['valorProduto'] * (1 - $pct / 100);
-            $r['valor_com_desconto'] = number_format($desc, 2, ',', '.');
-            $r['discount_pct'] = $pct;
-            $produtos[] = $r;
-        }
-    }
-
-    echo json_encode($produtos);
-    exit;
-}
 
 if ($action === 'search_suggest') {
     $q = $conn->real_escape_string($_GET['q']);
