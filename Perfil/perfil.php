@@ -26,11 +26,11 @@
 
     <nav>
         <ul>
-            <li><a href="../Home/index.php" ><ion-icon name="arrow-back-circle-outline"></ion-icon>INÍCIO </a></li>
+            <li><a href="../Home/index.php" class="voltarInicio"><ion-icon name="arrow-back-circle-outline"></ion-icon>INÍCIO</a></li>
         </ul>
     </nav>      
 
-        <div class="container-new">
+    <div class="container-new">
         <!-- Header -->
         <div class="header-new">
             <div class="user-info">
@@ -213,14 +213,12 @@
         </div>
 
         <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
-
     </footer>
 
     <script src="perfil.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
 </body>
 
 </html>
