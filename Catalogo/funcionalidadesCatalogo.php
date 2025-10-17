@@ -2,6 +2,11 @@
 include '../config.php';
 header('Content-Type: application/json; charset=utf-8');
 
+if (!isset($conn) || $conn->connect_error) {
+    echo json_encode(['error' => 'Erro de conexão com banco de dados']);
+    exit;
+}
+
 function calcDiscountPercent($qtd) {
     if ($qtd >= 1000) return 20;
     if ($qtd >= 500) return 10;
@@ -50,11 +55,29 @@ if ($action === 'getFilters') {
     exit;
 }
 
-
-
 if ($action === 'search_suggest') {
-    $q = $conn->real_escape_string($_GET['q']);
-    $res = $conn->query("SELECT nomeProduto FROM produtos WHERE nomeProduto LIKE '%$q%' LIMIT 3");
-    echo json_encode($res ? $res->fetch_all(MYSQLI_ASSOC) : []);
+    $q = trim($_GET['q'] ?? '');
+    
+    if (empty($q)) {
+        echo json_encode([]);
+        exit;
+    }
+    
+    $stmt = $conn->prepare("SELECT nomeProduto FROM produtos WHERE nomeProduto LIKE ? LIMIT 3");
+    $searchTerm = "%{$q}%";
+    $stmt->bind_param("s", $searchTerm);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    $suggestions = [];
+    while ($row = $result->fetch_assoc()) {
+        $suggestions[] = $row;
+    }
+    
+    echo json_encode($suggestions);
+    $stmt->close();
     exit;
 }
+
+$conn->close();
+?>

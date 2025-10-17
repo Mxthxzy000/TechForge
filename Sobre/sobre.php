@@ -1,3 +1,8 @@
+<?php
+require '../config.php';
+require '../session.php';
+require '../flash.php';
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -5,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="sobre.css">
-    <title>Sobre</title>
+    <title>Sobre | TechForge</title>
 </head>
 
 <body>
@@ -19,16 +24,54 @@
             <img src="../imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
         <div class="final-header">
-            <button id="minha-conta" class="btn-header"><ion-icon name="person-circle-outline"></ion-icon></button>
+            <!-- Adicionando dropdown de usuário funcional -->
+            <div class="usuario-menu">
+                <button id="minha-conta" class="btn-header">
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                </button>
+            </div>
             <button id="carrinho" class="btn-header"><ion-icon name="cart-outline"></ion-icon></button>
         </div>
     </header>
+
+    <!-- Adicionando dropdown de usuário -->
+    <div class="dropdown-user">
+        <?php if (!empty($_SESSION['idUsuario'])): ?>
+            <a href="../Perfil/perfil.php" class="menu-usuario" style="justify-content: space-between; align-items: center;">
+                <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
+
+                <?php if (!empty($_SESSION['fotoUsuario'])): ?>
+                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário" class="foto-usuario"
+                        style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
+                <?php else: ?>
+                    <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
+                <?php endif; ?>
+            </a>
+
+            <form method="POST" action="../logout.php">
+                <button type="submit" class="menu-usuario">
+                    Sair!
+                    <ion-icon name="log-out-outline" class="icon-user"></ion-icon>
+                </button>
+            </form>
+
+        <?php else: ?>
+            <a href="../Login/login.php" class="menu-usuario">
+                Fazer Login!
+                <ion-icon name="log-in-outline" class="icon-user"></ion-icon>
+            </a>
+        <?php endif; ?>
+    </div>
 
     <nav>
         <ul>
             <li><a href="../Home/index.php" class="voltarInicio"><ion-icon name="arrow-back-circle-outline"></ion-icon>INÍCIO</a></li>
         </ul>
     </nav>    
+    
+    <!-- Adicionando exibição de mensagens flash -->
+    <?php show_flash(); ?>
+    
     <div class="container-new">
         <h1>SOBRE A TECHFORGE</h1>
 
@@ -107,7 +150,7 @@
             <ul>
                 <h3>TECHFORGE</h3>
                 <div class="links">
-                    <li><a href="#">Sobre nós</a></li>
+                    <li><a href="../Sobre/sobre.php">Sobre nós</a></li>
                     <li><a href="#">Política De Privacidade</a></li>
                     <li><a href="#">Parceiros</a></li>
                 </div>
@@ -116,17 +159,17 @@
             <ul>
                 <h3>AJUDA</h3>
                 <div class="links">
-                    <li><a href="#">Fale Conosco</a></li>
+                    <li><a href="../Fale Conosco/fale.php">Fale Conosco</a></li>
                     <li><a href="#">Chat Suporte</a></li>
-                    <li><a href="#">Sua Conta</a></li>
+                    <li><a href="../Perfil/perfil.php">Sua Conta</a></li>
                 </div>
             </ul>
 
             <ul>
                 <h3>SERVIÇOS</h3>
                 <div class="links">
-                    <li><a href="#">Catálogo</a></li>
-                    <li><a href="#">Suporte</a></li>
+                    <li><a href="../Catalogo/catalogo.php">Catálogo</a></li>
+                    <li><a href="../Fale Conosco/fale.php">Suporte</a></li>
                     <li><a href="#">Como Escolher</a></li>
                 </div>
             </ul>
@@ -148,6 +191,8 @@
         <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
     </footer>
 
+    <!-- Adicionando common.js antes do script específico -->
+    <script src="../js/common.js"></script>
     <script src="sobre.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

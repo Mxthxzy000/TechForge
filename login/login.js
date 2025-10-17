@@ -1,5 +1,16 @@
 const emailInput = document.getElementById("email")
 const passwordInput = document.getElementById("password")
+const loginForm = document.getElementById("loginForm")
+
+/**
+ * Valida formato de email
+ * @param {string} email
+ * @returns {boolean}
+ */
+const isValidEmail = (email) => {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailPattern.test(email)
+}
 
 /**
  * Trata o envio do formulário de login
@@ -17,43 +28,22 @@ const handleLoginSubmit = (e) => {
   }
 
   // Validação de email
-  const isValidEmail = (email) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailPattern.test(email)
-  }
-
   if (!isValidEmail(email)) {
     e.preventDefault()
     alert("Por favor, insira um e-mail válido.")
     return
   }
-
-  console.log("[v0] Formulário validado, enviando para logarUsuario.php")
 }
 
-const loginForm = document.getElementById("loginForm")
+// Event listener do formulário
 if (loginForm) {
   loginForm.addEventListener("submit", handleLoginSubmit)
-  console.log("[v0] Event listener adicionado ao formulário de login")
 }
 
-const hamburguer = document.querySelector(".hamburguer-menu");
-const nav = document.querySelector("nav")
-
-
-hamburguer.addEventListener("click", () => {
-    hamburguer.classList.toggle("open");
-    nav.classList.toggle("open")
-});
-
-const User = document.querySelector(".usuario-menu");
-const dropUser = document.querySelector(".dropdown-user")
-
-
-User.addEventListener("click", () => {
-    dropUser.classList.toggle("open")
-});
-
-document.getElementById('cadastre-se').addEventListener('click', function() {
-    window.location.href = '../Cadastro/cadastro.php';
-});
+// Botão de cadastro
+const cadastreSeBtn = document.getElementById("cadastre-se")
+if (cadastreSeBtn) {
+  cadastreSeBtn.addEventListener("click", () => {
+    window.location.href = "../Cadastro/cadastro.php"
+  })
+}

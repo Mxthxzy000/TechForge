@@ -1,11 +1,12 @@
 <?php
+// session.php
 if (session_status() === PHP_SESSION_NONE) {
-    session_set_cookie_params(lifetime_or_options: [
+    session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
-        'httponly' => 'true',
+        'httponly' => true,  // ✅ Boolean, não string
         'samesite' => 'Lax',
-        // 'secure' => true
+        'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'  // ✅ Auto-detecta HTTPS
     ]);
     session_start();
 }

@@ -1,72 +1,77 @@
-const loginForm = document.getElementById("loginForm");
-const emailInput = document.getElementById("email");
-const creatPasswordInput = document.getElementById("senhaUsuario1");
-const passwordInput = document.getElementById("senhaUsuario");
-const celularInput = document.getElementById("celular");
-const nascimentoInput = document.getElementById("nascimento");
+const loginForm = document.getElementById("loginForm")
+const emailInput = document.getElementById("email")
+const creatPasswordInput = document.getElementById("senhaUsuario1")
+const passwordInput = document.getElementById("senhaUsuario")
+const celularInput = document.getElementById("celular")
+const nascimentoInput = document.getElementById("nascimento")
 
-// Validações
+/**
+ * Valida se as senhas são iguais
+ * @param {string} senha1
+ * @param {string} senha2
+ * @returns {boolean}
+ */
 function validarSenhas(senha1, senha2) {
-    if (senha1 !== senha2) {
-        Swal.fire('Erro!', 'As senhas não conferem!', 'warning');
-        return false;
-    }
-    return true;
+  if (senha1 !== senha2) {
+    alert("As senhas não conferem!")
+    return false
+  }
+  if (senha1.length < 6) {
+    alert("A senha deve ter pelo menos 6 caracteres!")
+    return false
+  }
+  return true
 }
 
+/**
+ * Valida formato de email
+ * @param {string} email
+ * @returns {boolean}
+ */
 function validarEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(!emailRegex.test(email)) {
-        Swal.fire('Erro!', 'E-mail inválido!', 'warning');
-        return false;
-    }
-    return true;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email)) {
+    alert("E-mail inválido!")
+    return false
+  }
+  return true
 }
 
+/**
+ * Valida todos os campos do formulário
+ * @returns {boolean}
+ */
 function validarCampos() {
-    const email = emailInput.value.trim();
-    const senha = passwordInput.value.trim();
-    const senhaCriada = creatPasswordInput.value.trim();
-    const celular = celularInput.value.trim();
-    const nascimento = nascimentoInput.value.trim();
+  const email = emailInput.value.trim()
+  const senha = passwordInput.value.trim()
+  const senhaCriada = creatPasswordInput.value.trim()
+  const celular = celularInput.value.trim()
+  const nascimento = nascimentoInput.value.trim()
 
-    if(!email || !senha || !senhaCriada || !celular || !nascimento) {
-        Swal.fire('Erro!', 'Preencha todos os campos!', 'warning');
-        return false;
-    }
+  if (!email || !senha || !senhaCriada || !celular || !nascimento) {
+    alert("Preencha todos os campos!")
+    return false
+  }
 
-    if(!validarEmail(email)) return false;
-    if(!validarSenhas(senhaCriada, senha)) return false;
+  if (!validarEmail(email)) return false
+  if (!validarSenhas(senhaCriada, senha)) return false
 
-    return true;
+  return true
 }
 
-// Intercepta submit
-loginForm.addEventListener("submit", (e) => {
-    if(!validarCampos()) e.preventDefault(); // cancela envio se inválido
-});
+// Intercepta submit do formulário
+if (loginForm) {
+  loginForm.addEventListener("submit", (e) => {
+    if (!validarCampos()) {
+      e.preventDefault()
+    }
+  })
+}
 
-document.getElementById('fazerlogin').addEventListener('click', function() {
-    window.location.href = '../Login/login.php';
-});
-
-const hamburguer = document.querySelector(".hamburguer-menu");
-const nav = document.querySelector("nav")
-
-
-hamburguer.addEventListener("click", () => {
-    hamburguer.classList.toggle("open");
-    nav.classList.toggle("open")
-});
-
-const User = document.querySelector(".usuario-menu");
-const dropUser = document.querySelector(".dropdown-user")
-
-
-User.addEventListener("click", () => {
-    dropUser.classList.toggle("open")
-});
-
-document.getElementById('cadastre-se').addEventListener('click', function() {
-    window.location.href = '../Cadastro/cadastro.php';
-});
+// Botão de fazer login
+const fazerLoginBtn = document.getElementById("fazerlogin")
+if (fazerLoginBtn) {
+  fazerLoginBtn.addEventListener("click", () => {
+    window.location.href = "../Login/login.php"
+  })
+}

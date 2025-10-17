@@ -1,49 +1,26 @@
-// -----------------------------
-// Seletores principais - Apenas Navbar e Footer
-// -----------------------------
-const hamburguer = document.querySelector(".hamburguer-menu");
-const nav = document.querySelector("nav");
-
-// -----------------------------
-// Funções - Apenas Navbar
-// -----------------------------
-
 /**
- * Alterna o menu hamburguer
+ * Sistema de tabs do perfil
  */
-const toggleHamburguerMenu = () => {
-  hamburguer.classList.toggle("open");
-  nav.classList.toggle("open");
-};
-
-// -----------------------------
-// Event Listeners - Apenas Navbar
-// -----------------------------
-
-// Menu hamburguer
-if (hamburguer && nav) {
-  hamburguer.addEventListener("click", toggleHamburguerMenu);
+const tabs = document.querySelectorAll(".tab")
+const sections = {
+  pedidos: document.querySelector(".orders-section"),
+  dados: document.querySelector(".user-data-section"),
+  endereco: document.querySelector(".addresses-section"),
+  favoritos: null, // Ainda não implementado
 }
 
-const User = document.querySelector(".usuario-menu");
-const dropUser = document.querySelector(".dropdown-user")
+if (tabs.length > 0) {
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      // Remove active de todas as tabs
+      tabs.forEach((t) => t.classList.remove("active"))
 
+      // Adiciona active na tab clicada
+      tab.classList.add("active")
 
-User.addEventListener("click", () => {
-    dropUser.classList.toggle("open")
-});
-
-let counter = 1;
-document.getElementById("radio1").checked = true;
-
-function nextimage() {
-    counter++;
-    if(counter > 4){
-        counter = 1;
-    }
-    document.getElementById("radio" + counter).checked = true;
+      // Aqui você pode adicionar lógica para mostrar/esconder seções
+      const tabName = tab.getAttribute("data-tab")
+      console.log("Tab selecionada:", tabName)
+    })
+  })
 }
-
-// chama a função a cada 2 segundos
-setInterval(nextimage, 6000);
-

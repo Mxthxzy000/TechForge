@@ -1,11 +1,7 @@
 <?php
 // flash.php
+// Remove session_start() - já feito em session.php
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// evita redefinir a função se já existir
 if (!function_exists('set_flash')) {
     function set_flash($tipo, $msg) {
         $_SESSION['flash'] = [
@@ -21,7 +17,7 @@ if (!function_exists('show_flash')) {
 
         $f = $_SESSION['flash'];
         $tipo = isset($f['tipo']) ? strtolower($f['tipo']) : 'aviso';
-        $msg  = $f['msg'] ?? '';
+        $msg = htmlspecialchars($f['msg'] ?? '', ENT_QUOTES, 'UTF-8');  // ✅ ESCAPA XSS
 
         $corBorda = "#f8c10d";
         $corFundo = "#2B3640";
@@ -44,6 +40,8 @@ if (!function_exists('show_flash')) {
                 break;
         }
 
+        $tipoEscapado = htmlspecialchars($tipo, ENT_QUOTES, 'UTF-8');
+
         echo <<<HTML
         <style>
             .flash-message {
@@ -61,7 +59,6 @@ if (!function_exists('show_flash')) {
                 align-items: center;
                 justify-content: space-between;
                 animation: fadeIn 0.6s ease-out;
-                transition: opacity 0.4s ease;
             }
 
             .flash-message strong {
@@ -93,7 +90,7 @@ if (!function_exists('show_flash')) {
 
         <div class='flash-message'>
             <div>
-                <strong>{$tipo}:</strong> {$msg}
+                <strong>{$tipoEscapado}:</strong> {$msg}
             </div>
             <button class='flash-close' onclick='this.parentElement.remove()'>&times;</button>
         </div>

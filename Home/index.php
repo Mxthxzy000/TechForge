@@ -1,6 +1,11 @@
 <?php
-include '../config.php';
-include '../session.php';
+require '../config.php';
+require '../session.php';
+require '../flash.php';
+
+if (!isset($conn)) {
+    die("Erro: Conexão com banco de dados não estabelecida.");
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +14,7 @@ include '../session.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechForge</title>
+    <title>TechForge - Sua Loja de Tecnologia</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,22 +49,18 @@ include '../session.php';
     </header>
 
     <div class="dropdown-user">
-
         <?php if (!empty($_SESSION['idUsuario'])): ?>
-            <!-- Linha do nome do usuário como botão -->
             <a href="../Perfil/perfil.php" class="menu-usuario"
                 style="justify-content: space-between; align-items: center;">
                 <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
 
                 <?php if (!empty($_SESSION['fotoUsuario'])): ?>
-                    <img src="<?php echo $_SESSION['fotoUsuario']; ?>" alt="Foto do Usuário" class="foto-usuario"
+                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário" class="foto-usuario"
                         style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
                 <?php else: ?>
                     <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
                 <?php endif; ?>
             </a>
-
-
 
             <form method="POST" action="../logout.php">
                 <button type="submit" class="menu-usuario">
@@ -73,10 +74,7 @@ include '../session.php';
                 Fazer Login!
                 <ion-icon name="log-in-outline" class="icon-user"></ion-icon>
             </a>
-
-
         <?php endif; ?>
-
     </div>
 
     <nav>
@@ -92,6 +90,9 @@ include '../session.php';
             <li><a href="../Sobre/sobre.php">SOBRE NÓS</a></li>
         </ul>
     </nav>
+
+    <!-- Adicionando exibição de mensagens flash -->
+    <?php show_flash(); ?>
 
     <main>
         <div class="slider">
@@ -132,10 +133,8 @@ include '../session.php';
                 </div>
             </div>
         </div>
-        </div>
 
         <div class="mincard">
-
             <div class="card1">
                 <h2>PREÇOS BAIXOS</h2>
                 <img src="../imagens/preçosBaixos.png" alt="preços baixos" id="preços-baixos">
@@ -167,7 +166,9 @@ include '../session.php';
             $query = "SELECT * FROM produtos ORDER BY vendasProduto DESC LIMIT 10";
             $result = $conn->query($query);
 
-            if ($result && $result->num_rows > 0):
+            if (!$result) {
+                echo "<p>Erro ao carregar produtos. Tente novamente mais tarde.</p>";
+            } elseif ($result->num_rows > 0) {
                 $rank = 1;
                 while ($row = $result->fetch_assoc()):
                     ?>
@@ -195,12 +196,11 @@ include '../session.php';
                     <?php
                     $rank++;
                 endwhile;
-            else:
-                echo "<p>Nenhum produto encontrado 😢</p>";
-            endif;
+            } else {
+                echo "<p>Nenhum produto encontrado no momento.</p>";
+            }
             ?>
         </div>
-
     </main>
 
     <footer>
@@ -247,8 +247,10 @@ include '../session.php';
         </div>
 
         <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
-
     </footer>
+
+    <!-- Incluindo script comum e específico -->
+    <script src="../common.js"></script>
     <script src="script.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
