@@ -46,22 +46,33 @@ include "../config.php";
                     <input type="hidden" name="acao" value="cadastrar">
 
                     <div class="input-group">
-                        <input type="text" id="nome" name="nomeUsuario" class="input-field" required placeholder="Nome" value="<?php echo isset($_POST['nomeUsuario']) ? htmlspecialchars($_POST['nomeUsuario']) : ''; ?>">
-                        <input type="text" id="Sobrenome" name="sobrenomeUsuario" class="input-field" required placeholder="Sobrenome" value="<?php echo isset($_POST['sobrenomeUsuario']) ? htmlspecialchars($_POST['sobrenomeUsuario']) : ''; ?>">
+                        <input type="text" id="nome" name="nomeUsuario" class="input-field" required placeholder="Nome"
+                            value="<?php echo isset($_POST['nomeUsuario']) ? htmlspecialchars($_POST['nomeUsuario']) : ''; ?>">
+                        <input type="text" id="Sobrenome" name="sobrenomeUsuario" class="input-field" required
+                            placeholder="Sobrenome"
+                            value="<?php echo isset($_POST['sobrenomeUsuario']) ? htmlspecialchars($_POST['sobrenomeUsuario']) : ''; ?>">
                     </div>
 
                     <div class="input-group">
-                        <input type="text" id="nascimento" name="nascimentoUsuario" class="input-field" placeholder="Data de Nascimento" maxlength="10" value="<?php echo isset($_POST['nascimentoUsuario']) ? htmlspecialchars($_POST['nascimentoUsuario']) : ''; ?>">
-                        <input type="text" id="celular" name="celularUsuario" class="input-field" maxlength="15" placeholder="Celular" value="<?php echo isset($_POST['celularUsuario']) ? htmlspecialchars($_POST['celularUsuario']) : ''; ?>">
+                        <input type="text" id="nascimento" name="nascimentoUsuario" class="input-field"
+                            placeholder="Data de Nascimento" maxlength="10"
+                            value="<?php echo isset($_POST['nascimentoUsuario']) ? htmlspecialchars($_POST['nascimentoUsuario']) : ''; ?>">
+                        <input type="text" id="celular" name="celularUsuario" class="input-field" maxlength="15"
+                            placeholder="Celular"
+                            value="<?php echo isset($_POST['celularUsuario']) ? htmlspecialchars($_POST['celularUsuario']) : ''; ?>">
                     </div>
 
                     <div class="input-group-max">
-                        <input type="email" id="email" name="emailUsuario" class="input-field" required placeholder="E-mail" value="<?php echo isset($_POST['emailUsuario']) ? htmlspecialchars($_POST['emailUsuario']) : ''; ?>">
+                        <input type="email" id="email" name="emailUsuario" class="input-field" required
+                            placeholder="E-mail"
+                            value="<?php echo isset($_POST['emailUsuario']) ? htmlspecialchars($_POST['emailUsuario']) : ''; ?>">
                     </div>
 
                     <div class="input-group">
-                        <input type="password" id="senhaUsuario1" name="senhaUsuario1" class="input-field" required placeholder="Crie sua Senha">
-                        <input type="password" id="senhaUsuario" name="senhaUsuario" class="input-field" required placeholder="Confirme sua Senha">
+                        <input type="password" id="senhaUsuario1" name="senhaUsuario1" class="input-field" required
+                            placeholder="Crie sua Senha">
+                        <input type="password" id="senhaUsuario" name="senhaUsuario" class="input-field" required
+                            placeholder="Confirme sua Senha">
                     </div>
 
                     <div class="terms-text">
@@ -93,17 +104,17 @@ include "../config.php";
             <ul>
                 <h3>AJUDA</h3>
                 <div class="links">
-                    <li><a href="#">Fale Conosco</a></li>
+                    <li><a href="../Fale Conosco/fale.php">Fale Conosco</a></li>
                     <li><a href="#">Chat Suporte</a></li>
-                    <li><a href="#">Sua Conta</a></li>
+                    <li><a href="../Perfil/perfil.php">Sua Conta</a></li>
                 </div>
             </ul>
 
             <ul>
                 <h3>SERVIÇOS</h3>
                 <div class="links">
-                    <li><a href="#">Catálogo</a></li>
-                    <li><a href="#">Suporte</a></li>
+                    <li><a href="../Catalogo/catalogo.php">Catálogo</a></li>
+                    <li><a href="../Fale Conosco/fale.php">Suporte</a></li>
                     <li><a href="#">Como Escolher</a></li>
                 </div>
             </ul>
@@ -122,7 +133,8 @@ include "../config.php";
             </ul>
         </div>
 
-        <p id="finalfooter">©2025 TechForge. Todos os Direitos Reservados | Caçapava SP</p>
+        <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
+
     </footer>
 
     <script src="cadastro.js"></script>

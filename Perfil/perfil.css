@@ -1,3 +1,4 @@
+/* ===== IMPORTAÇÕES E FONTES ===== */
 /* links externos */
 .fonte-inter {
     font-family: "Inter", sans-serif;
@@ -5,6 +6,7 @@
     font-style: normal;
 }
 
+/* ===== RESET E CONFIGURAÇÕES GLOBAIS ===== */
 /* reset geral */
 * {
     margin: 0;
@@ -19,6 +21,7 @@ body {
     min-height: 100vh;
 }
 
+/* ===== HEADER ===== */
 /* estilização header */
 header {
     width: 100%;
@@ -58,6 +61,20 @@ header {
     transition: all 0.4s ease;
 }
 
+/* Animação do X */
+.hamburguer-menu.open span:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+.hamburguer-menu.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.hamburguer-menu.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
 .logo {
     height: 60px;
 }
@@ -87,35 +104,24 @@ header {
     margin: 20px;
 }
 
-/* Animação do X */
-.hamburguer-menu.open span:nth-child(1) {
-    transform: rotate(45deg) translate(7px, 7px);
-}
-
-.hamburguer-menu.open span:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-}
-
-.hamburguer-menu.open span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -7px);
-}
-
+/* ===== NAVBAR ===== */
 /* estilização navbar*/
 nav {
     width: 200px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     background-color: #2B3640;
     transition: transform 0.4s ease;
     transform: translate(-100%);
+    overflow: hidden;
     position: absolute;
     margin-top: 80px;
     z-index: 1000;
-    height: calc(100vh - 80px);
 }
 
 nav.open {
+    transition: all 0.4s ease;
     transform: translate(0);
 }
 
@@ -123,6 +129,7 @@ nav ul {
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding: 0;
 }
 
@@ -151,12 +158,7 @@ nav ul li a:hover {
     transform: scale(1.1);
 }
 
-.voltarInicio {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
+/* ===== CONTAINERS PRINCIPAIS ===== */
 .container {
     display: flex;
     width: 977px;
@@ -166,110 +168,14 @@ nav ul li a:hover {
     border-radius: 0.5rem;
 }
 
-footer {
-    width: 100%;
-    padding: 25px 5%;
-    display: flex;
-    flex-direction: column;
-    background-color: #1a2a3c;
-    bottom: 0;
-    flex-wrap: wrap;
-    margin-top: auto;
-}
-
-.linha {
-    height: 2px;
-    width: 100%;
-    background-color: #fffbf3;
-    margin: 8px 0;
-}
-
-nav ul li a ion-icon {
-    width: 25px;
-    height: 25px;
-    vertical-align: middle;
-}
-
-.container-footer {
-    width: 100%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 48px;
-    margin-bottom: 60px;
-}
-
-.container-footer h3 {
-    margin-bottom: 16px;
-    cursor: pointer;
-    transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.container-footer h3:hover {
-    color: #f8c10d;
-    transform: scale(1.05);
-}
-
-.links {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.container-footer li {
-    list-style: none;
-}
-
-.container-footer li a {
-    text-decoration: none;
-    color: #cececd;
-    transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.container-footer li a:hover {
-    color: #ffffff;
-    transform: scale(1.05);
-}
-
-.title {
-    display: flex;
-    flex-direction: column;
-    margin-top: 24px;
-}
-
-.links-icon {
-    display: flex;
-    gap: 16px;
-    margin-top: 16px;
-}
-
-.links-icon ion-icon {
-    font-size: 28px;
-    cursor: pointer;
-    transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.links-icon ion-icon:hover {
-    color: #f8c10d;
-    transform: scale(1.1);
-}
-
-#finalfooter {
-    font-size: 16px;
-    text-align: center;
-    width: 100%;
-    margin-top: 20px;
-}
-
-/* Novos estilos para o perfil */
 .container-new {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* Header */
+/* ===== PERFIL DO USUÁRIO ===== */
+/* Header do Perfil */
 .header-new {
     background: white;
     border-radius: 12px;
@@ -318,6 +224,7 @@ nav ul li a ion-icon {
     gap: 10px;
 }
 
+/* Botões */
 .btn {
     padding: 8px 20px;
     border: none;
@@ -376,7 +283,7 @@ nav ul li a ion-icon {
     background: #0f172a;
 }
 
-/* Orders Section */
+/* ===== SEÇÃO DE PEDIDOS ===== */
 .orders-section {
     background: white;
     border-radius: 12px;
@@ -483,20 +390,14 @@ nav ul li a ion-icon {
     font-size: 16px;
 }
 
-/* Bottom Grid */
+/* ===== GRID INFERIOR ===== */
 .bottom-grid {
     display: grid;
     grid-template-columns: 1fr 400px;
     gap: 30px;
 }
 
-@media (max-width: 968px) {
-    .bottom-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Addresses Section */
+/* ===== SEÇÃO DE ENDEREÇOS ===== */
 .addresses-section {
     background: white;
     border-radius: 12px;
@@ -563,7 +464,7 @@ nav ul li a ion-icon {
     margin-bottom: 10px;
 }
 
-/* User Data Section */
+/* ===== SEÇÃO DE DADOS DO USUÁRIO ===== */
 .user-data-section {
     background: #e2e8f0;
     border-radius: 12px;
@@ -621,6 +522,104 @@ nav ul li a ion-icon {
 .email-text {
     font-size: 14px;
     color: #1e293b;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    width: 100%;
+    padding: 25px 5%;
+    display: flex;
+    flex-direction: column;
+    background-color: #1a2a3c;
+    bottom: 0;
+    flex-wrap: wrap;
+    margin-top: auto;
+}
+
+.linha {
+    height: 2px;
+    width: 100%;
+    background-color: #fffbf3;
+    margin: 8px 0;
+}
+
+.container-footer {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 48px;
+    margin-bottom: 60px;
+}
+
+.container-footer h3 {
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.container-footer h3:hover {
+    color: #f8c10d;
+    transform: scale(1.05);
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.container-footer li {
+    list-style: none;
+}
+
+.container-footer li a {
+    text-decoration: none;
+    color: #cececd;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.container-footer li a:hover {
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+}
+
+.links-icon {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.links-icon ion-icon {
+    font-size: 28px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.links-icon ion-icon:hover {
+    color: #f8c10d;
+    transform: scale(1.1);
+}
+
+#finalfooter {
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 968px) {
+    .bottom-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 768px) {

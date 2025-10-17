@@ -110,6 +110,8 @@ header {
 
 /* estilização navbar*/
 
+/* estilização navbar*/
+
 nav {
     width: 200px;
     display: flex;
@@ -118,6 +120,7 @@ nav {
     background-color: #2B3640;
     transition: transform 0.4s ease;
     transform: translate(-100%);
+    overflow: hidden;
     position: absolute;
     margin-top: 80px;
     z-index: 1000;

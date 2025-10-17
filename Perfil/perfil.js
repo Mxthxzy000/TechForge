@@ -46,3 +46,4 @@ function nextimage() {
 
 // chama a função a cada 2 segundos
 setInterval(nextimage, 6000);
+

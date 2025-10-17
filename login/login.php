@@ -43,7 +43,7 @@ require "logarUsuario.php";
     <h1 class="login-title">Login</h1>
 
     <div class="container">
-    
+
         <!-- Left side - Banner -->
         <div class="banner-section">
             <img src="../imagens/image-pc.webp" alt="Banner Image" class="banner-image">
@@ -88,17 +88,17 @@ require "logarUsuario.php";
             <ul>
                 <h3>AJUDA</h3>
                 <div class="links">
-                    <li><a href="#">Fale Conosco</a></li>
+                    <li><a href="../Fale Conosco/fale.php">Fale Conosco</a></li>
                     <li><a href="#">Chat Suporte</a></li>
-                    <li><a href="#">Sua Conta</a></li>
+                    <li><a href="../Perfil/perfil.php">Sua Conta</a></li>
                 </div>
             </ul>
 
             <ul>
                 <h3>SERVIÇOS</h3>
                 <div class="links">
-                    <li><a href="#">Catálogo</a></li>
-                    <li><a href="#">Suporte</a></li>
+                    <li><a href="../Catalogo/catalogo.php">Catálogo</a></li>
+                    <li><a href="../Fale Conosco/fale.php">Suporte</a></li>
                     <li><a href="#">Como Escolher</a></li>
                 </div>
             </ul>
@@ -117,7 +117,8 @@ require "logarUsuario.php";
             </ul>
         </div>
 
-        <p id="finalfooter">©2025 TechForge. Todos os Direitos Reservados | Caçapava SP</p>
+        <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
+
     </footer>
 
     <script src="login.js"></script>
@@ -132,4 +133,5 @@ require "logarUsuario.php";
         });
     </script>
 </body>
+
 </html>

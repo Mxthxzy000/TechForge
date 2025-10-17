@@ -26,3 +26,12 @@ INSERT INTO `produtos` (`idProduto`, `nomeProduto`, `valorProduto`, `descricaoPr
 (36, 'Intel Core i5-13600K', 2499, 'Processador de 14 núcleos e 20 threads, com clock base de 3.5GHz, ideal para jogos e multitarefas.', 17, 0, 1),
 (37, 'Corsair Vengeance LPX 8GB DDR4 3200MHz', 249, 'Memória RAM de 8GB (1x8GB), ideal para builds de entrada e upgrades.', 35, 0, 1),
 (38, 'ASUS TUF Gaming B550-Plus', 699, 'Placa-mãe com chipset B550, suporte para DDR4, PCIe 4.0 e WiFi 5, ideal para builds de médio desempenho.', 19, 0, 1);
+
+comando do switch modo escuro:
+<div class="menu-usuario" style="display:flex;align-items:center;gap:8px;">
+                <span>Modo escuro:</span>
+                <label class="switch">
+                    <input type="checkbox" id="botao-modo-escuro">
+                    <span class="slider-dark"></span>
+                </label>
+            </div>

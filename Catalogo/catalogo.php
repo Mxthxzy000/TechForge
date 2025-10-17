@@ -43,51 +43,38 @@ include '../session.php';
 
         <div class="dropdown-user">
 
-            <?php if (!empty($_SESSION['idUsuario'])): ?>
-                <!-- Linha do nome do usuário como botão -->
-                <a href="../Home/perfil.php" class="menu-usuario"
-                    style="justify-content: space-between; align-items: center;">
-                    <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
+        <?php if (!empty($_SESSION['idUsuario'])): ?>
+            <!-- Linha do nome do usuário como botão -->
+            <a href="../Perfil/perfil.php" class="menu-usuario" style="justify-content: space-between; align-items: center;">
+                <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
 
-                    <?php if (!empty($_SESSION['fotoUsuario'])): ?>
-                        <img src="<?php echo $_SESSION['fotoUsuario']; ?>" alt="Foto do Usuário" class="foto-usuario"
-                            style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
-                    <?php else: ?>
-                        <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
-                    <?php endif; ?>
-                </a>
+                <?php if (!empty($_SESSION['fotoUsuario'])): ?>
+                    <img src="<?php echo $_SESSION['fotoUsuario']; ?>" alt="Foto do Usuário" class="foto-usuario"
+                        style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
+                <?php else: ?>
+                    <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
+                <?php endif; ?>
+            </a>
 
-                <div class="menu-usuario" style="display:flex;align-items:center;gap:8px;">
-                    <span>Modo escuro:</span>
-                    <label class="switch">
-                        <input type="checkbox" id="botao-modo-escuro">
-                        <span class="slider-dark"></span>
-                    </label>
-                </div>
+            
 
-                <form method="POST" action="../logout.php">
-                    <button type="submit" class="menu-usuario">
-                        Sair
-                        <ion-icon name="log-out-outline" class="icon-user"></ion-icon>
-                    </button>
-                </form>
+            <form method="POST" action="../logout.php">
+                <button type="submit" class="menu-usuario">
+                    Sair!
+                    <ion-icon name="log-out-outline" class="icon-user"></ion-icon>
+                </button>
+            </form>
 
-            <?php else: ?>
-                <a href="../Login/login.php" class="menu-usuario">
-                    Fazer Login!
-                    <ion-icon name="log-in-outline" class="icon-user"></ion-icon>
-                </a>
+        <?php else: ?>
+            <a href="../Login/login.php" class="menu-usuario">
+                Fazer Login!
+                <ion-icon name="log-in-outline" class="icon-user"></ion-icon>
+            </a>
 
-                <div class="menu-usuario" style="display:flex;align-items:center;gap:8px;">
-                    <span>Modo escuro:</span>
-                    <label class="switch">
-                        <input type="checkbox" id="botao-modo-escuro">
-                        <span class="slider-dark"></span>
-                    </label>
-                </div>
-            <?php endif; ?>
+            
+        <?php endif; ?>
 
-        </div>
+    </div>
 
         <nav>
             <ul>
@@ -175,17 +162,17 @@ include '../session.php';
                 <ul>
                     <h3>AJUDA</h3>
                     <div class="links">
-                        <li><a href="#">Fale Conosco</a></li>
+                        <li><a href="../Fale Conosco/fale.php">Fale Conosco</a></li>
                         <li><a href="#">Chat Suporte</a></li>
-                        <li><a href="#">Sua Conta</a></li>
+                        <li><a href="../Perfil/perfil.php">Sua Conta</a></li>
                     </div>
                 </ul>
 
                 <ul>
                     <h3>SERVIÇOS</h3>
                     <div class="links">
-                        <li><a href="#">Catálogo</a></li>
-                        <li><a href="#">Suporte</a></li>
+                        <li><a href="../Catalogo/catalogo.php">Catálogo</a></li>
+                        <li><a href="../Fale Conosco/fale.php">Suporte</a></li>
                         <li><a href="#">Como Escolher</a></li>
                     </div>
                 </ul>

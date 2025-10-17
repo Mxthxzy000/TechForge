@@ -26,9 +26,10 @@
 
     <nav>
         <ul>
-            <li><a href="../Home/index.php" class="voltarInicio"><ion-icon name="arrow-back-circle-outline"></ion-icon>INÍCIO</a></li>
+            <li><a href="../Home/index.php" class="voltarInicio"><ion-icon
+                        name="arrow-back-circle-outline"></ion-icon>INÍCIO</a></li>
         </ul>
-    </nav>      
+    </nav>
 
     <div class="container-new">
         <!-- Header -->
@@ -183,17 +184,17 @@
             <ul>
                 <h3>AJUDA</h3>
                 <div class="links">
-                    <li><a href="#">Fale Conosco</a></li>
+                    <li><a href="../Fale Conosco/fale.php">Fale Conosco</a></li>
                     <li><a href="#">Chat Suporte</a></li>
-                    <li><a href="#">Sua Conta</a></li>
+                    <li><a href="../Perfil/perfil.php">Sua Conta</a></li>
                 </div>
             </ul>
 
             <ul>
                 <h3>SERVIÇOS</h3>
                 <div class="links">
-                    <li><a href="#">Catálogo</a></li>
-                    <li><a href="#">Suporte</a></li>
+                    <li><a href="../Catalogo/catalogo.php">Catálogo</a></li>
+                    <li><a href="../Fale Conosco/fale.php">Suporte</a></li>
                     <li><a href="#">Como Escolher</a></li>
                 </div>
             </ul>
@@ -213,6 +214,7 @@
         </div>
 
         <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
+
     </footer>
 
     <script src="perfil.js"></script>
