@@ -89,7 +89,7 @@ include '../session.php';
             <span class="linha"></span>
             <li><a href="#">GAMER</a></li>
             <span class="linha"></span>
-            <li><a href="../Fale Conosco/fale.php">SOBRE NÓS</a></li>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a></li>
         </ul>
     </nav>
 
@@ -208,7 +208,7 @@ include '../session.php';
             <ul>
                 <h3>TECHFORGE</h3>
                 <div class="links">
-                    <li><a href="#">Sobre nós</a></li>
+                    <li><a href="../Sobre/sobre.php">Sobre nós</a></li>
                     <li><a href="#">Política De Privacidade</a></li>
                     <li><a href="#">Parceiros</a></li>
                 </div>

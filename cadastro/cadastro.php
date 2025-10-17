@@ -95,7 +95,7 @@ include "../config.php";
             <ul>
                 <h3>TECHFORGE</h3>
                 <div class="links">
-                    <li><a href="#">Sobre nós</a></li>
+                    <li><a href="../Sobre/sobre.php">Sobre nós</a></li>
                     <li><a href="#">Política De Privacidade</a></li>
                     <li><a href="#">Parceiros</a></li>
                 </div>
