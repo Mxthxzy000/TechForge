@@ -540,31 +540,37 @@ footer {
 }
 
 .preco-inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .preco-inputs input {
-    padding: 6px;
-    border: none;
-    border-radius: 6px;
+  width: 48%;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  text-align: center;
 }
 
 .btn-filtrar {
-    margin-top: 6px;
-    padding: 8px;
-    border: none;
-    border-radius: 6px;
-    background-color: #f8c10d;
-    color: #1a2a3c;
-    font-weight: bold;
-    cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: #f8c10d;
+  color: #1a2a3c;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 .btn-filtrar:hover {
-    background-color: #ffdb4d;
+  background-color: #ffdb4d;
 }
+
 
 /* TAGS */
 #filterTags span {
@@ -620,3 +626,122 @@ footer {
 .cabecalho-lista h2 {
     color: #f8c10d;
 }
+
+/* === MELHORIAS === */
+.loading {
+    color: #f8c10d;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.erro {
+    color: #ff4444;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.nenhum-produto {
+    color: #ccc;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* Melhor responsividade dos cards */
+@media (max-width: 900px) {
+    .container-catalogo {
+        flex-direction: column;
+        align-items: center;
+    }
+    .filtro-lateral {
+        width: 95%;
+        position: static;
+        margin-bottom: 20px;
+    }
+    .cards-produtos {
+        gap: 20px;
+    }
+}
+
+/* === FILTRO DE LINHAS (Intel / AMD) === */
+.linha-marcas {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.marca-option {
+  width: 48%;
+  height: 80px;
+  background-color: #2B3640;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.marca-option img {
+  width: 70px;
+  height: auto;
+  opacity: 0.85;
+  transition: 0.3s ease;
+  filter: brightness(0) invert(1); /* deixa branca */
+}
+
+.marca-option:hover {
+  transform: scale(1.05);
+  background-color: #213B5B;
+}
+
+.marca-option:hover img {
+  opacity: 1;
+}
+
+/* quando selecionada */
+.marca-option.selected {
+  border-color: #f8c10d;
+  box-shadow: 0 0 10px #f8c10d;
+  background-color: #1a2a3c;
+}
+
+.marca-option.selected img {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+/* === CHECKBOXES DE PEÇAS === */
+.tipos-pecas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tipos-pecas label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background-color: #2B3640;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tipos-pecas label:hover {
+  background-color: #213B5B;
+  transform: scale(1.03);
+}
+
+.tipos-pecas input[type="checkbox"] {
+  accent-color: #f8c10d;
+  width: 16px;
+  height: 16px;
+}
+

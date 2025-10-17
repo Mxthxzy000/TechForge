@@ -113,13 +113,30 @@ include '../session.php';
                     <div class="preco-inputs">
                         <input type="number" id="priceMin" placeholder="Min R$">
                         <input type="number" id="priceMax" placeholder="Max R$">
-                        <button id="applyPrice" class="btn-filtrar">Aplicar</button>
                     </div>
+                    <button id="applyPrice" class="btn-filtrar">Aplicar</button>
+
                 </div>
 
                 <div class="filtro-secao">
                     <h3>Linhas:</h3>
-                    <div id="filterLines">Carregando...</div>
+                    <div class="linha-marcas">
+                        <div class="marca-option" id="intelOption" data-line="Intel">
+                            <img src="../imagens/intel-logo.png" alt="Intel">
+                        </div>
+                        <div class="marca-option" id="amdOption" data-line="AMD">
+                            <img src="../imagens/AMD-logo.png" alt="AMD">
+                        </div>
+                    </div>
+
+                    <div class="tipos-pecas">
+                        <label><input type="checkbox" class="tipoFiltro" value="Processador"> Processadores</label>
+                        <label><input type="checkbox" class="tipoFiltro" value="Placa de Vídeo"> Placas de Vídeo</label>
+                        <label><input type="checkbox" class="tipoFiltro" value="Placa-Mãe"> Placas-Mãe</label>
+                        <label><input type="checkbox" class="tipoFiltro" value="Memória RAM"> Memórias RAM</label>
+                        <label><input type="checkbox" class="tipoFiltro" value="Cooler"> Coolers</label>
+                        <label><input type="checkbox" class="tipoFiltro" value="Fonte"> Fontes</label>
+                    </div>
                 </div>
 
                 <div class="filtro-secao">

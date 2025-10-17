@@ -76,14 +76,13 @@ function carregarProdutos() {
   const tipos = Array.from(document.querySelectorAll(".tipoFiltro:checked"))
     .map((c) => c.value)
     .join(",");
-  const linhas = Array.from(document.querySelectorAll(".tipoFiltro:checked"))
-    .map((c) => c.dataset.line)
-    .join(",");
+
+  const linhas = (currentFilters.lines || []).join(",");
+
   const onlyPromo = onlyPromos && onlyPromos.checked ? "&categoria=promocoes" : "";
 
   fetch(
-    `funcionalidadesCatalogo.php?action=filter&type=${tipos}&line=${linhas}&tag=${
-      currentFilters.tag || ""
+    `funcionalidadesCatalogo.php?action=filter&type=${tipos}&line=${linhas}&tag=${currentFilters.tag || ""
     }&price_min=${priceMinEl.value}&price_max=${priceMaxEl.value}${onlyPromo}`
   )
     .then((r) => r.json())
@@ -92,6 +91,16 @@ function carregarProdutos() {
     });
 }
 
+fetch(
+  `funcionalidadesCatalogo.php?action=filter&type=${tipos}&line=${linhas}&tag=${currentFilters.tag || ""
+  }&price_min=${priceMinEl.value}&price_max=${priceMaxEl.value}${onlyPromo}`
+)
+  .then((r) => r.json())
+  .then((produtos) => {
+    renderProdutos(produtos);
+  });
+
+
 function renderProdutos(produtos) {
   productsEl.innerHTML = "";
   resultCount.textContent = `${produtos.length} produtos encontrados`;
@@ -99,6 +108,26 @@ function renderProdutos(produtos) {
     productsEl.innerHTML = "<p>Nenhum produto encontrado.</p>";
     return;
   }
+
+  // ======= Seleção Intel / AMD =======
+  const intelOption = document.getElementById("intelOption");
+  const amdOption = document.getElementById("amdOption");
+
+  [intelOption, amdOption].forEach((option) => {
+    option.addEventListener("click", () => {
+      option.classList.toggle("selected");
+      atualizarLinhasSelecionadas();
+    });
+  });
+
+  function atualizarLinhasSelecionadas() {
+    const selecionadas = Array.from(
+      document.querySelectorAll(".marca-option.selected")
+    ).map((el) => el.dataset.line);
+    currentFilters.lines = selecionadas;
+    carregarProdutos();
+  }
+
 
   produtos.forEach((p) => {
     const card = document.createElement("div");
