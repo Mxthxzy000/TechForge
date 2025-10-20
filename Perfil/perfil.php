@@ -1,3 +1,40 @@
+<?php
+require '../config.php';
+require '../session.php';
+require '../flash.php';
+
+if (empty($_SESSION['idUsuario'])) {
+    set_flash('erro', 'Você precisa fazer login para acessar esta página.');
+    header('Location: ../Login/login.php');
+    exit;
+}
+
+$idUsuario = $_SESSION['idUsuario'];
+$sql = "SELECT nomeUsuario, sobrenomeUsuario, emailUsuario, fotoUsuario, celularUsuario, nascimentoUsuario 
+        FROM usuario 
+        WHERE idUsuario = ? 
+        LIMIT 1";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $idUsuario);
+$stmt->execute();
+$result = $stmt->get_result();
+$usuario = $result->fetch_assoc();
+
+if (!$usuario) {
+    set_flash('erro', 'Usuário não encontrado.');
+    header('Location: ../Login/login.php');
+    exit;
+}
+
+$nomeCompleto = trim($usuario['nomeUsuario'] . ' ' . ($usuario['sobrenomeUsuario'] ?? ''));
+$email = $usuario['emailUsuario'];
+$foto = $usuario['fotoUsuario'] ?? '../imagens/default-avatar.png';
+$celular = $usuario['celularUsuario'] ?? 'Não informado';
+$nascimento = $usuario['nascimentoUsuario'] ?? 'Não informado';
+
+$stmt->close();
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -5,7 +42,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="perfil.css">
-    <title>Perfil</title>
+    <title>Perfil - TechForge</title>
 </head>
 
 <body>
@@ -31,14 +68,23 @@
         </ul>
     </nav>
 
+    <!-- Adicionando exibição de mensagens flash -->
+    <?php show_flash(); ?>
+
     <div class="container-new">
-        <!-- Header -->
+        <!-- Header com dados reais do usuário -->
         <div class="header-new">
             <div class="user-info">
-                <div class="user-avatar">👤</div>
+                <div class="user-avatar">
+                    <?php if ($foto !== '../imagens/default-avatar.png'): ?>
+                        <img src="<?php echo htmlspecialchars($foto); ?>" alt="Foto do usuário" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                    <?php else: ?>
+                        👤
+                    <?php endif; ?>
+                </div>
                 <div class="user-details">
-                    <h2>Olá, Greggori</h2>
-                    <div class="user-email">greggori.lol@gmail.com</div>
+                    <h2>Olá, <?php echo htmlspecialchars($nomeCompleto); ?></h2>
+                    <div class="user-email"><?php echo htmlspecialchars($email); ?></div>
                 </div>
             </div>
             <div class="header-actions">
@@ -59,79 +105,9 @@
         <div class="orders-section">
             <div class="section-title">Últimos Pedidos</div>
 
-            <!-- Order Card 1 -->
+            <!-- Mensagem quando não há pedidos -->
             <div class="order-card">
-                <div class="order-header">
-                    <div class="order-field">
-                        <div class="order-label">Número do Pedido</div>
-                        <div class="order-value">#12345</div>
-                    </div>
-                    <div class="order-field">
-                        <div class="order-label">Pagamento</div>
-                        <div class="order-value">PIX</div>
-                    </div>
-                    <div class="order-field">
-                        <div class="order-label">Data</div>
-                        <div class="order-value">15/01/2025</div>
-                    </div>
-                    <div class="order-field">
-                        <div class="order-label">Valor Total</div>
-                        <div class="order-value">R$ 234,90</div>
-                    </div>
-                    <div class="order-field">
-                        <div class="order-label">Status</div>
-                        <div class="order-value">CONCLUÍDO</div>
-                    </div>
-                </div>
-                <div class="order-footer">
-                    <div class="order-badges">
-                        <span class="badge badge-success">EM ENTREGA</span>
-                        <span class="badge badge-warning">Aguardando Entrega</span>
-                        <span class="badge badge-warning">Aguardando Entrega</span>
-                    </div>
-                    <div class="order-location">
-                        <span class="location-icon">📍</span>
-                        <span>Produto Saindo</span>
-                        <span>Recife</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Order Card 2 -->
-            <div class="order-card">
-                <div class="order-header">
-                    <div class="order-field">
-                        <div class="order-label">Número do Pedido</div>
-                        <div class="order-value">CART-01-00-00-0TC</div>
-                    </div>
-                    <div class="order-field">
-                        <div class="order-label">Pagamento</div>
-                        <div class="order-value">PIX</div>
-                    </div>
-                    <div class="order-field">
-                        <div class="order-label">Data</div>
-                        <div class="order-value">10/01/2025</div>
-                    </div>
-                    <div class="order-field">
-                        <div class="order-label">Valor Total</div>
-                        <div class="order-value">R$ 156,50</div>
-                    </div>
-                    <div class="order-field">
-                        <div class="order-label">Status</div>
-                        <div class="order-value">CONCLUÍDO</div>
-                    </div>
-                </div>
-                <div class="order-footer">
-                    <div class="order-badges">
-                        <span class="badge badge-success">EM ENTREGA</span>
-                        <span class="badge badge-warning">Aguardando Entrega</span>
-                        <span class="badge badge-warning">Aguardando Entrega</span>
-                    </div>
-                    <div class="order-location">
-                        <span class="location-icon">📍</span>
-                        <span>Produto Saindo</span>
-                    </div>
-                </div>
+                <p style="text-align:center;padding:20px;color:#666;">Você ainda não fez nenhum pedido.</p>
             </div>
         </div>
 
@@ -146,25 +122,33 @@
                 <div class="addresses-grid">
                     <div class="address-card">
                         <div class="address-title">Endereço de Entrega Padrão</div>
+                        <p style="color:#666;font-size:14px;margin-top:10px;">Nenhum endereço cadastrado</p>
                     </div>
                     <div class="address-card">
                         <div class="address-title">Endereço de Cobrança Padrão</div>
+                        <p style="color:#666;font-size:14px;margin-top:10px;">Nenhum endereço cadastrado</p>
                     </div>
                 </div>
             </div>
 
-            <!-- User Data Section -->
+            <!-- User Data Section com dados reais -->
             <div class="user-data-section">
                 <div class="user-data-title">Meus Dados</div>
                 <div class="user-data-content">
                     <div class="user-data-label">Informações da Conta</div>
                 </div>
                 <div class="user-data-content">
-                    <div class="user-data-value">👤 Greggori</div>
+                    <div class="user-data-value">👤 <?php echo htmlspecialchars($nomeCompleto); ?></div>
                 </div>
                 <div class="user-email-box">
                     <span class="email-icon">✉️</span>
-                    <span class="email-text">greggori.lol@gmail.com</span>
+                    <span class="email-text"><?php echo htmlspecialchars($email); ?></span>
+                </div>
+                <div class="user-data-content" style="margin-top:10px;">
+                    <div class="user-data-value">📱 <?php echo htmlspecialchars($celular); ?></div>
+                </div>
+                <div class="user-data-content" style="margin-top:10px;">
+                    <div class="user-data-value">🎂 <?php echo htmlspecialchars($nascimento); ?></div>
                 </div>
             </div>
         </div>
@@ -175,7 +159,7 @@
             <ul>
                 <h3>TECHFORGE</h3>
                 <div class="links">
-                    <li><a href="#">Sobre nós</a></li>
+                    <li><a href="../Sobre/sobre.php">Sobre nós</a></li>
                     <li><a href="#">Política De Privacidade</a></li>
                     <li><a href="#">Parceiros</a></li>
                 </div>
@@ -214,11 +198,11 @@
         </div>
 
         <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
-
     </footer>
 
+    <!-- Incluindo script comum e específico -->
+    <script src="../js/common.js"></script>
     <script src="perfil.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>

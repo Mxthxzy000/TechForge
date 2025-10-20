@@ -1,3 +1,8 @@
+<?php
+require '../config.php';
+require '../session.php';
+require '../flash.php';
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -5,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="fale.css">
-    <title>Fale Conosco</title>
+    <title>Fale Conosco | TechForge</title>
 </head>
 
 <body>
@@ -19,16 +24,53 @@
             <img src="../imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
         <div class="final-header">
-            <button id="minha-conta" class="btn-header"><ion-icon name="person-circle-outline"></ion-icon></button>
+            <!-- Adicionando dropdown de usuário funcional -->
+            <div class="usuario-menu">
+                <button id="minha-conta" class="btn-header">
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                </button>
+            </div>
             <button id="carrinho" class="btn-header"><ion-icon name="cart-outline"></ion-icon></button>
         </div>
     </header>
+
+    <!-- Adicionando dropdown de usuário -->
+    <div class="dropdown-user">
+        <?php if (!empty($_SESSION['idUsuario'])): ?>
+            <a href="../Perfil/perfil.php" class="menu-usuario" style="justify-content: space-between; align-items: center;">
+                <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
+
+                <?php if (!empty($_SESSION['fotoUsuario'])): ?>
+                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário" class="foto-usuario"
+                        style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
+                <?php else: ?>
+                    <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
+                <?php endif; ?>
+            </a>
+
+            <form method="POST" action="../logout.php">
+                <button type="submit" class="menu-usuario">
+                    Sair!
+                    <ion-icon name="log-out-outline" class="icon-user"></ion-icon>
+                </button>
+            </form>
+
+        <?php else: ?>
+            <a href="../Login/login.php" class="menu-usuario">
+                Fazer Login!
+                <ion-icon name="log-in-outline" class="icon-user"></ion-icon>
+            </a>
+        <?php endif; ?>
+    </div>
 
     <nav>
         <ul>
             <li><a href="../Home/index.php" class="voltarInicio"><ion-icon name="arrow-back-circle-outline"></ion-icon>INÍCIO</a></li>
         </ul>
     </nav>    
+    
+    <!-- Adicionando exibição de mensagens flash -->
+    <?php show_flash(); ?>
     
      <div class="container-new">
         <div class="left-section">
@@ -78,19 +120,20 @@
 
         <div class="form-container">
             <h2 class="form-title">Fale Conosco</h2>
-            <form id="contactForm">
+            <!-- Adicionando action para processar formulário -->
+            <form id="contactForm" method="POST" action="processar_contato.php">
                 <div class="form-row">
-                    <input type="text" class="form-input" placeholder="Nome" required>
-                    <input type="tel" class="form-input" placeholder="Celular" required>
+                    <input type="text" name="nome" class="form-input" placeholder="Nome" required>
+                    <input type="tel" name="celular" class="form-input" placeholder="Celular" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-input" placeholder="E-mail" required>
+                    <input type="email" name="email" class="form-input" placeholder="E-mail" required>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-input" placeholder="Dúvida" required>
+                    <input type="text" name="duvida" class="form-input" placeholder="Dúvida" required>
                 </div>
                 <div class="form-group">
-                    <textarea class="form-textarea" placeholder="Sobre..." required></textarea>
+                    <textarea name="mensagem" class="form-textarea" placeholder="Sobre..." required></textarea>
                 </div>
                 <button type="submit" class="submit-button">Enviar</button>
                 <div class="form-footer">
@@ -101,54 +144,54 @@
         </div>
     </div>
 
-
     <footer>
-            <div class="container-footer">
-                <ul>
-                    <h3>TECHFORGE</h3>
-                    <div class="links">
-                        <li><a href="../Sobre/sobre.php">Sobre nós</a></li>
-                        <li><a href="#">Política De Privacidade</a></li>
-                        <li><a href="#">Parceiros</a></li>
-                    </div>
-                </ul>
+        <div class="container-footer">
+            <ul>
+                <h3>TECHFORGE</h3>
+                <div class="links">
+                    <li><a href="../Sobre/sobre.php">Sobre nós</a></li>
+                    <li><a href="#">Política De Privacidade</a></li>
+                    <li><a href="#">Parceiros</a></li>
+                </div>
+            </ul>
 
-                <ul>
-                    <h3>AJUDA</h3>
-                    <div class="links">
-                        <li><a href="../Fale Conosco/fale.php">Fale Conosco</a></li>
-                        <li><a href="#">Chat Suporte</a></li>
-                        <li><a href="../Perfil/perfil.php">Sua Conta</a></li>
-                    </div>
-                </ul>
+            <ul>
+                <h3>AJUDA</h3>
+                <div class="links">
+                    <li><a href="../Fale Conosco/fale.php">Fale Conosco</a></li>
+                    <li><a href="#">Chat Suporte</a></li>
+                    <li><a href="../Perfil/perfil.php">Sua Conta</a></li>
+                </div>
+            </ul>
 
-                <ul>
-                    <h3>SERVIÇOS</h3>
-                    <div class="links">
-                        <li><a href="../Catalogo/catalogo.php">Catálogo</a></li>
-                        <li><a href="../Fale Conosco/fale.php">Suporte</a></li>
-                        <li><a href="#">Como Escolher</a></li>
-                    </div>
-                </ul>
+            <ul>
+                <h3>SERVIÇOS</h3>
+                <div class="links">
+                    <li><a href="../Catalogo/catalogo.php">Catálogo</a></li>
+                    <li><a href="../Fale Conosco/fale.php">Suporte</a></li>
+                    <li><a href="#">Como Escolher</a></li>
+                </div>
+            </ul>
 
-                <ul>
-                    <h3>SIGA-NOS</h3>
-                    <div class="links-icon">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                        <ion-icon name="logo-twitter"></ion-icon>
-                        <ion-icon name="logo-youtube"></ion-icon>
-                        <ion-icon name="logo-linkedin"></ion-icon>
-                    </div>
-                    <div class="title">
-                        <p>Em Nossas Redes Sociais</p>
-                    </div>
-                </ul>
-            </div>
+            <ul>
+                <h3>SIGA-NOS</h3>
+                <div class="links-icon">
+                    <ion-icon name="logo-instagram"></ion-icon>
+                    <ion-icon name="logo-twitter"></ion-icon>
+                    <ion-icon name="logo-youtube"></ion-icon>
+                    <ion-icon name="logo-linkedin"></ion-icon>
+                </div>
+                <div class="title">
+                    <p>Em Nossas Redes Sociais</p>
+                </div>
+            </ul>
+        </div>
 
-            <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
+        <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
+    </footer>
 
-        </footer>
-
+    <!-- Adicionando common.js antes do script específico -->
+    <script src="../js/common.js"></script>
     <script src="fale.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

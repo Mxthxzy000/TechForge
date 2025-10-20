@@ -1,11 +1,5 @@
 <?php
-// flash.php
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// evita redefinir a função se já existir
+// flash.php - Sistema de mensagens flash
 if (!function_exists('set_flash')) {
     function set_flash($tipo, $msg) {
         $_SESSION['flash'] = [
@@ -21,7 +15,7 @@ if (!function_exists('show_flash')) {
 
         $f = $_SESSION['flash'];
         $tipo = isset($f['tipo']) ? strtolower($f['tipo']) : 'aviso';
-        $msg  = $f['msg'] ?? '';
+        $msg = htmlspecialchars($f['msg'] ?? '', ENT_QUOTES, 'UTF-8');
 
         $corBorda = "#f8c10d";
         $corFundo = "#2B3640";

@@ -1,11 +1,12 @@
 <?php
+// session.php - Configuração de sessão
 if (session_status() === PHP_SESSION_NONE) {
-    session_set_cookie_params(lifetime_or_options: [
+    session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
-        'httponly' => 'true',
+        'httponly' => true,
         'samesite' => 'Lax',
-        // 'secure' => true
+        // 'secure' => true // Descomente em produção com HTTPS
     ]);
     session_start();
 }

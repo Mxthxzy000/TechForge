@@ -1,5 +1,12 @@
 <?php
-include "../config.php";
+require "../config.php";
+require "../session.php";
+require "../flash.php";
+
+if (!empty($_SESSION['idUsuario'])) {
+    header('Location: ../Home/index.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -8,7 +15,7 @@ include "../config.php";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="cadastro.css">
-    <title>Cadastro</title>
+    <title>Cadastro - TechForge</title>
 </head>
 
 <body>
@@ -33,6 +40,9 @@ include "../config.php";
         </ul>
     </nav>
 
+    <!-- Adicionando exibição de mensagens flash -->
+    <?php show_flash(); ?>
+
     <h1 class="login-title">Cadastro</h1>
 
     <div class="container">
@@ -43,8 +53,6 @@ include "../config.php";
         <div class="login-section">
             <div class="login-form-container">
                 <form id="loginForm" class="login-form" action="addNovoAluno.php" method="POST">
-                    <input type="hidden" name="acao" value="cadastrar">
-
                     <div class="input-group">
                         <input type="text" id="nome" name="nomeUsuario" class="input-field" required placeholder="Nome"
                             value="<?php echo isset($_POST['nomeUsuario']) ? htmlspecialchars($_POST['nomeUsuario']) : ''; ?>">
@@ -137,6 +145,8 @@ include "../config.php";
 
     </footer>
 
+    <!-- Incluindo script comum e específico -->
+    <script src="../js/common.js"></script>
     <script src="cadastro.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

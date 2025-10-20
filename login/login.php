@@ -2,7 +2,11 @@
 require "../config.php";
 require "../session.php";
 require "../flash.php";
-require "logarUsuario.php";
+
+if (!empty($_SESSION['idUsuario'])) {
+    header('Location: ../Home/index.php');
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +16,7 @@ require "logarUsuario.php";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="login.css">
-    <title>Login</title>
+    <title>Login - TechForge</title>
 </head>
 
 <body>
@@ -37,22 +41,19 @@ require "logarUsuario.php";
         </ul>
     </nav>
 
-    <!-- Mensagens de feedback -->
     <?php show_flash(); ?>
 
     <h1 class="login-title">Login</h1>
 
     <div class="container">
-
-        <!-- Left side - Banner -->
         <div class="banner-section">
             <img src="../imagens/image-pc.webp" alt="Banner Image" class="banner-image">
         </div>
 
-        <!-- Right side - Login Form -->
         <div class="login-section">
             <div class="login-form-container">
-                <form id="loginForm" class="login-form" method="POST" action="login.php">
+                <!-- Action agora aponta para logarUsuario.php -->
+                <form id="loginForm" class="login-form" method="POST" action="logarUsuario.php">
                     <div class="input-group">
                         <label for="email" class="input-label">E-mail</label>
                         <input type="email" id="email" name="emailUsuario" class="input-field" required>
@@ -79,7 +80,7 @@ require "logarUsuario.php";
             <ul>
                 <h3>TECHFORGE</h3>
                 <div class="links">
-                    <li><a href="#">Sobre nós</a></li>
+                    <li><a href="../Sobre/sobre.php">Sobre nós</a></li>
                     <li><a href="#">Política De Privacidade</a></li>
                     <li><a href="#">Parceiros</a></li>
                 </div>
@@ -118,20 +119,13 @@ require "logarUsuario.php";
         </div>
 
         <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
-
     </footer>
 
+    <!-- Incluindo script comum e específico -->
+    <script src="../js/common.js"></script>
     <script src="login.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
-    <script>
-        // botão de cadastro
-        document.getElementById('cadastre-se').addEventListener('click', () => {
-            window.location.href = '../Cadastro/cadastro.php';
-        });
-    </script>
 </body>
 
 </html>
