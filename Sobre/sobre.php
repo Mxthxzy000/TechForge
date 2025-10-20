@@ -2,13 +2,19 @@
 require '../config.php';
 require '../session.php';
 require '../flash.php';
+
+if (!isset($conn)) {
+    die("Erro: Conexão com banco de dados não estabelecida.");
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Comum/common.css">
     <link rel="stylesheet" href="sobre.css">
     <title>Sobre | TechForge</title>
 </head>
@@ -24,7 +30,10 @@ require '../flash.php';
             <img src="../imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
         <div class="final-header">
-            <!-- Adicionando dropdown de usuário funcional -->
+            <div class="divpesquisar">
+                <button id="pesquisar" class="btn-pesquisar"><ion-icon name="search-sharp"></ion-icon></button>
+                <input type="text" placeholder=" Pesquisar..." class="barra-pesquisa">
+            </div>
             <div class="usuario-menu">
                 <button id="minha-conta" class="btn-header">
                     <ion-icon name="person-circle-outline"></ion-icon>
@@ -34,15 +43,15 @@ require '../flash.php';
         </div>
     </header>
 
-    <!-- Adicionando dropdown de usuário -->
     <div class="dropdown-user">
         <?php if (!empty($_SESSION['idUsuario'])): ?>
-            <a href="../Perfil/perfil.php" class="menu-usuario" style="justify-content: space-between; align-items: center;">
+            <a href="../Perfil/perfil.php" class="menu-usuario"
+                style="justify-content: space-between; align-items: center;">
                 <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
 
                 <?php if (!empty($_SESSION['fotoUsuario'])): ?>
-                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário" class="foto-usuario"
-                        style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
+                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário"
+                        class="foto-usuario" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
                 <?php else: ?>
                     <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
                 <?php endif; ?>
@@ -65,31 +74,51 @@ require '../flash.php';
 
     <nav>
         <ul>
-            <li><a href="../Home/index.php" class="voltarInicio"><ion-icon name="arrow-back-circle-outline"></ion-icon>INÍCIO</a></li>
+             <li><a href="../Home/index.php">HOME</a></li>
+            <span class="linha"></span>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a></li>
+            <span class="linha"></span>
+            <li><a href="#">OFERTAS</a></li>
+            <span class="linha"></span>
+            <li><a href="#">MONTE SEU PC</a></li>
+            <span class="linha"></span>
+            <li><a href="#">GAMER</a></li>
         </ul>
-    </nav>    
-    
-    <!-- Adicionando exibição de mensagens flash -->
+    </nav>
+
     <?php show_flash(); ?>
-    
+
     <div class="container-new">
         <h1>SOBRE A TECHFORGE</h1>
 
         <div class="about-text">
             <p>
-                Fundada com o intuito de transformar a experiência tecnológica no Brasil, a TechForge é referência em inovação e excelência no mercado de tecnologia e games. Nossa missão é proporcionar aos nossos clientes acesso aos melhores produtos e serviços, sempre com foco em qualidade, atendimento personalizado e suporte técnico especializado.
+                Fundada com o intuito de transformar a experiência tecnológica no Brasil, a TechForge é referência em
+                inovação e excelência no mercado de tecnologia e games. Nossa missão é proporcionar aos nossos clientes
+                acesso aos melhores produtos e serviços, sempre com foco em qualidade, atendimento personalizado e
+                suporte técnico especializado.
             </p>
             <p>
-                Nascida da paixão por tecnologia e inovação, começamos nossa jornada com o objetivo de democratizar o acesso a equipamentos de alta performance. Hoje, somos reconhecidos como uma das principais referências no segmento, oferecendo desde componentes de hardware até soluções completas para gamers, profissionais e entusiastas.
+                Nascida da paixão por tecnologia e inovação, começamos nossa jornada com o objetivo de democratizar o
+                acesso a equipamentos de alta performance. Hoje, somos reconhecidos como uma das principais referências
+                no segmento, oferecendo desde componentes de hardware até soluções completas para gamers, profissionais
+                e entusiastas.
             </p>
             <p>
-                Nossa equipe é formada por especialistas apaixonados por tecnologia, sempre atualizados com as últimas tendências do mercado. Acreditamos que cada cliente é único, e por isso oferecemos consultoria personalizada para garantir que você encontre exatamente o que precisa, seja para montar seu setup dos sonhos ou para atualizar seu equipamento.
+                Nossa equipe é formada por especialistas apaixonados por tecnologia, sempre atualizados com as últimas
+                tendências do mercado. Acreditamos que cada cliente é único, e por isso oferecemos consultoria
+                personalizada para garantir que você encontre exatamente o que precisa, seja para montar seu setup dos
+                sonhos ou para atualizar seu equipamento.
             </p>
             <p>
-                Além de produtos de qualidade, investimos constantemente em infraestrutura e capacitação para oferecer a melhor experiência de compra. Nossas lojas físicas são projetadas para que você possa conhecer, testar e comparar produtos antes de decidir. E nosso suporte técnico está sempre disponível para auxiliar em qualquer dúvida ou necessidade.
+                Além de produtos de qualidade, investimos constantemente em infraestrutura e capacitação para oferecer a
+                melhor experiência de compra. Nossas lojas físicas são projetadas para que você possa conhecer, testar e
+                comparar produtos antes de decidir. E nosso suporte técnico está sempre disponível para auxiliar em
+                qualquer dúvida ou necessidade.
             </p>
             <p>
-                Na TechForge, acreditamos que tecnologia é mais do que produtos - é sobre possibilitar experiências, realizar sonhos e impulsionar o futuro. Venha fazer parte dessa jornada conosco!
+                Na TechForge, acreditamos que tecnologia é mais do que produtos - é sobre possibilitar experiências,
+                realizar sonhos e impulsionar o futuro. Venha fazer parte dessa jornada conosco!
             </p>
         </div>
 
@@ -192,7 +221,7 @@ require '../flash.php';
     </footer>
 
     <!-- Adicionando common.js antes do script específico -->
-    <script src="../js/common.js"></script>
+    <script src="../Comum/common.js"></script>
     <script src="sobre.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

@@ -33,3 +33,12 @@ document.addEventListener("click", (e) => {
     }
   }
 })
+
+const carrinho = document.getElementById("carrinho");
+
+if (carrinho) {
+    carrinho.addEventListener("click", () => {
+        window.location.href = "../Carrinho/carrinho.php"; // link da página do carrinho
+    });
+}
+

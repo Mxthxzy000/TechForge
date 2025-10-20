@@ -17,6 +17,7 @@ if (!isset($conn)) {
     <title>TechForge - Sua Loja de Tecnologia</title>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../Comum/common.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -55,8 +56,8 @@ if (!isset($conn)) {
                 <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
 
                 <?php if (!empty($_SESSION['fotoUsuario'])): ?>
-                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário" class="foto-usuario"
-                        style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
+                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário"
+                        class="foto-usuario" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
                 <?php else: ?>
                     <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
                 <?php endif; ?>
@@ -91,7 +92,6 @@ if (!isset($conn)) {
         </ul>
     </nav>
 
-    <!-- Adicionando exibição de mensagens flash -->
     <?php show_flash(); ?>
 
     <main>
@@ -165,7 +165,7 @@ if (!isset($conn)) {
             <?php
             // Verifica se a coluna vendasProduto existe
             $check_column = $conn->query("SHOW COLUMNS FROM produtos LIKE 'vendasProduto'");
-            
+
             if ($check_column && $check_column->num_rows > 0) {
                 // Coluna existe, ordena por vendas
                 $query = "SELECT * FROM produtos ORDER BY vendasProduto DESC LIMIT 10";
@@ -174,7 +174,7 @@ if (!isset($conn)) {
                 $query = "SELECT * FROM produtos ORDER BY idProduto DESC LIMIT 10";
                 error_log("AVISO: Coluna 'vendasProduto' não encontrada. Execute o script 'fix_vendas_produto_column.sql'");
             }
-            
+
             $result = $conn->query($query);
 
             if (!$result) {
@@ -185,21 +185,22 @@ if (!isset($conn)) {
                 while ($row = $result->fetch_assoc()):
                     ?>
                     <div class="card-produto">
-                        <?php if ($rank <= 3): ?>
+                        <?php if ($check_column && $rank <= 3): ?>
                             <span class="badge">Mais Vendidos</span>
                         <?php endif; ?>
 
-                        <img src="<?= htmlspecialchars($row['imagem']) ?>" alt="<?= htmlspecialchars($row['nomeProduto']) ?>">
+                        <img src="<?= htmlspecialchars($row['imagemProduto']) ?>"
+                            alt="<?= htmlspecialchars($row['nomeProduto']) ?>">
 
                         <div class="card-info">
                             <h3><?= htmlspecialchars($row['nomeProduto']) ?></h3>
                             <p class="descricao"><?= htmlspecialchars($row['descricaoProduto']) ?></p>
 
                             <p class="preco-atual">
-                                R$ <?= number_format($row['valorProduto'], 2, ',', '.') ?> <span>à vista</span>
+                                R$ <?= number_format($row['precoProduto'], 2, ',', '.') ?> <span>à vista</span>
                             </p>
                             <p class="parcelamento">
-                                12x de R$ <?= number_format($row['valorProduto'] / 12, 2, ',', '.') ?> sem juros
+                                12x de R$ <?= number_format($row['precoProduto'] / 12, 2, ',', '.') ?> sem juros
                             </p>
                         </div>
 
@@ -213,6 +214,7 @@ if (!isset($conn)) {
             }
             ?>
         </div>
+
     </main>
 
     <footer>
@@ -262,7 +264,7 @@ if (!isset($conn)) {
     </footer>
 
     <!-- Incluindo script comum e específico -->
-    <script src="../js/common.js"></script>
+    <script src="../Comum/common.js"></script>
     <script src="script.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

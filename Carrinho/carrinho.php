@@ -1,3 +1,4 @@
+
 <?php
 require '../config.php';
 require '../session.php';
@@ -6,17 +7,25 @@ require '../flash.php';
 if (!isset($conn)) {
     die("Erro: Conexão com banco de dados não estabelecida.");
 }
+
+// Verifica se o usuário está logado
+if (empty($_SESSION['idUsuario'])) {
+    // Redireciona para a página de login
+    header("Location: ../Login/login.php");
+    exit(); // sempre colocar exit após header para interromper o script
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo | TechForge</title>
     <link rel="stylesheet" href="../Comum/common.css">
-    <link rel="stylesheet" href="catalogo.css">
-    <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons.js"></script>
+    <link rel="stylesheet" href="carrinho.css">
+
+    <title>Carrinho</title>
 </head>
 
 <body>
@@ -76,6 +85,8 @@ if (!isset($conn)) {
         <ul>
             <li><a href="../Home/index.php">HOME</a></li>
             <span class="linha"></span>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a></li>
+            <span class="linha"></span>
             <li><a href="#">OFERTAS</a></li>
             <span class="linha"></span>
             <li><a href="#">MONTE SEU PC</a></li>
@@ -88,50 +99,72 @@ if (!isset($conn)) {
 
     <?php show_flash(); ?>
 
-    <div class="container-catalogo">
-        <aside class="filtro-lateral">
-            <h2>Filtros</h2>
-            <div class="filtro-secao">
-                <h3>Preço:</h3>
-                <div class="preco-inputs">
-                    <input type="number" id="priceMin" placeholder="Min R$">
-                    <input type="number" id="priceMax" placeholder="Max R$">
-                </div>
-                <button id="applyPrice" class="btn-filtrar">Aplicar</button>
+    <div class="container">
+        <div class="cart-section">
+            <div class="cart-header">
+                <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <h1>MEU CARRINHO</h1>
             </div>
 
-            <div class="filtro-secao">
-                <h3>Linhas:</h3>
-                <div class="linha-marcas">
-                    <div class="marca-option botao-filtro" data-linha="Intel"><img src="../imagens/intel-logo.png"
-                            alt="Intel"></div>
-                    <div class="marca-option botao-filtro" data-linha="AMD"><img src="../imagens/AMD-logo.png"
-                            alt="AMD"></div>
-                </div>
-                <div class="tipos-pecas">
-                    <label><input type="checkbox" class="tipoFiltro botao-filtro" data-tag="Processador">
-                        Processadores</label>
-                    <label><input type="checkbox" class="tipoFiltro botao-filtro" data-tag="Placa de Vídeo"> Placas de
-                        Vídeo</label>
-                    <label><input type="checkbox" class="tipoFiltro botao-filtro" data-tag="Placa-mãe">
-                        Placas-Mãe</label>
-                    <label><input type="checkbox" class="tipoFiltro botao-filtro" data-tag="Memória RAM"> Memórias
-                        RAM</label>
-                    <label><input type="checkbox" class="tipoFiltro botao-filtro" data-tag="Cooler"> Coolers</label>
-                    <label><input type="checkbox" class="tipoFiltro botao-filtro" data-tag="Fonte"> Fontes</label>
-                </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Items will be dynamically inserted here -->
             </div>
-        </aside>
+        </div>
 
-        <main class="produtos-lista">
-            <div class="cabecalho-lista">
-                <h2 id="pageTitle">Produtos</h2>
-                <span id="resultCount"></span>
+        <div class="summary-box">
+            <h2 class="summary-title">RESUMO</h2>
+
+            <div class="summary-row">
+                <span class="summary-label">Subtotal</span>
+                <span class="summary-value" id="subtotal">R$ 0,00</span>
             </div>
-            <div id="products" class="cards-produtos">
-                <p>Carregando produtos...</p>
+
+            <div class="summary-row">
+                <span class="summary-label">Desconto</span>
+                <span class="summary-value" id="discount">R$ 0,00</span>
             </div>
-        </main>
+
+            <div class="summary-total">
+                <span class="total-label">Total</span>
+                <span class="total-value" id="total">R$ 0,00</span>
+            </div>
+
+            <div class="qr-section">
+                <div class="qr-code">
+                    <svg width="60" height="60" viewBox="0 0 60 60">
+                        <rect width="60" height="60" fill="white" />
+                        <rect x="5" y="5" width="10" height="10" fill="black" />
+                        <rect x="20" y="5" width="5" height="5" fill="black" />
+                        <rect x="30" y="5" width="5" height="5" fill="black" />
+                        <rect x="45" y="5" width="10" height="10" fill="black" />
+                        <rect x="5" y="20" width="5" height="5" fill="black" />
+                        <rect x="25" y="20" width="10" height="10" fill="black" />
+                        <rect x="50" y="20" width="5" height="5" fill="black" />
+                        <rect x="5" y="30" width="5" height="5" fill="black" />
+                        <rect x="20" y="30" width="5" height="5" fill="black" />
+                        <rect x="50" y="30" width="5" height="5" fill="black" />
+                        <rect x="5" y="45" width="10" height="10" fill="black" />
+                        <rect x="30" y="45" width="5" height="5" fill="black" />
+                        <rect x="45" y="45" width="10" height="10" fill="black" />
+                    </svg>
+                </div>
+                <div class="payment-text">À vista</div>
+                <div class="payment-subtext">No pix você ganha 5% de desconto</div>
+            </div>
+
+            <button class="checkout-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                FINALIZAR PEDIDO
+            </button>
+        </div>
     </div>
 
     <footer>
@@ -181,7 +214,8 @@ if (!isset($conn)) {
     </footer>
 
     <script src="../Comum/common.js"></script>
-    <script src="catalogo.js"></script>
+    <script src="carrinho.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>

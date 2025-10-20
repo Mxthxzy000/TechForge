@@ -2,13 +2,26 @@
 require '../config.php';
 require '../session.php';
 require '../flash.php';
+
+if (!isset($conn)) {
+    die("Erro: Conexão com banco de dados não estabelecida.");
+}
+
+// Verifica se o usuário está logado
+if (empty($_SESSION['idUsuario'])) {
+    // Redireciona para a página de login
+    header("Location: ../Login/login.php");
+    exit(); // sempre colocar exit após header para interromper o script
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Comum/common.css">
     <link rel="stylesheet" href="fale.css">
     <title>Fale Conosco | TechForge</title>
 </head>
@@ -24,7 +37,10 @@ require '../flash.php';
             <img src="../imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
         <div class="final-header">
-            <!-- Adicionando dropdown de usuário funcional -->
+            <div class="divpesquisar">
+                <button id="pesquisar" class="btn-pesquisar"><ion-icon name="search-sharp"></ion-icon></button>
+                <input type="text" placeholder=" Pesquisar..." class="barra-pesquisa">
+            </div>
             <div class="usuario-menu">
                 <button id="minha-conta" class="btn-header">
                     <ion-icon name="person-circle-outline"></ion-icon>
@@ -34,15 +50,15 @@ require '../flash.php';
         </div>
     </header>
 
-    <!-- Adicionando dropdown de usuário -->
     <div class="dropdown-user">
         <?php if (!empty($_SESSION['idUsuario'])): ?>
-            <a href="../Perfil/perfil.php" class="menu-usuario" style="justify-content: space-between; align-items: center;">
+            <a href="../Perfil/perfil.php" class="menu-usuario"
+                style="justify-content: space-between; align-items: center;">
                 <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
 
                 <?php if (!empty($_SESSION['fotoUsuario'])): ?>
-                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário" class="foto-usuario"
-                        style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
+                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário"
+                        class="foto-usuario" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
                 <?php else: ?>
                     <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
                 <?php endif; ?>
@@ -65,14 +81,23 @@ require '../flash.php';
 
     <nav>
         <ul>
-            <li><a href="../Home/index.php" class="voltarInicio"><ion-icon name="arrow-back-circle-outline"></ion-icon>INÍCIO</a></li>
+            <li><a href="../Home/index.php">HOME</a></li>
+            <span class="linha"></span>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a></li>
+            <span class="linha"></span>
+            <li><a href="#">OFERTAS</a></li>
+            <span class="linha"></span>
+            <li><a href="#">MONTE SEU PC</a></li>
+            <span class="linha"></span>
+            <li><a href="#">GAMER</a></li>
+            <span class="linha"></span>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a></li>
         </ul>
-    </nav>    
-    
-    <!-- Adicionando exibição de mensagens flash -->
+    </nav>
+
     <?php show_flash(); ?>
-    
-     <div class="container-new">
+
+    <div class="container-new">
         <div class="left-section">
             <div class="articles-section">
                 <h2 class="section-title">Artigos mais populares</h2>
@@ -138,7 +163,8 @@ require '../flash.php';
                 <button type="submit" class="submit-button">Enviar</button>
                 <div class="form-footer">
                     Nesse atendimento a resposta dentro de um prazo de até <a href="#">3 dias úteis</a>.<br>
-                    <a href="#">Horário de expediente</a>: Segunda à Sexta-feira, das 08:15 às 12:00 e das 13:00 às 18:00.
+                    <a href="#">Horário de expediente</a>: Segunda à Sexta-feira, das 08:15 às 12:00 e das 13:00 às
+                    18:00.
                 </div>
             </form>
         </div>

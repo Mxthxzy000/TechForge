@@ -41,6 +41,7 @@ $stmt->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Comum/common.css">
     <link rel="stylesheet" href="perfil.css">
     <title>Perfil - TechForge</title>
 </head>
@@ -56,19 +57,64 @@ $stmt->close();
             <img src="../imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
         <div class="final-header">
-            <button id="minha-conta" class="btn-header"><ion-icon name="person-circle-outline"></ion-icon></button>
+            <div class="divpesquisar">
+                <button id="pesquisar" class="btn-pesquisar"><ion-icon name="search-sharp"></ion-icon></button>
+                <input type="text" placeholder=" Pesquisar..." class="barra-pesquisa">
+            </div>
+            <div class="usuario-menu">
+                <button id="minha-conta" class="btn-header">
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                </button>
+            </div>
             <button id="carrinho" class="btn-header"><ion-icon name="cart-outline"></ion-icon></button>
         </div>
     </header>
 
+    <div class="dropdown-user">
+        <?php if (!empty($_SESSION['idUsuario'])): ?>
+            <a href="../Perfil/perfil.php" class="menu-usuario"
+                style="justify-content: space-between; align-items: center;">
+                <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
+
+                <?php if (!empty($_SESSION['fotoUsuario'])): ?>
+                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário"
+                        class="foto-usuario" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
+                <?php else: ?>
+                    <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
+                <?php endif; ?>
+            </a>
+
+            <form method="POST" action="../logout.php">
+                <button type="submit" class="menu-usuario">
+                    Sair!
+                    <ion-icon name="log-out-outline" class="icon-user"></ion-icon>
+                </button>
+            </form>
+
+        <?php else: ?>
+            <a href="../Login/login.php" class="menu-usuario">
+                Fazer Login!
+                <ion-icon name="log-in-outline" class="icon-user"></ion-icon>
+            </a>
+        <?php endif; ?>
+    </div>
+
     <nav>
         <ul>
-            <li><a href="../Home/index.php" class="voltarInicio"><ion-icon
-                        name="arrow-back-circle-outline"></ion-icon>INÍCIO</a></li>
+             <li><a href="../Home/index.php">HOME</a></li>
+            <span class="linha"></span>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a></li>
+            <span class="linha"></span>
+            <li><a href="#">OFERTAS</a></li>
+            <span class="linha"></span>
+            <li><a href="#">MONTE SEU PC</a></li>
+            <span class="linha"></span>
+            <li><a href="#">GAMER</a></li>
+            <span class="linha"></span>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a></li>
         </ul>
     </nav>
 
-    <!-- Adicionando exibição de mensagens flash -->
     <?php show_flash(); ?>
 
     <div class="container-new">
@@ -77,7 +123,8 @@ $stmt->close();
             <div class="user-info">
                 <div class="user-avatar">
                     <?php if ($foto !== '../imagens/default-avatar.png'): ?>
-                        <img src="<?php echo htmlspecialchars($foto); ?>" alt="Foto do usuário" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                        <img src="<?php echo htmlspecialchars($foto); ?>" alt="Foto do usuário"
+                            style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
                     <?php else: ?>
                         👤
                     <?php endif; ?>
@@ -201,7 +248,7 @@ $stmt->close();
     </footer>
 
     <!-- Incluindo script comum e específico -->
-    <script src="../js/common.js"></script>
+    <script src="../Comum/common.js"></script>
     <script src="perfil.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

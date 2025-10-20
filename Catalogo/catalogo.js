@@ -1,3 +1,16 @@
+// Ler tag da URL e aplicar filtro automaticamente
+const urlParams = new URLSearchParams(window.location.search);
+const tagFromURL = urlParams.get('tag');
+if (tagFromURL) {
+    currentFilters.tag = tagFromURL;
+
+    // Marca o checkbox correspondente, se existir
+    const checkbox = document.querySelector(`.tipoFiltro[data-tag="${tagFromURL}"]`);
+    if (checkbox) checkbox.checked = true;
+
+    applyFilters();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     let currentFilters = {
         linha: '',
