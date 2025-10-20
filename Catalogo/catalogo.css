@@ -506,13 +506,12 @@ footer {
 }
 
 .filtro-lateral {
-    width: 280px;
+    min-width: 250px;
     background-color: #1a2a3c;
     border-radius: 16px;
     padding: 20px;
     color: #fff;
     height: fit-content;
-    position: sticky;
     top: 100px;
     border: 2px solid #1a2a3c;
 }
@@ -589,30 +588,48 @@ footer {
     transform: scale(1.1);
 }
 
-/* SUGESTÕES DE PESQUISA */
+/* SUGESTÕES DE PESQUISA - CORRIGIDO */
 .suggestions-list {
     position: absolute;
-    top: 45px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 100%; /* Abaixo da barra de pesquisa */
+    left: 18%;
+    right: 0;
     background: #fff;
     color: #000;
-    width: 250px;
-    border-radius: 8px;
+    width: 82%; /* Mesma largura do container de pesquisa */
+    border-radius: 0 0 8px 8px;
     list-style: none;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     display: none;
     z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .suggestions-list li {
-    padding: 10px;
+    padding: 10px 15px;
     cursor: pointer;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.suggestions-list li:last-child {
+    border-bottom: none;
 }
 
 .suggestions-list li:hover {
     background-color: #f8c10d;
     color: #1a2a3c;
+}
+
+/* Container de pesquisa com posição relativa para as sugestões */
+.divpesquisar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    width: 235px;
+    position: relative; /* IMPORTANTE: para as sugestões se posicionarem relativas a este container */
 }
 
 /* CABEÇALHO DA LISTA */
@@ -744,4 +761,3 @@ footer {
   width: 16px;
   height: 16px;
 }
-

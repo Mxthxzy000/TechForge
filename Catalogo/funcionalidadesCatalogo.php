@@ -1,60 +1,126 @@
 <?php
-include '../config.php';
 header('Content-Type: application/json; charset=utf-8');
+include '../config.php';
 
-function calcDiscountPercent($qtd) {
-    if ($qtd >= 1000) return 20;
-    if ($qtd >= 500) return 10;
-    if ($qtd >= 200) return 5;
-    if ($qtd >= 100) return 3;
-    return 0;
+// erro de conexão
+if (!isset($conn) || $conn->connect_error) {
+    echo json_encode(['error' => 'Erro de conexão com o banco: ' . $conn->connect_error]);
+    exit;
 }
 
 $action = $_GET['action'] ?? '';
 
-if ($action === 'getFilters') {
-    $data = ['lines' => [], 'topTags' => []];
-
-    $sql = "SELECT linhaProduto, tipoProduto, COUNT(*) AS qtd FROM produtos GROUP BY linhaProduto, tipoProduto";
+if ($action === 'getAll') {
+    $sql = "SELECT idProduto, nomeProduto, precoProduto, imagemProduto, linhaProduto, tipoProduto 
+            FROM produtos";
     $res = $conn->query($sql);
 
-    if ($res) {
-        while ($r = $res->fetch_assoc()) {
-            $linha = $r['linhaProduto'] ?: 'Genérico';
-            if (!isset($data['lines'][$linha])) $data['lines'][$linha] = [];
-            $data['lines'][$linha][] = ['tipo' => $r['tipoProduto'], 'count' => $r['qtd']];
-        }
+    $produtos = [];
+    while ($row = $res->fetch_assoc()) {
+        $produtos[] = $row;
     }
 
-    $tagCounts = [];
-    $res2 = $conn->query("SELECT tagsProduto FROM produtos");
-    if ($res2) {
-        while ($row = $res2->fetch_assoc()) {
-            $tags = explode(',', $row['tagsProduto']);
-            foreach ($tags as $t) {
-                $t = trim($t);
-                if (!$t) continue;
-                $tagCounts[$t] = ($tagCounts[$t] ?? 0) + 1;
-            }
-        }
-    }
-
-    arsort($tagCounts);
-    $i = 0;
-    foreach ($tagCounts as $tag => $count) {
-        $data['topTags'][] = ['tag' => $tag, 'count' => $count];
-        if (++$i >= 20) break;
-    }
-
-    echo json_encode($data);
+    echo json_encode(['produtos' => $produtos]);
     exit;
 }
 
+if ($action === 'filter') {
+    $linha = $_GET['linha'] ?? '';
+    $tag = $_GET['tag'] ?? '';
+    $precoMin = $_GET['precoMin'] ?? '';
+    $precoMax = $_GET['precoMax'] ?? '';
 
+    $condicoes = [];
+    if (!empty($linha)) $condicoes[] = "linhaProduto = '" . $conn->real_escape_string($linha) . "'";
+    if (!empty($tag))   $condicoes[] = "tipoProduto = '" . $conn->real_escape_string($tag) . "'";
+    if (!empty($precoMin)) $condicoes[] = "precoProduto >= " . floatval($precoMin);
+    if (!empty($precoMax)) $condicoes[] = "precoProduto <= " . floatval($precoMax);
 
-if ($action === 'search_suggest') {
-    $q = $conn->real_escape_string($_GET['q']);
-    $res = $conn->query("SELECT nomeProduto FROM produtos WHERE nomeProduto LIKE '%$q%' LIMIT 3");
-    echo json_encode($res ? $res->fetch_all(MYSQLI_ASSOC) : []);
+    $where = count($condicoes) > 0 ? 'WHERE ' . implode(' AND ', $condicoes) : '';
+
+    $sql = "SELECT idProduto, nomeProduto, precoProduto, imagemProduto, linhaProduto, tipoProduto 
+            FROM produtos $where";
+
+    $res = $conn->query($sql);
+
+    if (!$res) {
+        echo json_encode(['error' => 'Erro ao buscar produtos filtrados', 'sql_error' => $conn->error]);
+        exit;
+    }
+
+    $produtos = [];
+    while ($row = $res->fetch_assoc()) {
+        $produtos[] = $row;
+    }
+
+    echo json_encode(['produtos' => $produtos]);
     exit;
 }
+
+// NOVA FUNÇÃO PARA PESQUISA
+if ($action === 'search') {
+    $termo = $_GET['termo'] ?? '';
+    
+    if (empty($termo)) {
+        echo json_encode(['produtos' => []]);
+        exit;
+    }
+
+    $termo = $conn->real_escape_string($termo);
+    
+    // Busca produtos com nomes similares (máximo 3 para sugestões)
+    $sql = "SELECT idProduto, nomeProduto, precoProduto, imagemProduto, linhaProduto, tipoProduto 
+            FROM produtos 
+            WHERE nomeProduto LIKE '%$termo%' 
+            LIMIT 3";
+
+    $res = $conn->query($sql);
+
+    if (!$res) {
+        echo json_encode(['error' => 'Erro ao buscar produtos', 'sql_error' => $conn->error]);
+        exit;
+    }
+
+    $produtos = [];
+    while ($row = $res->fetch_assoc()) {
+        $produtos[] = $row;
+    }
+
+    echo json_encode(['produtos' => $produtos]);
+    exit;
+}
+
+// NOVA FUNÇÃO PARA PESQUISA COMPLETA
+if ($action === 'searchFull') {
+    $termo = $_GET['termo'] ?? '';
+    
+    if (empty($termo)) {
+        echo json_encode(['produtos' => []]);
+        exit;
+    }
+
+    $termo = $conn->real_escape_string($termo);
+    
+    // Busca todos os produtos com nomes similares
+    $sql = "SELECT idProduto, nomeProduto, precoProduto, imagemProduto, linhaProduto, tipoProduto 
+            FROM produtos 
+            WHERE nomeProduto LIKE '%$termo%'";
+
+    $res = $conn->query($sql);
+
+    if (!$res) {
+        echo json_encode(['error' => 'Erro ao buscar produtos', 'sql_error' => $conn->error]);
+        exit;
+    }
+
+    $produtos = [];
+    while ($row = $res->fetch_assoc()) {
+        $produtos[] = $row;
+    }
+
+    echo json_encode(['produtos' => $produtos]);
+    exit;
+}
+
+echo json_encode(['error' => 'Ação inválida']);
+exit;

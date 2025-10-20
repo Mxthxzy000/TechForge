@@ -1,187 +1,280 @@
-const hamburguer = document.querySelector(".hamburguer-menu");
-const nav = document.querySelector("nav");
-
-hamburguer.addEventListener("click", () => {
-  hamburguer.classList.toggle("open");
-  nav.classList.toggle("open");
-});
-
-const User = document.querySelector(".usuario-menu");
-const dropUser = document.querySelector(".dropdown-user");
-
-if (User) {
-  User.addEventListener("click", () => {
-    dropUser.classList.toggle("open");
-  });
-}
-
-// ==================== NOVAS FUNÇÕES DO CATÁLOGO ====================
-
-const productsEl = document.getElementById("products");
-const filterLinesEl = document.getElementById("filterLines");
-const filterTagsEl = document.getElementById("filterTags");
-const resultCount = document.getElementById("resultCount");
-const searchInput = document.getElementById("searchInput");
-const suggestionsList = document.getElementById("suggestions");
-const priceMinEl = document.getElementById("priceMin");
-const priceMaxEl = document.getElementById("priceMax");
-const applyPriceBtn = document.getElementById("applyPrice");
-const onlyPromos = document.getElementById("onlyPromos");
-
-let currentFilters = {};
-
-fetch("funcionalidadesCatalogo.php?action=getFilters")
-  .then((r) => r.json())
-  .then((data) => {
-    renderFilters(data.lines);
-    renderTags(data.topTags);
-    carregarProdutos();
-  });
-
-function renderFilters(lines) {
-  filterLinesEl.innerHTML = "";
-  for (const linha in lines) {
-    const group = document.createElement("div");
-    const title = document.createElement("h4");
-    title.textContent = linha;
-    group.appendChild(title);
-
-    lines[linha].forEach((t) => {
-      const label = document.createElement("label");
-      label.innerHTML = `<input type="checkbox" class="tipoFiltro" data-line="${linha}" value="${t.tipo}"> ${t.tipo}`;
-      group.appendChild(label);
-    });
-    filterLinesEl.appendChild(group);
-  }
-
-  document.querySelectorAll(".tipoFiltro").forEach((c) => {
-    c.onchange = carregarProdutos;
-  });
-}
-
-function renderTags(tags) {
-  filterTagsEl.innerHTML = "";
-  tags.forEach((tag) => {
-    const span = document.createElement("span");
-    span.textContent = tag.tag;
-    span.onclick = () => {
-      currentFilters.tag = tag.tag;
-      carregarProdutos();
+document.addEventListener('DOMContentLoaded', function() {
+    let currentFilters = {
+        linha: '',
+        tag: '',
+        precoMin: '',
+        precoMax: ''
     };
-    filterTagsEl.appendChild(span);
-  });
-}
 
-function carregarProdutos() {
-  const tipos = Array.from(document.querySelectorAll(".tipoFiltro:checked"))
-    .map((c) => c.value)
-    .join(",");
+    // Elementos da pesquisa
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.querySelector('.btn-pesquisar');
+    const suggestionsList = document.getElementById('suggestions');
 
-  const linhas = (currentFilters.lines || []).join(",");
+    // Carregar todos os produtos inicialmente
+    loadProducts();
 
-  const onlyPromo = onlyPromos && onlyPromos.checked ? "&categoria=promocoes" : "";
-
-  fetch(
-    `funcionalidadesCatalogo.php?action=filter&type=${tipos}&line=${linhas}&tag=${currentFilters.tag || ""
-    }&price_min=${priceMinEl.value}&price_max=${priceMaxEl.value}${onlyPromo}`
-  )
-    .then((r) => r.json())
-    .then((produtos) => {
-      renderProdutos(produtos);
+    // Eventos da pesquisa
+    searchInput.addEventListener('input', function() {
+        const termo = this.value.trim();
+        if (termo.length >= 2) {
+            showSuggestions(termo);
+        } else {
+            hideSuggestions();
+        }
     });
-}
 
-fetch(
-  `funcionalidadesCatalogo.php?action=filter&type=${tipos}&line=${linhas}&tag=${currentFilters.tag || ""
-  }&price_min=${priceMinEl.value}&price_max=${priceMaxEl.value}${onlyPromo}`
-)
-  .then((r) => r.json())
-  .then((produtos) => {
-    renderProdutos(produtos);
-  });
-
-
-function renderProdutos(produtos) {
-  productsEl.innerHTML = "";
-  resultCount.textContent = `${produtos.length} produtos encontrados`;
-  if (!produtos.length) {
-    productsEl.innerHTML = "<p>Nenhum produto encontrado.</p>";
-    return;
-  }
-
-  // ======= Seleção Intel / AMD =======
-  const intelOption = document.getElementById("intelOption");
-  const amdOption = document.getElementById("amdOption");
-
-  [intelOption, amdOption].forEach((option) => {
-    option.addEventListener("click", () => {
-      option.classList.toggle("selected");
-      atualizarLinhasSelecionadas();
+    searchInput.addEventListener('focus', function() {
+        const termo = this.value.trim();
+        if (termo.length >= 2) {
+            showSuggestions(termo);
+        }
     });
-  });
 
-  function atualizarLinhasSelecionadas() {
-    const selecionadas = Array.from(
-      document.querySelectorAll(".marca-option.selected")
-    ).map((el) => el.dataset.line);
-    currentFilters.lines = selecionadas;
-    carregarProdutos();
-  }
-
-
-  produtos.forEach((p) => {
-    const card = document.createElement("div");
-    card.className = "card-produto";
-    const precoAntigo =
-      p.discount_pct > 0 ? `<p class="preco-antigo">R$ ${p.valor.toFixed(2)}</p>` : "";
-    const badge =
-      p.discount_pct > 0
-        ? `<span class="badge">-${p.discount_pct}% de desconto</span>`
-        : "";
-    card.innerHTML = `
-      ${badge}
-      <img src="${p.imagem}" alt="${p.nome}">
-      <div class="card-info">
-        <h3>${p.nome}</h3>
-        <p class="descricao">${p.descricao}</p>
-        ${precoAntigo}
-        <p class="preco-atual">R$ ${p.valor_com_desconto}</p>
-      </div>
-    `;
-    productsEl.appendChild(card);
-  });
-}
-
-applyPriceBtn.onclick = carregarProdutos;
-if (onlyPromos) onlyPromos.onchange = carregarProdutos;
-
-// Sugestões da barra de pesquisa
-searchInput.addEventListener("input", () => {
-  const query = searchInput.value.trim();
-  if (query.length < 2) {
-    suggestionsList.style.display = "none";
-    return;
-  }
-
-  fetch(`funcionalidadesCatalogo.php?action=search_suggest&q=${query}`)
-    .then((r) => r.json())
-    .then((data) => {
-      suggestionsList.innerHTML = "";
-      if (!data.length) {
-        suggestionsList.style.display = "none";
-        return;
-      }
-      data.forEach((item) => {
-        const li = document.createElement("li");
-        li.textContent = item.nomeProduto;
-        li.onclick = () => {
-          searchInput.value = item.nomeProduto;
-          suggestionsList.style.display = "none";
-          currentFilters.q = item.nomeProduto;
-          carregarProdutos();
-        };
-        suggestionsList.appendChild(li);
-      });
-      suggestionsList.style.display = "block";
+    searchButton.addEventListener('click', function() {
+        performSearch(searchInput.value.trim());
     });
+
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch(this.value.trim());
+        }
+    });
+
+    // Fechar sugestões ao clicar fora
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.divpesquisar')) {
+            hideSuggestions();
+        }
+    });
+
+    // Função para mostrar sugestões
+    function showSuggestions(termo) {
+        fetch(`funcionalidadesCatalogo.php?action=search&termo=${encodeURIComponent(termo)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Erro:', data.error);
+                    return;
+                }
+                
+                if (data.produtos.length > 0) {
+                    suggestionsList.innerHTML = data.produtos.map(product => `
+                        <li data-id="${product.idProduto}" data-name="${product.nomeProduto}">
+                            ${product.nomeProduto}
+                        </li>
+                    `).join('');
+                    suggestionsList.style.display = 'block';
+                    
+                    // Adicionar eventos às sugestões
+                    suggestionsList.querySelectorAll('li').forEach(item => {
+                        item.addEventListener('click', function() {
+                            searchInput.value = this.getAttribute('data-name');
+                            hideSuggestions();
+                            performSearch(this.getAttribute('data-name'));
+                        });
+                    });
+                } else {
+                    hideSuggestions();
+                }
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+            });
+    }
+
+    // Função para esconder sugestões
+    function hideSuggestions() {
+        suggestionsList.style.display = 'none';
+    }
+
+    // Função para executar pesquisa completa
+    function performSearch(termo) {
+        hideSuggestions();
+        
+        if (termo === '') {
+            loadProducts();
+            return;
+        }
+
+        fetch(`funcionalidadesCatalogo.php?action=searchFull&termo=${encodeURIComponent(termo)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Erro:', data.error);
+                    return;
+                }
+                displayProducts(data.produtos);
+                document.getElementById('pageTitle').textContent = `Resultados para: "${termo}"`;
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+            });
+    }
+
+    // Filtros por linha (Intel/AMD)
+    document.querySelectorAll('.marca-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const linha = this.getAttribute('data-linha');
+            
+            // Toggle - se clicar na mesma linha, desmarca
+            if (currentFilters.linha === linha) {
+                currentFilters.linha = '';
+                this.classList.remove('active');
+            } else {
+                currentFilters.linha = linha;
+                document.querySelectorAll('.marca-option').forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+            }
+            
+            applyFilters();
+        });
+    });
+
+    // Filtros por tipo de peça
+    document.querySelectorAll('.tipoFiltro').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const tag = this.getAttribute('data-tag');
+            
+            if (this.checked) {
+                currentFilters.tag = tag;
+                // Desmarca outros checkboxes
+                document.querySelectorAll('.tipoFiltro').forEach(cb => {
+                    if (cb !== this) cb.checked = false;
+                });
+            } else {
+                currentFilters.tag = '';
+            }
+            
+            applyFilters();
+        });
+    });
+
+    // Filtro por preço
+    document.getElementById('applyPrice').addEventListener('click', function() {
+        currentFilters.precoMin = document.getElementById('priceMin').value;
+        currentFilters.precoMax = document.getElementById('priceMax').value;
+        applyFilters();
+    });
+
+    // Aplicar filtros
+    function applyFilters() {
+        manterTamanhoFiltro();
+        
+        // Verifica se há algum filtro ativo
+        const hasActiveFilter = currentFilters.linha || currentFilters.tag || currentFilters.precoMin || currentFilters.precoMax;
+        
+        if (!hasActiveFilter) {
+            // Se não há filtros ativos, carrega todos os produtos
+            loadProducts();
+            document.getElementById('pageTitle').textContent = 'Produtos';
+            return;
+        }
+
+        // Monta a URL com os filtros
+        let url = `funcionalidadesCatalogo.php?action=filter`;
+        
+        if (currentFilters.linha) {
+            url += `&linha=${encodeURIComponent(currentFilters.linha)}`;
+        }
+        
+        if (currentFilters.tag) {
+            url += `&tag=${encodeURIComponent(currentFilters.tag)}`;
+        }
+        
+        if (currentFilters.precoMin) {
+            url += `&precoMin=${encodeURIComponent(currentFilters.precoMin)}`;
+        }
+        
+        if (currentFilters.precoMax) {
+            url += `&precoMax=${encodeURIComponent(currentFilters.precoMax)}`;
+        }
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Erro:', data.error);
+                    return;
+                }
+                displayProducts(data.produtos);
+                document.getElementById('pageTitle').textContent = 'Produtos Filtrados';
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+            });
+    }
+
+    // Carregar todos os produtos
+    function loadProducts() {
+        fetch('funcionalidadesCatalogo.php?action=getAll')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Erro:', data.error);
+                    return;
+                }
+                displayProducts(data.produtos);
+                document.getElementById('pageTitle').textContent = 'Produtos';
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+            });
+    }
+
+    // Exibir produtos - FORMATAÇÃO IDÊNTICA À HOME
+    function displayProducts(products) {
+        const container = document.getElementById('products');
+        const resultCount = document.getElementById('resultCount');
+        
+        resultCount.textContent = `(${products.length} produtos)`;
+        
+        if (products.length === 0) {
+            container.innerHTML = '<p>Nenhum produto encontrado.</p>';
+            return;
+        }
+
+        container.innerHTML = products.map(product => `
+            <div class="card-produto">
+                <img src="../imagens_produtos/${product.imagemProduto}" alt="${product.nomeProduto}">
+                <div class="card-info">
+                    <h3>${product.nomeProduto}</h3>
+                    <p class="preco-atual">
+                        R$ ${parseFloat(product.precoProduto).toFixed(2).replace('.', ',')} <span>à vista</span>
+                    </p>
+                    <p class="parcelamento">
+                        12x de R$ ${(parseFloat(product.precoProduto) / 12).toFixed(2).replace('.', ',')} sem juros
+                    </p>
+                </div>
+                <button class="btn-comprar-produto" data-id="${product.idProduto}">Comprar</button>
+            </div>
+        `).join('');
+
+        // Adicionar eventos aos botões do carrinho
+        container.querySelectorAll('.btn-comprar-produto').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-id');
+                addToCart(productId);
+            });
+        });
+    }
+
+    // Função para adicionar ao carrinho
+    function addToCart(productId) {
+        console.log('Adicionar produto ao carrinho:', productId);
+        // Sua lógica existente para adicionar ao carrinho
+    }
+
+    // Forçar tamanho do filtro
+    function manterTamanhoFiltro() {
+        const filtro = document.querySelector('.filtro-lateral');
+        if (filtro) {
+            filtro.style.width = '300px';
+            filtro.style.minWidth = '300px';
+            filtro.style.flexShrink = '0';
+        }
+    }
+
+    // Executar quando a DOM carregar
+    manterTamanhoFiltro();
 });
