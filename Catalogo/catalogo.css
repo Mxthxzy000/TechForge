@@ -1,8 +1,25 @@
-/* === ADIÇÕES PARA O CATÁLOGO COM FILTRO LATERAL === */
-.container-catalogo {
+/* === ADIÇÕES PARA O CATÁLOGO COM FILTRO LATERAL === */.container-catalogo {
     display: flex;
-    gap: 30px;
-    padding: 20px;
+    gap: 20px; /* Espaçamento entre filtro e produtos */
+    align-items: flex-start; /* Alinha ao topo */
+}
+
+.filtro-lateral {
+    width: 300px; /* Largura fixa do filtro */
+    flex-shrink: 0; /* Não encolhe */
+}
+
+.produtos-lista {
+    flex: 1; /* Ocupa o restante do espaço */
+}
+
+
+.cards-produtos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: flex-start; /* ou center, se quiser centralizar */
+    flex: 1; /* ocupa o espaço restante */
 }
 
 .filtro-lateral {
@@ -13,6 +30,8 @@
     color: #fff;
     height: fit-content;
     top: 100px;
+    margin-top: 25px;
+    margin-left: 25px;
     border: 2px solid #1a2a3c;
 }
 
@@ -88,6 +107,38 @@
     transform: scale(1.1);
 }
 
+/* Estilo para tags com contador */
+.tag-option {
+    background-color: #f8c10d;
+    color: #1a2a3c;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin: 4px;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.tag-option:hover {
+    transform: scale(1.08);
+    background-color: #ffdb4d;
+}
+
+.tag-option.active {
+    background-color: #ffdb49 !important;
+    color: rgb(0, 0, 0) !important;
+    box-shadow: 0 0 8px #ffebc4;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+}
+
 /* SUGESTÕES DE PESQUISA - CORRIGIDO */
 .suggestions-list {
     position: absolute;
@@ -137,7 +188,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #fff;
+    color: #000000;
 }
 
 .cabecalho-lista h2 {
@@ -160,10 +211,32 @@
 }
 
 .nenhum-produto {
-    color: #ccc;
+    color: #000000;
     font-size: 1rem;
     text-align: center;
     margin-top: 30px;
+}
+/* Esconder o contador de resultados */
+#resultCount {
+    display: none;
+}
+
+/* Ou se quiser manter o cabecalho-lista sem o span */
+.cabecalho-lista {
+  margin: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #000000;
+}
+
+.cabecalho-lista h2 {
+    color: #f8c10d;
+}
+
+/* Remover o span do layout */
+.cabecalho-lista span {
+    display: none;
 }
 
 /* Melhor responsividade dos cards */
@@ -261,4 +334,3 @@
   width: 16px;
   height: 16px;
 }
-

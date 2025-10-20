@@ -32,7 +32,8 @@ if (!isset($conn)) {
         <div class="final-header">
             <div class="divpesquisar">
                 <button id="pesquisar" class="btn-pesquisar"><ion-icon name="search-sharp"></ion-icon></button>
-                <input type="text" placeholder=" Pesquisar..." class="barra-pesquisa">
+                <input type="text" id="searchInput" placeholder=" Pesquisar..." class="barra-pesquisa">
+                <ul id="suggestions" class="suggestions-list"></ul>
             </div>
             <div class="usuario-menu">
                 <button id="minha-conta" class="btn-header">
@@ -119,6 +120,34 @@ if (!isset($conn)) {
                         RAM</label>
                     <label><input type="checkbox" class="tipoFiltro botao-filtro" data-tag="Cooler"> Coolers</label>
                     <label><input type="checkbox" class="tipoFiltro botao-filtro" data-tag="Fonte"> Fontes</label>
+                </div>
+            </div>
+
+            <!-- TAGS POPULARES QUE REALMENTE FUNCIONAM -->
+            <div class="filtro-secao">
+                <h3>Tags Populares:</h3>
+                <div id="filterTags" class="tags-container">
+                    <?php
+                    // Tags garantidas que EXISTEM no banco (baseado no debug)
+                    $working_tags = [
+                        'gamer' => 'Gamer (16)',
+                        'processador' => 'Processador (6)',
+                        'placa de vídeo' => 'Placa de Vídeo (7)',
+                        'memória' => 'Memória (7)',
+                        'ssd' => 'SSD (4)',
+                        'intel' => 'Intel (3)',
+                        'rtx' => 'RTX (5)',
+                        'nvme' => 'NVMe (4)',
+                        'placa-mãe' => 'Placa-Mãe (4)',
+                        'ryzen' => 'Ryzen (2)'
+                    ];
+                    
+                    // Exibir tags que FUNCIONAM
+                    foreach ($working_tags as $tag_value => $tag_label): ?>
+                        <span class="tag-option botao-filtro" data-tag="<?php echo htmlspecialchars($tag_value); ?>">
+                            <?php echo htmlspecialchars($tag_label); ?>
+                        </span>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </aside>

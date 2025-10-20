@@ -1,16 +1,3 @@
-// Ler tag da URL e aplicar filtro automaticamente
-const urlParams = new URLSearchParams(window.location.search);
-const tagFromURL = urlParams.get('tag');
-if (tagFromURL) {
-    currentFilters.tag = tagFromURL;
-
-    // Marca o checkbox correspondente, se existir
-    const checkbox = document.querySelector(`.tipoFiltro[data-tag="${tagFromURL}"]`);
-    if (checkbox) checkbox.checked = true;
-
-    applyFilters();
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     let currentFilters = {
         linha: '',
@@ -140,6 +127,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.classList.add('active');
             }
             
+            // Limpa tags ao usar filtro de linha
+            document.querySelectorAll('.tag-option').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            
             applyFilters();
         });
     });
@@ -154,6 +146,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Desmarca outros checkboxes
                 document.querySelectorAll('.tipoFiltro').forEach(cb => {
                     if (cb !== this) cb.checked = false;
+                });
+                
+                // Limpa tags populares
+                document.querySelectorAll('.tag-option').forEach(tagEl => {
+                    tagEl.classList.remove('active');
                 });
             } else {
                 currentFilters.tag = '';
@@ -170,9 +167,93 @@ document.addEventListener('DOMContentLoaded', function() {
         applyFilters();
     });
 
+    // EVENTOS PARA TAGS POPULARES - MÚLTIPLAS SELEÇÕES
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('tag-option')) {
+            const tag = e.target.getAttribute('data-tag');
+            
+            console.log('Tag clicada:', tag);
+            
+            // Toggle da tag individual
+            if (e.target.classList.contains('active')) {
+                // Se já está ativa, desmarca
+                e.target.classList.remove('active');
+            } else {
+                // Se não está ativa, marca
+                e.target.classList.add('active');
+            }
+            
+            // Limpa filtros de tipo ao usar tags
+            document.querySelectorAll('.tipoFiltro').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            currentFilters.tag = '';
+            
+            // Limpa filtro de linha
+            document.querySelectorAll('.marca-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            currentFilters.linha = '';
+            
+            // Coletar todas as tags ativas
+            const activeTags = [];
+            document.querySelectorAll('.tag-option.active').forEach(tagEl => {
+                activeTags.push(tagEl.getAttribute('data-tag'));
+            });
+            
+            console.log('Tags ativas:', activeTags);
+            
+            if (activeTags.length === 0) {
+                // Se não há tags selecionadas, volta para todos os produtos
+                loadProducts();
+                document.getElementById('pageTitle').textContent = 'Produtos';
+            } else {
+                // Filtra por múltiplas tags
+                filterByMultipleTags(activeTags);
+            }
+        }
+    });
+
+    // Função para filtrar por múltiplas tags
+    function filterByMultipleTags(tags) {
+        console.log('Filtrando por múltiplas tags:', tags);
+        
+        let url = `funcionalidadesCatalogo.php?action=filterMultipleTags`;
+        
+        tags.forEach((tag, index) => {
+            url += `&tags[]=${encodeURIComponent(tag)}`;
+        });
+
+        console.log('URL da requisição:', url);
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(`Resultados para tags "${tags.join(', ')}":`, data);
+                
+                if (data.error) {
+                    console.error('Erro:', data.error);
+                    return;
+                }
+                
+                displayProducts(data.produtos);
+                
+                if (data.produtos.length === 0) {
+                    document.getElementById('pageTitle').textContent = `Nenhum produto com as tags selecionadas`;
+                } else {
+                 document.getElementById('pageTitle').textContent = `Tags: ${tags.join(', ')}`;
+                }
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+            });
+    }
+
     // Aplicar filtros
     function applyFilters() {
         manterTamanhoFiltro();
+        
+        console.log('Filtros ativos:', currentFilters);
         
         // Verifica se há algum filtro ativo
         const hasActiveFilter = currentFilters.linha || currentFilters.tag || currentFilters.precoMin || currentFilters.precoMax;
@@ -203,9 +284,12 @@ document.addEventListener('DOMContentLoaded', function() {
             url += `&precoMax=${encodeURIComponent(currentFilters.precoMax)}`;
         }
 
+        console.log('URL da requisição:', url);
+
         fetch(url)
             .then(response => response.json())
             .then(data => {
+                console.log('Resposta do servidor:', data);
                 if (data.error) {
                     console.error('Erro:', data.error);
                     return;
@@ -239,8 +323,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayProducts(products) {
         const container = document.getElementById('products');
         const resultCount = document.getElementById('resultCount');
-        
-        resultCount.textContent = `(${products.length} produtos)`;
         
         if (products.length === 0) {
             container.innerHTML = '<p>Nenhum produto encontrado.</p>';
