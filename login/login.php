@@ -122,7 +122,7 @@ if (!empty($_SESSION['idUsuario'])) {
     </footer>
 
     <!-- Incluindo script comum e específico -->
-    <script src="../common.js"></script>
+    <script src="../js/common.js"></script>
     <script src="login.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

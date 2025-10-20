@@ -163,11 +163,23 @@ if (!isset($conn)) {
 
         <div class="cards-produtos">
             <?php
-            $query = "SELECT * FROM produtos ORDER BY vendasProduto DESC LIMIT 10";
+            // Verifica se a coluna vendasProduto existe
+            $check_column = $conn->query("SHOW COLUMNS FROM produtos LIKE 'vendasProduto'");
+            
+            if ($check_column && $check_column->num_rows > 0) {
+                // Coluna existe, ordena por vendas
+                $query = "SELECT * FROM produtos ORDER BY vendasProduto DESC LIMIT 10";
+            } else {
+                // Coluna não existe, ordena por ID (produtos mais recentes)
+                $query = "SELECT * FROM produtos ORDER BY idProduto DESC LIMIT 10";
+                error_log("AVISO: Coluna 'vendasProduto' não encontrada. Execute o script 'fix_vendas_produto_column.sql'");
+            }
+            
             $result = $conn->query($query);
 
             if (!$result) {
-                echo "<p>Erro ao carregar produtos. Tente novamente mais tarde.</p>";
+                echo "<p>Erro ao carregar produtos: " . htmlspecialchars($conn->error) . "</p>";
+                error_log("Erro na query de produtos: " . $conn->error);
             } elseif ($result->num_rows > 0) {
                 $rank = 1;
                 while ($row = $result->fetch_assoc()):
@@ -250,7 +262,7 @@ if (!isset($conn)) {
     </footer>
 
     <!-- Incluindo script comum e específico -->
-    <script src="../common.js"></script>
+    <script src="../js/common.js"></script>
     <script src="script.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

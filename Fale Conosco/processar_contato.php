@@ -34,7 +34,6 @@ if (!isset($conn) || $conn->connect_error) {
     exit;
 }
 
-// Inserir no banco usando prepared statement
 $stmt = $conn->prepare("INSERT INTO contatos (nome, celular, email, duvida, mensagem, data_envio) VALUES (?, ?, ?, ?, ?, NOW())");
 
 if (!$stmt) {
@@ -45,9 +44,9 @@ if (!$stmt) {
 $stmt->bind_param("sssss", $nome, $celular, $email, $duvida, $mensagem);
 
 if ($stmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Mensagem enviada com sucesso!']);
+    echo json_encode(['success' => true, 'message' => 'Mensagem enviada com sucesso! Entraremos em contato em breve.']);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Erro ao enviar mensagem']);
+    echo json_encode(['success' => false, 'message' => 'Erro ao enviar mensagem. Tente novamente.']);
 }
 
 $stmt->close();

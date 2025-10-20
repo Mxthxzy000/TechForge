@@ -146,7 +146,7 @@ if (!empty($_SESSION['idUsuario'])) {
     </footer>
 
     <!-- Incluindo script comum e específico -->
-    <script src="../common.js"></script>
+    <script src="../js/common.js"></script>
     <script src="cadastro.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
