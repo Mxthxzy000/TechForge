@@ -3,8 +3,7 @@
 require 'session.php';
 require 'flash.php';
 
-// Só processa se for POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'GET') {
     // Define flash ANTES de destruir a sessão
     set_flash('sucesso', 'Logout realizado com sucesso!');
     
@@ -29,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     session_destroy();
 
     // Caminho absoluto para TechForge
-    header('Location: /TechForge/Login/login.php');
+    header('Location: /TechForge/login/login.php');
     exit;
 }
 

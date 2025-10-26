@@ -38,10 +38,6 @@ if (empty($_SESSION['idUsuario'])) {
             <img src="../imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
         <div class="final-header">
-            <div class="divpesquisar">
-                <button id="pesquisar" class="btn-pesquisar"><ion-icon name="search-sharp"></ion-icon></button>
-                <input type="text" placeholder=" Pesquisar..." class="barra-pesquisa">
-            </div>
             <div class="usuario-menu">
                 <button id="minha-conta" class="btn-header">
                     <ion-icon name="person-circle-outline"></ion-icon>

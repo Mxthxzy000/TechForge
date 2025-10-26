@@ -37,10 +37,6 @@ if (empty($_SESSION['idUsuario'])) {
             <img src="../imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
         <div class="final-header">
-            <div class="divpesquisar">
-                <button id="pesquisar" class="btn-pesquisar"><ion-icon name="search-sharp"></ion-icon></button>
-                <input type="text" placeholder=" Pesquisar..." class="barra-pesquisa">
-            </div>
             <div class="usuario-menu">
                 <button id="minha-conta" class="btn-header">
                     <ion-icon name="person-circle-outline"></ion-icon>
@@ -102,6 +98,37 @@ if (empty($_SESSION['idUsuario'])) {
     <div class="container">
         <!-- Seção Principal - Métodos de Pagamento -->
         <div class="main-section">
+            <!-- Saved Payment Methods -->
+            <div class="payment-section" style="margin-bottom: 20px;">
+                <div class="section-header">
+                    <svg class="icon-card" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="2" y="5" width="20" height="14" rx="2" stroke-width="2" />
+                        <line x1="2" y1="10" x2="22" y2="10" stroke-width="2" />
+                    </svg>
+                    <h2>Formas de Pagamento Salvas</h2>
+                </div>
+                <div id="savedPaymentMethods" style="display: grid; gap: 15px; margin-top: 15px;">
+                    <!-- Payment methods will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Delivery Address Selection -->
+            <div class="payment-section" style="margin-bottom: 20px;">
+                <div class="section-header">
+                    <svg class="icon-card" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke-width="2"/>
+                        <polyline points="9 22 9 12 15 12 15 22" stroke-width="2"/>
+                    </svg>
+                    <h2>Endereço de Entrega</h2>
+                </div>
+                <div id="savedAddresses" style="display: grid; gap: 15px; margin-top: 15px;">
+                    <!-- Addresses will be loaded here -->
+                </div>
+                <button type="button" id="addNewAddress" class="submit-btn" style="margin-top: 15px; background: #64748b;">
+                    + Adicionar Novo Endereço
+                </button>
+            </div>
+
             <div class="payment-section">
                 <div class="section-header">
                     <svg class="icon-card" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -358,6 +385,135 @@ if (empty($_SESSION['idUsuario'])) {
 
     <script src="../Comum/common.js"></script>
     <script src="out.js"></script>
+    <script>
+        let selectedPaymentMethod = null;
+        let selectedAddress = null;
+
+        // Load saved payment methods
+        async function loadSavedPaymentMethods() {
+            try {
+                const response = await fetch('../Perfil/paymentAPI.php?action=getPaymentMethods');
+                const data = await response.json();
+                
+                const container = document.getElementById('savedPaymentMethods');
+                
+                if (data.paymentMethods && data.paymentMethods.length > 0) {
+                    container.innerHTML = data.paymentMethods.map(payment => {
+                        let info = '';
+                        if (payment.tipoPagamento === 'cartao_credito') {
+                            info = `${payment.bandeiraCartao} •••• ${payment.numeroCartao.slice(-4)}`;
+                        } else if (payment.tipoPagamento === 'pix') {
+                            info = `PIX: ${payment.chavePix}`;
+                        } else {
+                            info = payment.tipoPagamento.toUpperCase();
+                        }
+                        
+                        return `
+                            <div class="payment-option" style="cursor: pointer;" onclick="selectPaymentMethod(${payment.idFormaPagamento}, '${payment.tipoPagamento}')">
+                                <label class="payment-label">
+                                    <input type="radio" name="saved-payment" value="${payment.idFormaPagamento}" class="payment-radio">
+                                    <span class="radio-custom"></span>
+                                    <span class="payment-text">${info}</span>
+                                </label>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    container.innerHTML = '<p style="color: #666;">Nenhuma forma de pagamento salva. Use os métodos abaixo.</p>';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar formas de pagamento:', error);
+            }
+        }
+
+        // Load saved addresses
+        async function loadSavedAddresses() {
+            try {
+                const response = await fetch('../Perfil/addressAPI.php?action=getAddresses');
+                const data = await response.json();
+                
+                const container = document.getElementById('savedAddresses');
+                
+                if (data.addresses && data.addresses.length > 0) {
+                    container.innerHTML = data.addresses.map(addr => `
+                        <div class="payment-option" style="cursor: pointer;" onclick="selectAddress(${addr.idEndereco})">
+                            <label class="payment-label">
+                                <input type="radio" name="saved-address" value="${addr.idEndereco}" class="payment-radio">
+                                <span class="radio-custom"></span>
+                                <div class="payment-text">
+                                    <strong>${addr.rua}, ${addr.numero}</strong><br>
+                                    <small>${addr.bairro} - ${addr.cidade}/${addr.estado} - CEP: ${addr.cep}</small>
+                                </div>
+                            </label>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p style="color: #666;">Nenhum endereço cadastrado.</p>';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar endereços:', error);
+            }
+        }
+
+        function selectPaymentMethod(id, type) {
+            selectedPaymentMethod = { id, type };
+        }
+
+        function selectAddress(id) {
+            selectedAddress = id;
+        }
+
+        // Handle add new address button
+        document.getElementById('addNewAddress').addEventListener('click', () => {
+            window.location.href = '../Perfil/perfil.php';
+        });
+
+        // Handle form submission
+        document.getElementById('credit-card-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!selectedAddress) {
+                Swal.fire('Atenção!', 'Por favor, selecione um endereço de entrega.', 'warning');
+                return;
+            }
+
+            // Create order
+            const formData = new FormData();
+            formData.append('action', 'createOrder');
+            formData.append('idEndereco', selectedAddress);
+            formData.append('metodoPagamento', selectedPaymentMethod ? selectedPaymentMethod.type : 'cartao');
+            formData.append('idFormaPagamento', selectedPaymentMethod ? selectedPaymentMethod.id : '');
+            
+            try {
+                const response = await fetch('checkoutAPI.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    Swal.fire({
+                        title: 'Pedido Realizado!',
+                        text: 'Seu pedido foi confirmado com sucesso!',
+                        icon: 'success',
+                        confirmButtonText: 'Ver Meus Pedidos'
+                    }).then(() => {
+                        window.location.href = '../Perfil/perfil.php';
+                    });
+                } else {
+                    Swal.fire('Erro!', result.message || 'Erro ao processar pedido', 'error');
+                }
+            } catch (error) {
+                console.error('Erro ao criar pedido:', error);
+                Swal.fire('Erro!', 'Erro ao processar pedido', 'error');
+            }
+        });
+
+        // Load data on page load
+        loadSavedPaymentMethods();
+        loadSavedAddresses();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

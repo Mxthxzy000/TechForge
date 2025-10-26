@@ -41,15 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // CPF formatting
   cpfInput.addEventListener("focus", (e) => {
-    if (e.target.value === "9 x de R$ 24,88 (com 5% de desconto)") {
+    if (e.target.value === "Seu CPF aqui *") {
       e.target.value = ""
-      e.target.placeholder = "CPF *"
     }
   })
 
   cpfInput.addEventListener("blur", (e) => {
     if (e.target.value === "") {
-      e.target.value = "9 x de R$ 24,88 (com 5% de desconto)"
+      e.target.value = "Seu CPF aqui *"
       e.target.placeholder = ""
     }
   })

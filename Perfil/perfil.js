@@ -433,7 +433,7 @@ function loadOrders() {
           ${data.orders
             .map(
               (order) => `
-            <div class="order-card">
+            <div class="order-card" style="cursor: pointer;" onclick="window.location.href='detalhes-pedido.php?id=${order.idPedido}'">
               <div class="order-header">
                 <div class="order-field">
                   <div class="order-label">Pedido</div>
