@@ -209,4 +209,80 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     })
   }
+
+  // Load cart summary
+  loadCheckoutSummary()
+
+  function loadCheckoutSummary() {
+    fetch("../Carrinho/cartAPI.php?action=getCart")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.needsLogin) {
+          window.location.href = "../login/login.php"
+          return
+        }
+
+        if (data.error) {
+          console.error("Erro:", data.error)
+          return
+        }
+
+        const cartItems = data.produtos
+
+        if (cartItems.length === 0) {
+          window.location.href = "../Catalogo/catalogo.php"
+          return
+        }
+
+        renderCheckoutSummary(cartItems)
+      })
+      .catch((error) => {
+        console.error("Erro ao carregar resumo:", error)
+      })
+  }
+
+  function renderCheckoutSummary(cartItems) {
+    const subtotal = cartItems.reduce((sum, item) => {
+      return sum + Number.parseFloat(item.precoProduto) * item.quantidade
+    }, 0)
+
+    const discount = subtotal * 0.05 // 5% discount
+    const total = subtotal - discount
+
+    // Update product info section
+    const productInfoDiv = document.querySelector(".product-info")
+    if (productInfoDiv && cartItems.length > 0) {
+      const firstItem = cartItems[0]
+      const itemCount = cartItems.reduce((sum, item) => sum + item.quantidade, 0)
+
+      productInfoDiv.innerHTML = `
+        <img src="../imagens_produtos/${firstItem.imagemProduto}" 
+             alt="${firstItem.nomeProduto}" 
+             class="product-image">
+        <div class="product-details">
+          <p class="product-name">${firstItem.nomeProduto}</p>
+          ${cartItems.length > 1 ? `<p style="color: #666; font-size: 14px; margin-top: 5px;">+ ${cartItems.length - 1} outro(s) produto(s)</p>` : ""}
+          <p style="color: #666; font-size: 14px; margin-top: 5px;">Total: ${itemCount} item(ns)</p>
+        </div>
+      `
+    }
+
+    // Update summary values
+    const summaryRows = document.querySelectorAll(".summary-row")
+    if (summaryRows[0]) {
+      summaryRows[0].querySelector(".price").textContent = formatPrice(subtotal)
+    }
+    if (summaryRows[1]) {
+      summaryRows[1].querySelector(".price").textContent = formatPrice(discount)
+    }
+
+    const totalPrice = document.querySelector(".total-price")
+    if (totalPrice) {
+      totalPrice.textContent = formatPrice(total)
+    }
+  }
+
+  function formatPrice(price) {
+    return `R$ ${price.toFixed(2).replace(".", ",")}`
+  }
 })

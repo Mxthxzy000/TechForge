@@ -101,24 +101,23 @@ $stmt->close();
 
     <nav>
         <ul>
-             <li><a href="../Home/index.php">HOME</a></li>
+             <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a></li>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon class="navicon" name="bag-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="#">OFERTAS</a></li>
+            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="#">MONTE SEU PC</a></li>
+            <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="#">GAMER</a></li>
+            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a></li>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon></li>
         </ul>
     </nav>
 
     <?php show_flash(); ?>
 
     <div class="container-new">
-        <!-- Header com dados reais do usuário -->
         <div class="header-new">
             <div class="user-info">
                 <div class="user-avatar">
@@ -135,67 +134,74 @@ $stmt->close();
                 </div>
             </div>
             <div class="header-actions">
-                <button class="btn btn-primary">Rastrear</button>
                 <button class="btn btn-secondary">Editar</button>
             </div>
         </div>
 
-        <!-- Tabs -->
-        <div class="tabs">
-            <button class="tab active" data-tab="pedidos">Meus Pedidos</button>
-            <button class="tab" data-tab="dados">Meus Dados</button>
-            <button class="tab" data-tab="endereco">Endereço</button>
-            <button class="tab" data-tab="favoritos">Favoritos</button>
-        </div>
-
-        <!-- Orders Section -->
         <div class="orders-section">
             <div class="section-title">Últimos Pedidos</div>
-
-            <!-- Mensagem quando não há pedidos -->
             <div class="order-card">
                 <p style="text-align:center;padding:20px;color:#666;">Você ainda não fez nenhum pedido.</p>
             </div>
         </div>
 
-        <!-- Bottom Grid -->
         <div class="bottom-grid">
-            <!-- Addresses Section -->
             <div class="addresses-section">
                 <div class="addresses-header">
                     <div class="addresses-title">Endereços</div>
-                    <button class="btn-add">+ Adicionar</button>
+                    <button class="btn-add" id="addAddressBtn">+ Adicionar</button>
                 </div>
-                <div class="addresses-grid">
+                <div class="addresses-grid" id="addressesContainer">
                     <div class="address-card">
-                        <div class="address-title">Endereço de Entrega Padrão</div>
-                        <p style="color:#666;font-size:14px;margin-top:10px;">Nenhum endereço cadastrado</p>
-                    </div>
-                    <div class="address-card">
-                        <div class="address-title">Endereço de Cobrança Padrão</div>
-                        <p style="color:#666;font-size:14px;margin-top:10px;">Nenhum endereço cadastrado</p>
+                        <div class="address-title">Carregando endereços...</div>
                     </div>
                 </div>
             </div>
 
-            <!-- User Data Section com dados reais -->
             <div class="user-data-section">
-                <div class="user-data-title">Meus Dados</div>
-                <div class="user-data-content">
-                    <div class="user-data-label">Informações da Conta</div>
+                <!-- Added profile photo upload section -->
+                <div class="profile-photo-section">
+                    <div class="profile-photo-circle" id="profilePhotoCircle">
+                        <?php if ($foto !== '../imagens/default-avatar.png'): ?>
+                            <img src="<?php echo htmlspecialchars($foto); ?>" alt="Foto do usuário" class="profile-photo-img">
+                        <?php else: ?>
+                            <ion-icon name="person-outline" style="font-size: 60px; color: #64748b;"></ion-icon>
+                        <?php endif; ?>
+                        <div class="profile-photo-overlay">
+                            <ion-icon name="camera-outline" style="font-size: 32px;"></ion-icon>
+                            <span>Alterar Foto</span>
+                        </div>
+                    </div>
+                    <input type="file" id="photoInput" accept="image/*" style="display: none;">
                 </div>
+
+                <div class="user-data-title">Meus Dados</div>
+    
                 <div class="user-data-content">
-                    <div class="user-data-value">👤 <?php echo htmlspecialchars($nomeCompleto); ?></div>
+                    <div class="user-data-value"><ion-icon name="person-circle-outline"></ion-icon><?php echo htmlspecialchars($nomeCompleto); ?></div>
                 </div>
                 <div class="user-email-box">
-                    <span class="email-icon">✉️</span>
+                    <span class="email-icon"> <ion-icon name="mail-outline"></ion-icon> </span>
                     <span class="email-text"><?php echo htmlspecialchars($email); ?></span>
                 </div>
                 <div class="user-data-content" style="margin-top:10px;">
-                    <div class="user-data-value">📱 <?php echo htmlspecialchars($celular); ?></div>
+                    <div class="user-data-value"> <ion-icon name="call-outline"></ion-icon> <?php echo htmlspecialchars($celular); ?></div>
                 </div>
                 <div class="user-data-content" style="margin-top:10px;">
-                    <div class="user-data-value">🎂 <?php echo htmlspecialchars($nascimento); ?></div>
+                    <div class="user-data-value"> <ion-icon name="calendar-outline"></ion-icon> <?php echo htmlspecialchars($nascimento); ?></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Added payment methods section -->
+        <div class="payment-methods-section">
+            <div class="payment-methods-header">
+                <div class="payment-methods-title">Formas de Pagamento</div>
+                <button class="btn-add" id="addPaymentBtn">+ Adicionar</button>
+            </div>
+            <div class="payment-methods-grid" id="paymentMethodsContainer">
+                <div class="payment-card">
+                    <div class="payment-title">Carregando formas de pagamento...</div>
                 </div>
             </div>
         </div>
@@ -247,7 +253,6 @@ $stmt->close();
         <p id="finalfooter"> ©2025 TechForge. Todos os Direitos Reservados | Caçapava SP </p>
     </footer>
 
-    <!-- Incluindo script comum e específico -->
     <script src="../Comum/common.js"></script>
     <script src="perfil.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

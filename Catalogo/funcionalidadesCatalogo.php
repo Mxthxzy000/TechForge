@@ -11,7 +11,7 @@ if (!isset($conn) || $conn->connect_error) {
 $action = $_GET['action'] ?? '';
 
 if ($action === 'getAll') {
-    $sql = "SELECT idProduto, nomeProduto, precoProduto, imagemProduto, linhaProduto, tipoProduto 
+    $sql = "SELECT idProduto, nomeProduto, valorProduto as precoProduto, imagem as imagemProduto, linhaProduto, tipoProduto 
             FROM produtos";
     $res = $conn->query($sql);
 
@@ -43,18 +43,93 @@ if ($action === 'filter') {
         $condicoes[] = "tipoProduto = '" . $conn->real_escape_string($tag) . "'";
     }
     
-    if (!empty($precoMin)) $condicoes[] = "precoProduto >= " . floatval($precoMin);
-    if (!empty($precoMax)) $condicoes[] = "precoProduto <= " . floatval($precoMax);
+    if (!empty($precoMin)) $condicoes[] = "valorProduto >= " . floatval($precoMin);
+    if (!empty($precoMax)) $condicoes[] = "valorProduto <= " . floatval($precoMax);
 
     $where = count($condicoes) > 0 ? 'WHERE ' . implode(' AND ', $condicoes) : '';
 
-    $sql = "SELECT idProduto, nomeProduto, precoProduto, imagemProduto, linhaProduto, tipoProduto 
+    $sql = "SELECT idProduto, nomeProduto, valorProduto as precoProduto, imagem as imagemProduto, linhaProduto, tipoProduto 
             FROM produtos $where";
 
     $res = $conn->query($sql);
 
     if (!$res) {
         echo json_encode(['error' => 'Erro ao buscar produtos filtrados', 'sql_error' => $conn->error]);
+        exit;
+    }
+
+    $produtos = [];
+    while ($row = $res->fetch_assoc()) {
+        $produtos[] = $row;
+    }
+
+    echo json_encode(['produtos' => $produtos]);
+    exit;
+}
+
+if ($action === 'filterByTag') {
+    $tag = $_GET['tag'] ?? '';
+    
+    if (empty($tag)) {
+        echo json_encode(['produtos' => []]);
+        exit;
+    }
+
+    $tag = $conn->real_escape_string($tag);
+    
+    // Busca produtos onde a tag está presente no campo tagsProduto
+    $sql = "SELECT idProduto, nomeProduto, valorProduto as precoProduto, imagem as imagemProduto, linhaProduto, tipoProduto 
+            FROM produtos 
+            WHERE tagsProduto LIKE '%$tag%'";
+
+    $res = $conn->query($sql);
+
+    if (!$res) {
+        echo json_encode(['error' => 'Erro ao buscar produtos por tag', 'sql_error' => $conn->error]);
+        exit;
+    }
+
+    $produtos = [];
+    while ($row = $res->fetch_assoc()) {
+        $produtos[] = $row;
+    }
+
+    echo json_encode(['produtos' => $produtos]);
+    exit;
+}
+
+// NOVA AÇÃO PARA FILTRAR POR MÚLTIPLAS TAGS - VERSÃO CORRIGIDA
+// AÇÃO PARA FILTRAR POR MÚLTIPLAS TAGS - AND (AMBAS AS TAGS)
+if ($action === 'filterMultipleTags') {
+    // Verifica se tags é array ou string única
+    $tags = $_GET['tags'] ?? [];
+    
+    // Se for string única, converte para array
+    if (!is_array($tags)) {
+        $tags = [$tags];
+    }
+    
+    if (empty($tags)) {
+        echo json_encode(['produtos' => []]);
+        exit;
+    }
+
+    // Para cada tag, adiciona uma condição AND (todas as tags devem estar presentes)
+    $sql = "SELECT idProduto, nomeProduto, valorProduto as precoProduto, imagem as imagemProduto, linhaProduto, tipoProduto 
+            FROM produtos 
+            WHERE 1=1";
+    
+    foreach ($tags as $tag) {
+        $clean_tag = $conn->real_escape_string(trim($tag));
+        if (!empty($clean_tag)) {
+            $sql .= " AND tagsProduto LIKE '%$clean_tag%'";
+        }
+    }
+
+    $res = $conn->query($sql);
+
+    if (!$res) {
+        echo json_encode(['error' => 'Erro ao buscar produtos por múltiplas tags', 'sql_error' => $conn->error]);
         exit;
     }
 
@@ -79,7 +154,7 @@ if ($action === 'search') {
     $termo = $conn->real_escape_string($termo);
     
     // Busca produtos com nomes similares (máximo 3 para sugestões)
-    $sql = "SELECT idProduto, nomeProduto, precoProduto, imagemProduto, linhaProduto, tipoProduto 
+    $sql = "SELECT idProduto, nomeProduto, valorProduto as precoProduto, imagem as imagemProduto, linhaProduto, tipoProduto 
             FROM produtos 
             WHERE nomeProduto LIKE '%$termo%' 
             LIMIT 3";
@@ -112,7 +187,7 @@ if ($action === 'searchFull') {
     $termo = $conn->real_escape_string($termo);
     
     // Busca todos os produtos com nomes similares
-    $sql = "SELECT idProduto, nomeProduto, precoProduto, imagemProduto, linhaProduto, tipoProduto 
+    $sql = "SELECT idProduto, nomeProduto, valorProduto as precoProduto, imagem as imagemProduto, linhaProduto, tipoProduto 
             FROM produtos 
             WHERE nomeProduto LIKE '%$termo%'";
 
@@ -156,82 +231,6 @@ if ($action === 'getPopularTags') {
     $popularTags = array_slice($tag_count, 0, 10);
     
     echo json_encode(['tags' => $popularTags]);
-    exit;
-}
-
-// NOVA AÇÃO PARA FILTRAR POR TAGS (TAGS REAIS DO CAMPO tagsProduto)
-if ($action === 'filterByTag') {
-    $tag = $_GET['tag'] ?? '';
-    
-    if (empty($tag)) {
-        echo json_encode(['produtos' => []]);
-        exit;
-    }
-
-    $tag = $conn->real_escape_string($tag);
-    
-    // Busca produtos onde a tag está presente no campo tagsProduto
-    $sql = "SELECT idProduto, nomeProduto, precoProduto, imagemProduto, linhaProduto, tipoProduto 
-            FROM produtos 
-            WHERE tagsProduto LIKE '%$tag%'";
-
-    $res = $conn->query($sql);
-
-    if (!$res) {
-        echo json_encode(['error' => 'Erro ao buscar produtos por tag', 'sql_error' => $conn->error]);
-        exit;
-    }
-
-    $produtos = [];
-    while ($row = $res->fetch_assoc()) {
-        $produtos[] = $row;
-    }
-
-    echo json_encode(['produtos' => $produtos]);
-    exit;
-}
-
-// AÇÃO PARA FILTRAR POR MÚLTIPLAS TAGS - VERSÃO CORRIGIDA
-// AÇÃO PARA FILTRAR POR MÚLTIPLAS TAGS - AND (AMBAS AS TAGS)
-if ($action === 'filterMultipleTags') {
-    // Verifica se tags é array ou string única
-    $tags = $_GET['tags'] ?? [];
-    
-    // Se for string única, converte para array
-    if (!is_array($tags)) {
-        $tags = [$tags];
-    }
-    
-    if (empty($tags)) {
-        echo json_encode(['produtos' => []]);
-        exit;
-    }
-
-    // Para cada tag, adiciona uma condição AND (todas as tags devem estar presentes)
-    $sql = "SELECT idProduto, nomeProduto, precoProduto, imagemProduto, linhaProduto, tipoProduto 
-            FROM produtos 
-            WHERE 1=1";
-    
-    foreach ($tags as $tag) {
-        $clean_tag = $conn->real_escape_string(trim($tag));
-        if (!empty($clean_tag)) {
-            $sql .= " AND tagsProduto LIKE '%$clean_tag%'";
-        }
-    }
-
-    $res = $conn->query($sql);
-
-    if (!$res) {
-        echo json_encode(['error' => 'Erro ao buscar produtos por múltiplas tags', 'sql_error' => $conn->error]);
-        exit;
-    }
-
-    $produtos = [];
-    while ($row = $res->fetch_assoc()) {
-        $produtos[] = $row;
-    }
-
-    echo json_encode(['produtos' => $produtos]);
     exit;
 }
 

@@ -1,60 +1,60 @@
-/* === ADIÇÕES PARA O CATÁLOGO COM FILTRO LATERAL === */.container-catalogo {
-    display: flex;
-    gap: 20px; /* Espaçamento entre filtro e produtos */
-    align-items: flex-start; /* Alinha ao topo */
+/* === ADIÇÕES PARA O CATÁLOGO COM FILTRO LATERAL === */
+.container-catalogo {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
 }
 
 .filtro-lateral {
-    width: 300px; /* Largura fixa do filtro */
-    flex-shrink: 0; /* Não encolhe */
+  width: 300px;
+  flex-shrink: 0;
 }
 
 .produtos-lista {
-    flex: 1; /* Ocupa o restante do espaço */
+  flex: 1;
 }
 
-
 .cards-produtos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    justify-content: flex-start; /* ou center, se quiser centralizar */
-    flex: 1; /* ocupa o espaço restante */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 45px;
+  justify-content: center;
+  flex: 1;
 }
 
 .filtro-lateral {
-    min-width: 250px;
-    background-color: #1a2a3c;
-    border-radius: 16px;
-    padding: 20px;
-    color: #fff;
-    height: fit-content;
-    top: 100px;
-    margin-top: 25px;
-    margin-left: 25px;
-    border: 2px solid #1a2a3c;
+  min-width: 250px;
+  background-color: #1a2a3c;
+  border-radius: 16px;
+  padding: 20px;
+  color: #fff;
+  height: fit-content;
+  top: 100px;
+  margin-top: 25px;
+  margin-left: 25px;
+  border: 2px solid #1a2a3c;
 }
 
 .filtro-lateral h2 {
-    color: #ffffff;
-    margin-bottom: 15px;
-    text-transform: uppercase;
+  color: #ffffff;
+  margin-bottom: 15px;
+  text-transform: uppercase;
 }
 
 .filtro-secao {
-    margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 
 .filtro-secao h3 {
-    margin-bottom: 10px;
-    color: #f8c10d;
-    font-size: 18px;
+  margin-bottom: 10px;
+  color: #f8c10d;
+  font-size: 18px;
 }
 
 .filtro-secao label {
-    display: block;
-    margin-bottom: 8px;
-    cursor: pointer;
+  display: block;
+  margin-bottom: 8px;
+  cursor: pointer;
 }
 
 .preco-inputs {
@@ -89,170 +89,154 @@
   background-color: #ffdb4d;
 }
 
-
 /* TAGS */
 #filterTags span {
-    background-color: #f8c10d;
-    color: #1a2a3c;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 14px;
-    margin: 3px;
-    display: inline-block;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+  background-color: #f8c10d;
+  color: #1a2a3c;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 3px;
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 #filterTags span:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
-/* Estilo para tags com contador */
 .tag-option {
-    background-color: #f8c10d;
-    color: #1a2a3c;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 13px;
-    margin: 4px;
-    display: inline-block;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: bold;
+  background-color: #f8c10d;
+  color: #1a2a3c;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin: 4px;
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
 }
 
 .tag-option:hover {
-    transform: scale(1.08);
-    background-color: #ffdb4d;
+  transform: scale(1.08);
+  background-color: #ffdb4d;
 }
 
 .tag-option.active {
-    background-color: #ffdb49 !important;
-    color: rgb(0, 0, 0) !important;
-    box-shadow: 0 0 8px #ffebc4;
+  background-color: #ffdb49 !important;
+  color: rgb(0, 0, 0) !important;
+  box-shadow: 0 0 8px #ffebc4;
 }
 
 .tags-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
 }
 
-/* SUGESTÕES DE PESQUISA - CORRIGIDO */
+/* SUGESTÕES DE PESQUISA */
 .suggestions-list {
-    position: absolute;
-    top: 100%; /* Abaixo da barra de pesquisa */
-    left: 18%;
-    right: 0;
-    background: #fff;
-    color: #000;
-    width: 82%; /* Mesma largura do container de pesquisa */
-    border-radius: 0 0 8px 8px;
-    list-style: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: none;
-    z-index: 1000;
-    max-height: 200px;
-    overflow-y: auto;
+  position: absolute;
+  top: 100%;
+  left: 18%;
+  right: 0;
+  background: #fff;
+  color: #000;
+  width: 82%;
+  border-radius: 0 0 8px 8px;
+  list-style: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: none;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .suggestions-list li {
-    padding: 10px 15px;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
 }
 
 .suggestions-list li:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .suggestions-list li:hover {
-    background-color: #f8c10d;
-    color: #1a2a3c;
+  background-color: #f8c10d;
+  color: #1a2a3c;
 }
 
-/* Container de pesquisa com posição relativa para as sugestões */
 .divpesquisar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20px;
-    width: 235px;
-    position: relative; /* IMPORTANTE: para as sugestões se posicionarem relativas a este container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+  width: 235px;
+  position: relative;
 }
 
 /* CABEÇALHO DA LISTA */
 .cabecalho-lista {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #000000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #000000;
+  margin: 30px;
 }
 
 .cabecalho-lista h2 {
-    color: #f8c10d;
+  color: #f8c10d;
+}
+
+#resultCount {
+  display: none;
+}
+
+.cabecalho-lista span {
+  display: none;
 }
 
 /* === MELHORIAS === */
 .loading {
-    color: #f8c10d;
-    font-size: 1.2rem;
-    text-align: center;
-    margin-top: 40px;
+  color: #f8c10d;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 40px;
 }
 
 .erro {
-    color: #ff4444;
-    font-size: 1.1rem;
-    text-align: center;
-    margin-top: 40px;
+  color: #ff4444;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-top: 40px;
 }
 
 .nenhum-produto {
-    color: #000000;
-    font-size: 1rem;
-    text-align: center;
-    margin-top: 30px;
-}
-/* Esconder o contador de resultados */
-#resultCount {
-    display: none;
-}
-
-/* Ou se quiser manter o cabecalho-lista sem o span */
-.cabecalho-lista {
-  margin: 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #000000;
-}
-
-.cabecalho-lista h2 {
-    color: #f8c10d;
-}
-
-/* Remover o span do layout */
-.cabecalho-lista span {
-    display: none;
+  color: #000000;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 30px;
 }
 
 /* Melhor responsividade dos cards */
 @media (max-width: 900px) {
-    .container-catalogo {
-        flex-direction: column;
-        align-items: center;
-    }
-    .filtro-lateral {
-        width: 95%;
-        position: static;
-        margin-bottom: 20px;
-    }
-    .cards-produtos {
-        gap: 20px;
-    }
+  .container-catalogo {
+    flex-direction: column;
+    align-items: center;
+  }
+  .filtro-lateral {
+    width: 95%;
+    position: static;
+    margin-bottom: 20px;
+  }
+  .cards-produtos {
+    gap: 20px;
+  }
 }
 
 /* === FILTRO DE LINHAS (Intel / AMD) === */
@@ -266,7 +250,7 @@
 .marca-option {
   width: 48%;
   height: 80px;
-  background-color: #2B3640;
+  background-color: #2b3640;
   border-radius: 10px;
   border: 2px solid transparent;
   display: flex;
@@ -282,19 +266,18 @@
   height: auto;
   opacity: 0.85;
   transition: 0.3s ease;
-  filter: brightness(0) invert(1); /* deixa branca */
+  filter: brightness(0) invert(1);
 }
 
 .marca-option:hover {
   transform: scale(1.05);
-  background-color: #213B5B;
+  background-color: #213b5b;
 }
 
 .marca-option:hover img {
   opacity: 1;
 }
 
-/* quando selecionada */
 .marca-option.selected {
   border-color: #f8c10d;
   box-shadow: 0 0 10px #f8c10d;
@@ -319,13 +302,13 @@
   gap: 8px;
   padding: 6px 10px;
   border-radius: 6px;
-  background-color: #2B3640;
+  background-color: #2b3640;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .tipos-pecas label:hover {
-  background-color: #213B5B;
+  background-color: #213b5b;
   transform: scale(1.03);
 }
 
@@ -333,4 +316,81 @@
   accent-color: #f8c10d;
   width: 16px;
   height: 16px;
+}
+
+/* Aplicando animação de hover igual à home page nos cards do catálogo */
+/* === BOTÕES DOS CARDS COM ANIMAÇÃO === */
+.card-buttons {
+  display: flex;
+  gap: 8px;
+  width: 70%;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 125%);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+}
+
+.card-produto:hover .card-buttons {
+  transform: translate(-50%, 50%);
+  opacity: 1;
+}
+
+.btn-add-cart,
+.btn-see-more {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.btn-add-cart {
+  background-color: #f8c10d;
+  color: #1a2a3c;
+}
+
+.btn-add-cart:hover {
+  background-color: #ffdb4d;
+  transform: scale(1.05);
+}
+
+.btn-see-more {
+  background-color: #2b3640;
+  color: #fff;
+}
+
+.btn-see-more:hover {
+  background-color: #3a4a5c;
+  transform: scale(1.05);
+}
+
+.btn-add-cart ion-icon,
+.btn-see-more ion-icon {
+  font-size: 16px;
+}
+
+/* Cart badge */
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #f8c10d;
+  color: #1a2a3c;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
 }

@@ -1,0 +1,259 @@
+.container-builder {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.builder-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.builder-header h1 {
+  font-size: 32px;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.builder-header p {
+  font-size: 16px;
+  color: #64748b;
+}
+
+.builder-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 30px;
+}
+
+.components-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.component-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.component-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.component-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.component-header ion-icon {
+  font-size: 28px;
+  color: #f8c10d;
+}
+
+.component-header h3 {
+  font-size: 18px;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.component-select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.component-select:focus {
+  outline: none;
+  border-color: #f8c10d;
+}
+
+.component-price {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #22c55e;
+  text-align: right;
+}
+
+.summary-section {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+.summary-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card h2 {
+  font-size: 22px;
+  color: #1e293b;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.setup-name-input {
+  margin-bottom: 20px;
+}
+
+.setup-name-input label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.setup-name-input input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.setup-name-input input:focus {
+  outline: none;
+  border-color: #f8c10d;
+}
+
+.summary-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-item-name {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.summary-item-value {
+  font-size: 14px;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.observations {
+  margin-bottom: 20px;
+}
+
+.observations label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.observations textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.observations textarea:focus {
+  outline: none;
+  border-color: #f8c10d;
+}
+
+.total-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #1e293b;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.total-price span:first-child {
+  font-size: 16px;
+  color: white;
+  font-weight: 500;
+}
+
+.total-price span:last-child {
+  font-size: 24px;
+  color: #f8c10d;
+  font-weight: 700;
+}
+
+.btn-save-build {
+  width: 100%;
+  padding: 15px;
+  background: #f8c10d;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.2s;
+}
+
+.btn-save-build:hover {
+  background: #e0ad0a;
+}
+
+.btn-save-build ion-icon {
+  font-size: 24px;
+}
+
+.info-text {
+  text-align: center;
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 15px;
+}
+
+@media (max-width: 1024px) {
+  .builder-content {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-section {
+    position: static;
+  }
+}
