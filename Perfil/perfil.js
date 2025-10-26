@@ -795,10 +795,11 @@ document.getElementById("paymentForm").addEventListener("submit", (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
+      saveBtn.disabled = false
+      saveBtn.textContent = "Salvar"
+
       if (data.error) {
         alert(data.error)
-        saveBtn.disabled = false
-        saveBtn.textContent = "Salvar"
         return
       }
 

@@ -6,13 +6,114 @@ document.addEventListener("DOMContentLoaded", () => {
     precoMax: "",
   }
 
+  const urlParams = new URLSearchParams(window.location.search)
+  const searchQuery = urlParams.get("search")
+
   // Elementos da pesquisa
   const searchInput = document.getElementById("searchInput")
   const searchButton = document.querySelector(".btn-pesquisar")
   const suggestionsList = document.getElementById("suggestions")
 
+  const tagSearchInput = document.getElementById("tagSearchInput")
+  const allTagOptions = document.querySelectorAll(".tag-option")
+
+  if (tagSearchInput) {
+    const suggestionsContainer = document.createElement("div")
+    suggestionsContainer.className = "tag-suggestions"
+    tagSearchInput.parentElement.appendChild(suggestionsContainer)
+
+    const allTags = []
+
+    // Collect all available tags
+    allTagOptions.forEach((tagOption) => {
+      const tagText = tagOption.textContent.trim()
+      const tagCount = tagText.match(/$$(\d+)$$/)
+      const tagName = tagText.replace(/\s*$$\d+$$/, "").trim()
+      allTags.push({
+        name: tagName,
+        count: tagCount ? tagCount[1] : "0",
+        element: tagOption,
+      })
+    })
+
+    tagSearchInput.addEventListener("input", function () {
+      const searchTerm = this.value.toLowerCase().trim()
+
+      // Filter visible tags
+      allTagOptions.forEach((tagOption) => {
+        const tagText = tagOption.textContent.toLowerCase()
+
+        if (searchTerm === "" || tagText.includes(searchTerm)) {
+          tagOption.classList.remove("hidden")
+        } else {
+          tagOption.classList.add("hidden")
+        }
+      })
+
+      // Show autocomplete suggestions
+      if (searchTerm.length >= 2) {
+        const matchingTags = allTags.filter((tag) => tag.name.toLowerCase().includes(searchTerm))
+
+        if (matchingTags.length > 0) {
+          suggestionsContainer.innerHTML = matchingTags
+            .slice(0, 8)
+            .map(
+              (tag) => `
+              <div class="tag-suggestion-item" data-tag="${tag.name}">
+                <ion-icon name="pricetag-outline"></ion-icon>
+                <span>${tag.name}</span>
+                <span style="margin-left: auto; color: #666; font-size: 12px;">(${tag.count})</span>
+              </div>
+            `,
+            )
+            .join("")
+          suggestionsContainer.classList.add("show")
+
+          // Add click handlers to suggestions
+          suggestionsContainer.querySelectorAll(".tag-suggestion-item").forEach((item) => {
+            item.addEventListener("click", function () {
+              const tagName = this.getAttribute("data-tag")
+
+              // Find and click the corresponding tag option
+              allTagOptions.forEach((tagOption) => {
+                const optionTagName = tagOption.textContent.replace(/\s*$$\d+$$/, "").trim()
+                if (optionTagName === tagName) {
+                  tagOption.click()
+                  tagSearchInput.value = ""
+                  suggestionsContainer.classList.remove("show")
+                }
+              })
+            })
+          })
+        } else {
+          suggestionsContainer.innerHTML = '<div class="no-suggestions">Nenhuma tag encontrada</div>'
+          suggestionsContainer.classList.add("show")
+        }
+      } else {
+        suggestionsContainer.classList.remove("show")
+      }
+    })
+
+    // Close suggestions when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".tag-search-container")) {
+        suggestionsContainer.classList.remove("show")
+      }
+    })
+
+    // Close suggestions on escape key
+    tagSearchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        suggestionsContainer.classList.remove("show")
+        tagSearchInput.blur()
+      }
+    })
+  }
+
   // Carregar todos os produtos inicialmente
-  loadProducts()
+  if (!searchQuery) {
+    loadProducts()
+  }
 
   // Eventos da pesquisa
   searchInput.addEventListener("input", function () {

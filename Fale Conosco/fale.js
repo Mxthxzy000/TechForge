@@ -51,12 +51,33 @@ document.querySelector(".chat-button").addEventListener("click", () => {
 
 document.querySelectorAll(".article-card").forEach((card) => {
   card.addEventListener("click", function () {
-    const title = this.querySelector(".article-title").textContent
-    Swal.fire({
-      icon: "info",
-      title: title,
-      text: "Abrindo artigo...",
-      confirmButtonColor: "#f8c10d",
-    })
+    const title = this.querySelector(".article-title").textContent.trim()
+    const duvidaSelect = document.querySelector('select[name="duvida"]')
+
+    // Map article titles to dropdown values
+    let optionValue = title
+    if (title === "Outros dúvidas") {
+      optionValue = "Outros"
+    }
+
+    // Find and select the matching option
+    const options = Array.from(duvidaSelect.options)
+    const matchingOption = options.find((opt) => opt.value === optionValue)
+
+    if (matchingOption) {
+      duvidaSelect.value = matchingOption.value
+
+      // Scroll to the form smoothly
+      const formContainer = document.querySelector(".form-container")
+      formContainer.scrollIntoView({ behavior: "smooth", block: "start" })
+
+      // Add a visual highlight to the dropdown
+      duvidaSelect.style.transition = "all 0.3s ease"
+      duvidaSelect.style.boxShadow = "0 0 0 3px rgba(248, 193, 13, 0.3)"
+
+      setTimeout(() => {
+        duvidaSelect.style.boxShadow = ""
+      }, 1500)
+    }
   })
 })

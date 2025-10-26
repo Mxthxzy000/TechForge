@@ -2,6 +2,32 @@
 require '../config.php';
 require '../session.php';
 require '../flash.php';
+
+// Get selected components from session
+if (!isset($_SESSION['pc_build'])) {
+    $_SESSION['pc_build'] = [
+        'cpu' => null,
+        'gpu' => null,
+        'placaMae' => null,
+        'ram' => null,
+        'armazenamento' => null,
+        'fonte' => null,
+        'gabinete' => null,
+        'cooler' => null,
+        'nomeSetup' => '',
+        'observacoes' => ''
+    ];
+}
+
+$build = $_SESSION['pc_build'];
+$totalPrice = 0;
+
+// Calculate total price
+foreach ($build as $key => $component) {
+    if ($component && isset($component['price'])) {
+        $totalPrice += $component['price'];
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -24,10 +50,6 @@ require '../flash.php';
             <img src="../imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
         <div class="final-header">
-            <div class="divpesquisar">
-                <button id="pesquisar" class="btn-pesquisar"><ion-icon name="search-sharp"></ion-icon></button>
-                <input type="text" placeholder=" Pesquisar..." class="barra-pesquisa">
-            </div>
             <div class="usuario-menu">
                 <button id="minha-conta" class="btn-header">
                     <ion-icon name="person-circle-outline"></ion-icon>
@@ -63,17 +85,15 @@ require '../flash.php';
 
     <nav>
         <ul>
-            <li><a href="../Home/index.php">HOME</a></li>
+            <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a></li>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="#">OFERTAS</a></li>
+            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a></li>
+            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="#">GAMER</a></li>
-            <span class="linha"></span>
-            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a></li>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon></li>
         </ul>
     </nav>
 
@@ -82,98 +102,162 @@ require '../flash.php';
     <div class="container-builder">
         <div class="builder-header">
             <h1>Monte Seu PC Personalizado</h1>
-            <p>Selecione os componentes e monte o PC dos seus sonhos</p>
+            <p>Escolha cada componente e monte o PC perfeito para você</p>
         </div>
 
         <div class="builder-content">
-            <div class="components-section">
-                <div class="component-card">
-                    <div class="component-header">
+            <div class="components-grid">
+                <!-- CPU Card -->
+                <a href="selecionar-componente.php?tipo=processador" class="component-selection-card">
+                    <div class="component-icon">
                         <ion-icon name="hardware-chip-outline"></ion-icon>
+                    </div>
+                    <div class="component-info">
                         <h3>Processador (CPU)</h3>
+                        <?php if ($build['cpu']): ?>
+                            <p class="selected-component"><?php echo htmlspecialchars($build['cpu']['name']); ?></p>
+                            <p class="component-price-display">R$ <?php echo number_format($build['cpu']['price'], 2, ',', '.'); ?></p>
+                        <?php else: ?>
+                            <p class="no-selection">Clique para escolher</p>
+                        <?php endif; ?>
                     </div>
-                    <select id="cpu" class="component-select">
-                        <option value="">Selecione um processador</option>
-                    </select>
-                    <div class="component-price" id="cpu-price">R$ 0,00</div>
-                </div>
+                    <div class="component-arrow">
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </div>
+                </a>
 
-                <div class="component-card">
-                    <div class="component-header">
+                <!-- GPU Card -->
+                <a href="selecionar-componente.php?tipo=placa-video" class="component-selection-card">
+                    <div class="component-icon">
                         <ion-icon name="desktop-outline"></ion-icon>
+                    </div>
+                    <div class="component-info">
                         <h3>Placa de Vídeo (GPU)</h3>
+                        <?php if ($build['gpu']): ?>
+                            <p class="selected-component"><?php echo htmlspecialchars($build['gpu']['name']); ?></p>
+                            <p class="component-price-display">R$ <?php echo number_format($build['gpu']['price'], 2, ',', '.'); ?></p>
+                        <?php else: ?>
+                            <p class="no-selection">Clique para escolher</p>
+                        <?php endif; ?>
                     </div>
-                    <select id="gpu" class="component-select">
-                        <option value="">Selecione uma placa de vídeo</option>
-                    </select>
-                    <div class="component-price" id="gpu-price">R$ 0,00</div>
-                </div>
+                    <div class="component-arrow">
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </div>
+                </a>
 
-                <div class="component-card">
-                    <div class="component-header">
+                <!-- Placa-Mãe Card -->
+                <a href="selecionar-componente.php?tipo=placa-mae" class="component-selection-card">
+                    <div class="component-icon">
                         <ion-icon name="grid-outline"></ion-icon>
+                    </div>
+                    <div class="component-info">
                         <h3>Placa-Mãe</h3>
+                        <?php if ($build['placaMae']): ?>
+                            <p class="selected-component"><?php echo htmlspecialchars($build['placaMae']['name']); ?></p>
+                            <p class="component-price-display">R$ <?php echo number_format($build['placaMae']['price'], 2, ',', '.'); ?></p>
+                        <?php else: ?>
+                            <p class="no-selection">Clique para escolher</p>
+                        <?php endif; ?>
                     </div>
-                    <select id="placaMae" class="component-select">
-                        <option value="">Selecione uma placa-mãe</option>
-                    </select>
-                    <div class="component-price" id="placaMae-price">R$ 0,00</div>
-                </div>
+                    <div class="component-arrow">
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </div>
+                </a>
 
-                <div class="component-card">
-                    <div class="component-header">
+                <!-- RAM Card -->
+                <a href="selecionar-componente.php?tipo=memoria" class="component-selection-card">
+                    <div class="component-icon">
                         <ion-icon name="albums-outline"></ion-icon>
+                    </div>
+                    <div class="component-info">
                         <h3>Memória RAM</h3>
+                        <?php if ($build['ram']): ?>
+                            <p class="selected-component"><?php echo htmlspecialchars($build['ram']['name']); ?></p>
+                            <p class="component-price-display">R$ <?php echo number_format($build['ram']['price'], 2, ',', '.'); ?></p>
+                        <?php else: ?>
+                            <p class="no-selection">Clique para escolher</p>
+                        <?php endif; ?>
                     </div>
-                    <select id="ram" class="component-select">
-                        <option value="">Selecione a memória RAM</option>
-                    </select>
-                    <div class="component-price" id="ram-price">R$ 0,00</div>
-                </div>
+                    <div class="component-arrow">
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </div>
+                </a>
 
-                <div class="component-card">
-                    <div class="component-header">
+                <!-- Armazenamento Card -->
+                <a href="selecionar-componente.php?tipo=armazenamento" class="component-selection-card">
+                    <div class="component-icon">
                         <ion-icon name="save-outline"></ion-icon>
+                    </div>
+                    <div class="component-info">
                         <h3>Armazenamento (SSD/HD)</h3>
+                        <?php if ($build['armazenamento']): ?>
+                            <p class="selected-component"><?php echo htmlspecialchars($build['armazenamento']['name']); ?></p>
+                            <p class="component-price-display">R$ <?php echo number_format($build['armazenamento']['price'], 2, ',', '.'); ?></p>
+                        <?php else: ?>
+                            <p class="no-selection">Clique para escolher</p>
+                        <?php endif; ?>
                     </div>
-                    <select id="armazenamento" class="component-select">
-                        <option value="">Selecione o armazenamento</option>
-                    </select>
-                    <div class="component-price" id="armazenamento-price">R$ 0,00</div>
-                </div>
+                    <div class="component-arrow">
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </div>
+                </a>
 
-                <div class="component-card">
-                    <div class="component-header">
+                <!-- Fonte Card -->
+                <a href="selecionar-componente.php?tipo=fonte" class="component-selection-card">
+                    <div class="component-icon">
                         <ion-icon name="flash-outline"></ion-icon>
+                    </div>
+                    <div class="component-info">
                         <h3>Fonte de Alimentação</h3>
+                        <?php if ($build['fonte']): ?>
+                            <p class="selected-component"><?php echo htmlspecialchars($build['fonte']['name']); ?></p>
+                            <p class="component-price-display">R$ <?php echo number_format($build['fonte']['price'], 2, ',', '.'); ?></p>
+                        <?php else: ?>
+                            <p class="no-selection">Clique para escolher</p>
+                        <?php endif; ?>
                     </div>
-                    <select id="fonte" class="component-select">
-                        <option value="">Selecione a fonte</option>
-                    </select>
-                    <div class="component-price" id="fonte-price">R$ 0,00</div>
-                </div>
+                    <div class="component-arrow">
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </div>
+                </a>
 
-                <div class="component-card">
-                    <div class="component-header">
+                <!-- Gabinete Card -->
+                <a href="selecionar-componente.php?tipo=gabinete" class="component-selection-card">
+                    <div class="component-icon">
                         <ion-icon name="cube-outline"></ion-icon>
+                    </div>
+                    <div class="component-info">
                         <h3>Gabinete</h3>
+                        <?php if ($build['gabinete']): ?>
+                            <p class="selected-component"><?php echo htmlspecialchars($build['gabinete']['name']); ?></p>
+                            <p class="component-price-display">R$ <?php echo number_format($build['gabinete']['price'], 2, ',', '.'); ?></p>
+                        <?php else: ?>
+                            <p class="no-selection">Clique para escolher</p>
+                        <?php endif; ?>
                     </div>
-                    <select id="gabinete" class="component-select">
-                        <option value="">Selecione o gabinete</option>
-                    </select>
-                    <div class="component-price" id="gabinete-price">R$ 0,00</div>
-                </div>
+                    <div class="component-arrow">
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </div>
+                </a>
 
-                <div class="component-card">
-                    <div class="component-header">
+                <!-- Cooler Card -->
+                <a href="selecionar-componente.php?tipo=cooler" class="component-selection-card optional">
+                    <div class="component-icon">
                         <ion-icon name="snow-outline"></ion-icon>
-                        <h3>Cooler (Opcional)</h3>
                     </div>
-                    <select id="cooler" class="component-select">
-                        <option value="">Selecione o cooler</option>
-                    </select>
-                    <div class="component-price" id="cooler-price">R$ 0,00</div>
-                </div>
+                    <div class="component-info">
+                        <h3>Cooler <span class="optional-badge">Opcional</span></h3>
+                        <?php if ($build['cooler']): ?>
+                            <p class="selected-component"><?php echo htmlspecialchars($build['cooler']['name']); ?></p>
+                            <p class="component-price-display">R$ <?php echo number_format($build['cooler']['price'], 2, ',', '.'); ?></p>
+                        <?php else: ?>
+                            <p class="no-selection">Clique para escolher</p>
+                        <?php endif; ?>
+                    </div>
+                    <div class="component-arrow">
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </div>
+                </a>
             </div>
 
             <div class="summary-section">
@@ -182,26 +266,57 @@ require '../flash.php';
                     
                     <div class="setup-name-input">
                         <label>Nome do Setup</label>
-                        <input type="text" id="nomeSetup" placeholder="Ex: PC Gamer 2025" maxlength="100">
+                        <input type="text" id="nomeSetup" placeholder="Ex: PC Gamer 2025" maxlength="100" value="<?php echo htmlspecialchars($build['nomeSetup']); ?>">
                     </div>
 
                     <div class="summary-list" id="summaryList">
-                        <p style="color: #666; text-align: center; padding: 20px;">Nenhum componente selecionado</p>
+                        <?php
+                        $hasComponents = false;
+                        $componentLabels = [
+                            'cpu' => 'Processador',
+                            'gpu' => 'Placa de Vídeo',
+                            'placaMae' => 'Placa-Mãe',
+                            'ram' => 'Memória RAM',
+                            'armazenamento' => 'Armazenamento',
+                            'fonte' => 'Fonte',
+                            'gabinete' => 'Gabinete',
+                            'cooler' => 'Cooler'
+                        ];
+
+                        foreach ($build as $key => $component) {
+                            if ($component && isset($component['name'])) {
+                                $hasComponents = true;
+                                echo '<div class="summary-item">';
+                                echo '<span class="summary-item-name">' . htmlspecialchars($componentLabels[$key]) . '</span>';
+                                echo '<span class="summary-item-value">R$ ' . number_format($component['price'], 2, ',', '.') . '</span>';
+                                echo '</div>';
+                            }
+                        }
+
+                        if (!$hasComponents) {
+                            echo '<p style="color: #666; text-align: center; padding: 20px;">Nenhum componente selecionado</p>';
+                        }
+                        ?>
                     </div>
 
                     <div class="observations">
                         <label>Observações (Opcional)</label>
-                        <textarea id="observacoes" placeholder="Adicione observações sobre sua montagem..." rows="4"></textarea>
+                        <textarea id="observacoes" placeholder="Adicione observações sobre sua montagem..." rows="4"><?php echo htmlspecialchars($build['observacoes']); ?></textarea>
                     </div>
 
                     <div class="total-price">
                         <span>Total Estimado:</span>
-                        <span id="totalPrice">R$ 0,00</span>
+                        <span id="totalPrice">R$ <?php echo number_format($totalPrice, 2, ',', '.'); ?></span>
                     </div>
 
                     <button class="btn-save-build" id="saveBuildBtn">
                         <ion-icon name="checkmark-circle-outline"></ion-icon>
                         Salvar Montagem
+                    </button>
+
+                    <button class="btn-clear-build" id="clearBuildBtn">
+                        <ion-icon name="trash-outline"></ion-icon>
+                        Limpar Montagem
                     </button>
 
                     <p class="info-text">Sua montagem será salva e você poderá visualizá-la no seu perfil</p>

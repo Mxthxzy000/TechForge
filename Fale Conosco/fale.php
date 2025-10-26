@@ -37,10 +37,6 @@ if (empty($_SESSION['idUsuario'])) {
             <img src="../imagens/logo_header_TechForge.png" alt="TechForge Logo" class="logo">
         </div>
         <div class="final-header">
-            <div class="divpesquisar">
-                <button id="pesquisar" class="btn-pesquisar"><ion-icon name="search-sharp"></ion-icon></button>
-                <input type="text" placeholder=" Pesquisar..." class="barra-pesquisa">
-            </div>
             <div class="usuario-menu">
                 <button id="minha-conta" class="btn-header">
                     <ion-icon name="person-circle-outline"></ion-icon>
@@ -80,19 +76,20 @@ if (empty($_SESSION['idUsuario'])) {
     </div>
 
     <nav>
-        <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon> </li>
-        <span class="linha"></span>
-        <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon>
-        </li>
-        <span class="linha"></span>
-        <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
-        <span class="linha"></span>
-        <li><a href="#">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
-        <span class="linha"></span>
-        <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
-        <span class="linha"></span>
-        <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
-        </li>
+        <ul>
+            <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon> </li>
+            <span class="linha"></span>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon>
+            </li>
+            <span class="linha"></span>
+            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
+            <span class="linha"></span>
+            <li><a href="#">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
+            <span class="linha"></span>
+            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
+            <span class="linha"></span>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
+            </li>
         </ul>
     </nav>
 
@@ -155,17 +152,27 @@ if (empty($_SESSION['idUsuario'])) {
                 <div class="form-group">
                     <input type="email" name="email" class="form-input" placeholder="E-mail" required>
                 </div>
+                <!-- Changed text input to dropdown select for duvida -->
                 <div class="form-group">
-                    <input type="text" name="duvida" class="form-input" placeholder="Dúvida" required>
+                    <select name="duvida" class="form-input form-select" required>
+                        <option value="" disabled selected>Selecione o tipo de dúvida</option>
+                        <option value="Abertura de ticket">Abertura de ticket</option>
+                        <option value="Consulta de pedido">Consulta de pedido</option>
+                        <option value="Rastreio">Rastreio</option>
+                        <option value="Problemas com produto">Problemas com produto</option>
+                        <option value="Devolução/Troca">Devolução/Troca</option>
+                        <option value="Pagamento">Pagamento</option>
+                        <option value="Outros">Outros</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <textarea name="mensagem" class="form-textarea" placeholder="Sobre..." required></textarea>
+                    <textarea name="mensagem" class="form-textarea" placeholder="Descreva sua dúvida..." required></textarea>
                 </div>
                 <button type="submit" class="submit-button">Enviar</button>
                 <div class="form-footer">
-                    Nesse atendimento a resposta dentro de um prazo de até <a href="#">3 dias úteis</a>.<br>
-                    <a href="#">Horário de expediente</a>: Segunda à Sexta-feira, das 08:15 às 12:00 e das 13:00 às
-                    18:00.
+                    Nesse atendimento a resposta dentro de um prazo de até <a href="#">6 dias úteis</a>.<br>
+                    <a href="#">Horário de expediente</a>: Segunda e Sexta-feira, das 08:15 às 12:00 e das 13:30 às
+                    16:00.
                 </div>
             </form>
         </div>
@@ -218,7 +225,7 @@ if (empty($_SESSION['idUsuario'])) {
     </footer>
 
     <!-- Adicionando common.js antes do script específico -->
-    <script src="../js/common.js"></script>
+    <script src="../Comum/common.js"></script>
     <script src="fale.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

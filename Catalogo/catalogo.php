@@ -124,29 +124,44 @@ if (!isset($conn)) {
                 </div>
             </div>
 
-            <!-- TAGS POPULARES QUE REALMENTE FUNCIONAM -->
+            <!-- Dynamic tags section with search -->
             <div class="filtro-secao">
                 <h3>Tags Populares:</h3>
+                
+                <!-- Tag search input -->
+                <div class="tag-search-container">
+                    <input type="text" id="tagSearchInput" placeholder="Buscar tag..." class="tag-search-input">
+                    <ion-icon name="search-outline" class="tag-search-icon"></ion-icon>
+                </div>
+                
                 <div id="filterTags" class="tags-container">
                     <?php
-                    // Tags garantidas que EXISTEM no banco (baseado no debug)
-                    $working_tags = [
-                        'gamer' => 'Gamer (16)',
-                        'processador' => 'Processador (6)',
-                        'placa de vídeo' => 'Placa de Vídeo (7)',
-                        'memória' => 'Memória (7)',
-                        'ssd' => 'SSD (4)',
-                        'intel' => 'Intel (3)',
-                        'rtx' => 'RTX (5)',
-                        'nvme' => 'NVMe (4)',
-                        'placa-mãe' => 'Placa-Mãe (4)',
-                        'ryzen' => 'Ryzen (2)'
-                    ];
-
-                    // Exibir tags que FUNCIONAM
-                    foreach ($working_tags as $tag_value => $tag_label): ?>
-                        <span class="tag-option botao-filtro" data-tag="<?php echo htmlspecialchars($tag_value); ?>">
-                            <?php echo htmlspecialchars($tag_label); ?>
+                    // Buscar tags populares do banco de dados
+                    $sql = "SELECT tagsProduto FROM produtos WHERE tagsProduto IS NOT NULL AND tagsProduto != ''";
+                    $res = $conn->query($sql);
+                    
+                    $all_tags = [];
+                    if ($res && $res->num_rows > 0) {
+                        while ($row = $res->fetch_assoc()) {
+                            $tags = explode(',', $row['tagsProduto']);
+                            foreach ($tags as $tag) {
+                                $clean_tag = trim($tag);
+                                if (!empty($clean_tag)) {
+                                    $all_tags[] = $clean_tag;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Contar frequência e pegar as 10 mais populares
+                    $tag_count = array_count_values($all_tags);
+                    arsort($tag_count);
+                    $popularTags = array_slice($tag_count, 0, 10, true);
+                    
+                    // Exibir as 10 tags mais populares
+                    foreach ($popularTags as $tag => $count): ?>
+                        <span class="tag-option botao-filtro" data-tag="<?php echo htmlspecialchars($tag); ?>">
+                            <?php echo htmlspecialchars($tag); ?> (<?php echo $count; ?>)
                         </span>
                     <?php endforeach; ?>
                 </div>

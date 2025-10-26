@@ -1,172 +1,224 @@
 /* estilização slider/slides/slide */
 .slider {
-    margin: 0 auto;
-    width: 100%;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    position: relative;
-    z-index: 1;
+  margin: 0 auto;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
 }
 .slides {
-    width: 400%;
-    height: 100%;
-    display: flex;
-    transition: margin-left 0.6s ease-in-out;
+  width: 400%;
+  height: 100%;
+  display: flex;
+  transition: margin-left 0.6s ease-in-out;
 }
 
 .slides input {
-    display: none;
-
+  display: none;
 }
 
 .slide {
-    width: 25%;
-    position: relative;
-    transition: 2s;
+  width: 25%;
+  position: relative;
+  transition: 2s;
 }
 
 .slide img {
-    width: 100%;
-    height: auto;
-    display: block;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .manual-navegar {
-    position: absolute;
-    bottom: 15px;   /* fixa na parte de baixo do slider */
-    left: 50%;
-    transform: translateX(-50%); /* centraliza */
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    z-index: 10; /* fica por cima das imagens */
+  position: absolute;
+  bottom: 15px; /* fixa na parte de baixo do slider */
+  left: 50%;
+  transform: translateX(-50%); /* centraliza */
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  z-index: 10; /* fica por cima das imagens */
 }
 
 .manual-navegar {
-    position: absolute;
-    bottom: 15px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 12px;
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
 }
 
 .manual-btn {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid #1a2a3c;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #1a2a3c;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .manual-btn:hover {
-    background: #f8c10d;
-    border-color: #1a2a3c;
+  background: #f8c10d;
+  border-color: #1a2a3c;
 }
-
 
 #radio1:checked ~ .first {
-    margin-left: 0;
+  margin-left: 0;
 }
 #radio2:checked ~ .first {
-    margin-left: -25%;
+  margin-left: -25%;
 }
 #radio3:checked ~ .first {
-    margin-left: -50%;
+  margin-left: -50%;
 }
 #radio4:checked ~ .first {
-    margin-left: -75%;
+  margin-left: -75%;
 }
 
 #radio1:checked ~ .manual-navegar label[for="radio1"],
 #radio2:checked ~ .manual-navegar label[for="radio2"],
 #radio3:checked ~ .manual-navegar label[for="radio3"],
 #radio4:checked ~ .manual-navegar label[for="radio4"] {
-    background: #f8c10d;
-    border-color: #1a2a3c;
+  background: #f8c10d;
+  border-color: #1a2a3c;
 }
 
 .autonavegar div {
-    border: 2px solid red;
-    padding: 5px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 1s;
+  border: 2px solid red;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 1s;
 }
 .autonavegar {
-    position: absolute;
-    width: 800px;
-    margin-top: 360px;
-    display: flex;
-    justify-content: center;
+  position: absolute;
+  width: 800px;
+  margin-top: 360px;
+  display: flex;
+  justify-content: center;
 }
 
 .autonavegar div:not(:last-child) {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
-#radio1:checked ~ .autonavegar .auto-btn1{
-    background: #f8c10d;
+#radio1:checked ~ .autonavegar .auto-btn1 {
+  background: #f8c10d;
 }
-#radio2:checked ~ .autonavegar .auto-btn2{
-    background: #f8c10d;
+#radio2:checked ~ .autonavegar .auto-btn2 {
+  background: #f8c10d;
 }
-#radio3:checked ~ .autonavegar .auto-btn3{
-    background: #f8c10d;
+#radio3:checked ~ .autonavegar .auto-btn3 {
+  background: #f8c10d;
 }
-#radio4:checked ~ .autonavegar .auto-btn4{
-    background: #f8c10d;
+#radio4:checked ~ .autonavegar .auto-btn4 {
+  background: #f8c10d;
 }
 
 /* primeira leva de cards */
 .card1 {
-    background-color: #1a2a3c;
-    width: 275px;
-    height: 125px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s ease;
-    padding: 10px;
+  background-color: #1a2a3c;
+  width: 275px;
+  height: 125px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  padding: 10px;
 }
 
 .mincard {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
 }
 
 /*imagens card1*/
 #preços-baixos {
-    width: 100px;
-    height: 80px;
-
+  width: 100px;
+  height: 80px;
 }
 
-#serviços-montagem{
-     width: 100px;
-    height: 80px;
-
+#serviços-montagem {
+  width: 100px;
+  height: 80px;
 }
 
-#excelente-qualidade{
-     width: 100px;
-    height: 80px;
-
+#excelente-qualidade {
+  width: 100px;
+  height: 80px;
 }
 
-#cupons-desconto{
-     width: 100px;
-    height: 80px;
-
+#cupons-desconto {
+  width: 100px;
+  height: 80px;
 }
 
-#parcelas-12x{
-     width: 100px;
-    height: 80px;
+#parcelas-12x {
+  width: 100px;
+  height: 80px;
+}
 
+/* Added two-button card structure matching catalog page */
+.card-buttons {
+  display: flex;
+  gap: 8px;
+  width: 70%;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 125%);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+}
+
+.card-produto:hover .card-buttons {
+  transform: translate(-50%, 50%);
+  opacity: 1;
+}
+
+.btn-add-cart,
+.btn-see-more {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.btn-add-cart {
+  background-color: #f8c10d;
+  color: #1a2a3c;
+}
+
+.btn-add-cart:hover {
+  background-color: #ffdb4d;
+  transform: scale(1.05);
+}
+
+.btn-see-more {
+  background-color: #2b3640;
+  color: #fff;
+}
+
+.btn-see-more:hover {
+  background-color: #3a4a5c;
+  transform: scale(1.05);
+}
+
+.btn-add-cart ion-icon,
+.btn-see-more ion-icon {
+  font-size: 16px;
 }

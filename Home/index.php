@@ -205,7 +205,16 @@ if (!isset($conn)) {
                             </p>
                         </div>
 
-                        <button class="btn-comprar-produto">Comprar</button>
+                        <div class="card-buttons">
+                            <button class="btn-add-cart" data-id="<?= $row['idProduto'] ?>" title="Adicionar ao carrinho">
+                                <ion-icon name="cart-outline"></ion-icon>
+                                Adicionar
+                            </button>
+                            <button class="btn-see-more" data-id="<?= $row['idProduto'] ?>" title="Ver mais detalhes">
+                                <ion-icon name="eye-outline"></ion-icon>
+                                Ver Mais
+                            </button>
+                        </div>
                     </div>
                     <?php
                     $rank++;

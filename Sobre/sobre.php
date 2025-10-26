@@ -83,8 +83,6 @@ if (!isset($conn)) {
             <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon></li>
             <span class="linha"></span>
             <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon></li>
-            <span class="linha"></span>
-            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon></li>
         </ul>
     </nav>
 

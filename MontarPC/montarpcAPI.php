@@ -11,21 +11,35 @@ if (empty($_SESSION['idUsuario'])) {
 
 $idUsuario = $_SESSION['idUsuario'];
 
-$nomeSetup = trim($_POST['nomeSetup'] ?? '');
-$cpu = trim($_POST['cpu'] ?? '');
-$gpu = trim($_POST['gpu'] ?? '');
-$placaMae = trim($_POST['placaMae'] ?? '');
-$ram = trim($_POST['ram'] ?? '');
-$armazenamento = trim($_POST['armazenamento'] ?? '');
-$fonte = trim($_POST['fonte'] ?? '');
-$gabinete = trim($_POST['gabinete'] ?? '');
-$cooler = trim($_POST['cooler'] ?? '');
-$observacoes = trim($_POST['observacoes'] ?? '');
-$precoEstimado = floatval($_POST['precoEstimado'] ?? 0);
+$build = $_SESSION['pc_build'] ?? null;
+
+if (!$build) {
+    echo json_encode(['error' => 'Nenhuma montagem encontrada']);
+    exit;
+}
+
+$nomeSetup = trim($_POST['nomeSetup'] ?? $build['nomeSetup'] ?? '');
+$observacoes = trim($_POST['observacoes'] ?? $build['observacoes'] ?? '');
 
 if (empty($nomeSetup)) {
     echo json_encode(['error' => 'Nome do setup é obrigatório']);
     exit;
+}
+
+$cpu = $build['cpu']['name'] ?? '';
+$gpu = $build['gpu']['name'] ?? '';
+$placaMae = $build['placaMae']['name'] ?? '';
+$ram = $build['ram']['name'] ?? '';
+$armazenamento = $build['armazenamento']['name'] ?? '';
+$fonte = $build['fonte']['name'] ?? '';
+$gabinete = $build['gabinete']['name'] ?? '';
+$cooler = $build['cooler']['name'] ?? '';
+
+$precoEstimado = 0;
+foreach ($build as $key => $component) {
+    if (is_array($component) && isset($component['price'])) {
+        $precoEstimado += floatval($component['price']);
+    }
 }
 
 $stmt = $conn->prepare("INSERT INTO servico_montagem (idUsuario, nomeSetup, cpu, gpu, placaMae, ram, armazenamento, fonte, gabinete, cooler, observacoes, precoEstimado, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'em análise')");

@@ -394,3 +394,126 @@
   font-size: 12px;
   font-weight: bold;
 }
+
+/* Added tag search input styles */
+/* Enhanced tag search styling with better visual design */
+.tag-search-container {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.tag-search-input {
+  width: 100%;
+  padding: 12px 40px 12px 15px;
+  border: 2px solid #2b3640;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2b3640 0%, #1a2a3c 100%);
+  color: #fff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tag-search-input:focus {
+  outline: none;
+  border-color: #f8c10d;
+  background: linear-gradient(135deg, #1a2a3c 0%, #213b5b 100%);
+  box-shadow: 0 0 12px rgba(248, 193, 13, 0.3);
+  transform: translateY(-2px);
+}
+
+.tag-search-input::placeholder {
+  color: #8a9aa8;
+  font-style: italic;
+}
+
+.tag-search-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #f8c10d;
+  font-size: 20px;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.tag-search-input:focus + .tag-search-icon {
+  color: #ffdb4d;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Tag autocomplete suggestions dropdown */
+.tag-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  margin-top: 2px;
+}
+
+.tag-suggestions.show {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tag-suggestion-item {
+  padding: 12px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #e0e0e0;
+  color: #1a2a3c;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tag-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.tag-suggestion-item:hover {
+  background: linear-gradient(90deg, #f8c10d 0%, #ffdb4d 100%);
+  color: #1a2a3c;
+  font-weight: bold;
+  padding-left: 20px;
+}
+
+.tag-suggestion-item ion-icon {
+  font-size: 16px;
+  color: #f8c10d;
+}
+
+.tag-suggestion-item:hover ion-icon {
+  color: #1a2a3c;
+}
+
+.no-suggestions {
+  padding: 15px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.tag-option.hidden {
+  display: none;
+}
