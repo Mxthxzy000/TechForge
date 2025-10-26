@@ -16,8 +16,8 @@ if (!isset($conn)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechForge - Sua Loja de Tecnologia</title>
 
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../Comum/common.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -80,15 +80,17 @@ if (!isset($conn)) {
 
     <nav>
         <ul>
-            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a></li>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon>
+            </li>
             <span class="linha"></span>
-            <li><a href="#">OFERTAS</a></li>
+            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="#">MONTE SEU PC</a></li>
+            <li><a href="#">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="#">GAMER</a></li>
+            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a></li>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
+            </li>
         </ul>
     </nav>
 
@@ -189,18 +191,17 @@ if (!isset($conn)) {
                             <span class="badge">Mais Vendidos</span>
                         <?php endif; ?>
 
-                        <img src="<?= htmlspecialchars($row['imagemProduto']) ?>"
-                            alt="<?= htmlspecialchars($row['nomeProduto']) ?>">
+                        <img src="<?= htmlspecialchars($row['imagem']) ?>" alt="<?= htmlspecialchars($row['nomeProduto']) ?>">
 
                         <div class="card-info">
                             <h3><?= htmlspecialchars($row['nomeProduto']) ?></h3>
                             <p class="descricao"><?= htmlspecialchars($row['descricaoProduto']) ?></p>
 
                             <p class="preco-atual">
-                                R$ <?= number_format($row['precoProduto'], 2, ',', '.') ?> <span>à vista</span>
+                                R$ <?= number_format($row['valorProduto'], 2, ',', '.') ?> <span>à vista</span>
                             </p>
                             <p class="parcelamento">
-                                12x de R$ <?= number_format($row['precoProduto'] / 12, 2, ',', '.') ?> sem juros
+                                12x de R$ <?= number_format($row['valorProduto'] / 12, 2, ',', '.') ?> sem juros
                             </p>
                         </div>
 

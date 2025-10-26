@@ -75,15 +75,16 @@ if (!isset($conn)) {
 
     <nav>
         <ul>
-            <li><a href="../Home/index.php">HOME</a></li>
-            <span class="linha"></span>
-            <li><a href="#">OFERTAS</a></li>
-            <span class="linha"></span>
-            <li><a href="#">MONTE SEU PC</a></li>
-            <span class="linha"></span>
-            <li><a href="#">GAMER</a></li>
-            <span class="linha"></span>
-            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a></li>
+        <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon> </li>
+        <span class="linha"></span>
+        <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
+        <span class="linha"></span>
+        <li><a href="#">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
+        <span class="linha"></span>
+        <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
+        <span class="linha"></span>
+        <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
+        </li>
         </ul>
     </nav>
 
@@ -141,7 +142,7 @@ if (!isset($conn)) {
                         'placa-mãe' => 'Placa-Mãe (4)',
                         'ryzen' => 'Ryzen (2)'
                     ];
-                    
+
                     // Exibir tags que FUNCIONAM
                     foreach ($working_tags as $tag_value => $tag_label): ?>
                         <span class="tag-option botao-filtro" data-tag="<?php echo htmlspecialchars($tag_value); ?>">

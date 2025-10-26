@@ -74,10 +74,11 @@ if (!empty($_SESSION['idUsuario'])) {
     </div>
 
     <nav>
-        <ul>
-            <li><a href="../Home/index.php">HOME</a></li>
-            <span class="linha"></span>
-            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a></li>
+        <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon> </li>
+        <span class="linha"></span>
+        <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
+        </li>
+        <span class="linha"></span>
         </ul>
     </nav>
 

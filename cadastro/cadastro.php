@@ -14,8 +14,8 @@ if (!empty($_SESSION['idUsuario'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="cadastro.css">
     <link rel="stylesheet" href="../Comum/common.css">
+    <link rel="stylesheet" href="cadastro.css">
     <title>Cadastro - TechForge</title>
 </head>
 
@@ -74,9 +74,10 @@ if (!empty($_SESSION['idUsuario'])) {
 
     <nav>
         <ul>
-            <li><a href="../Home/index.php">HOME</a></li>
+            <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a></li>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
+            </li>
         </ul>
     </nav>
 

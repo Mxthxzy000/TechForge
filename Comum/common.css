@@ -241,7 +241,7 @@ transition: transform 0.4s ease;
 /* estilização navbar*/
 
 nav {
-    width: 200px;
+    width: 250px; /* um pouco maior */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -252,6 +252,7 @@ nav {
     position: absolute;
     margin-top: 80px;
     z-index: 1000;
+    padding-top: 10px;
 }
 
 nav.open {
@@ -263,34 +264,48 @@ nav ul {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     padding: 0;
+    margin: 0;
 }
 
 nav ul li {
     list-style: none;
     width: 100%;
-}
-
-nav ul li a {
-    display: block;
-    width: 100%;
-    padding: 15px 25px;
-    text-decoration: none;
-    color: #fffbf3;
-    font-size: 15px;
-    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 18px 25px;
     box-sizing: border-box;
     transition: all 0.3s ease;
 }
 
 nav ul li:hover {
     background-color: #213B5B;
+    transform: scale(1.05);
 }
 
-nav ul li a:hover {
-    transform: scale(1.1);
+nav ul li a {
+    color: #fffbf3;
+    text-decoration: none;
+    font-size: 16px;
+    letter-spacing: 2px;
+    flex-grow: 1; /* garante que o texto ocupe o espaço restante */
+    transition: transform 0.3s ease;
 }
+
+.navicon {
+    font-size: 20px;
+    color: #fffbf3;
+}
+
+/* Se quiser manter as linhas entre os itens */
+.linha {
+    display: block;
+    width: 80%;
+    height: 1px;
+    background-color: #415161;
+}
+
 
 /* estilização cards dos produtos */
 .cards-produtos {
