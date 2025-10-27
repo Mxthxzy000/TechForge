@@ -82,11 +82,11 @@ if (empty($_SESSION['idUsuario'])) {
             <span class="linha"></span>
             <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
+           <li><a href="../Catalogo/catalogo.php?tag=Ofertas">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
             <span class="linha"></span>
             <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
+            <li><a href="../Catalogo/catalogo.php?tag=Gamer">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
             <span class="linha"></span>
             <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon></li>
         </ul>
@@ -130,25 +130,9 @@ if (empty($_SESSION['idUsuario'])) {
 
             <div class="qr-section">
                 <div class="qr-code">
-                    <svg width="60" height="60" viewBox="0 0 60 60">
-                        <rect width="60" height="60" fill="white" />
-                        <rect x="5" y="5" width="10" height="10" fill="black" />
-                        <rect x="20" y="5" width="5" height="5" fill="black" />
-                        <rect x="30" y="5" width="5" height="5" fill="black" />
-                        <rect x="45" y="5" width="10" height="10" fill="black" />
-                        <rect x="5" y="20" width="5" height="5" fill="black" />
-                        <rect x="25" y="20" width="10" height="10" fill="black" />
-                        <rect x="50" y="20" width="5" height="5" fill="black" />
-                        <rect x="5" y="30" width="5" height="5" fill="black" />
-                        <rect x="20" y="30" width="5" height="5" fill="black" />
-                        <rect x="50" y="30" width="5" height="5" fill="black" />
-                        <rect x="5" y="45" width="10" height="10" fill="black" />
-                        <rect x="30" y="45" width="5" height="5" fill="black" />
-                        <rect x="45" y="45" width="10" height="10" fill="black" />
-                    </svg>
+                    <img src="../imagens/qrcode.jpg" alt="pix" class="qrcode">
                 </div>
                 <div class="payment-text">À vista</div>
-                <div class="payment-subtext">No pix você ganha 5% de desconto</div>
             </div>
 
             <button class="checkout-btn">

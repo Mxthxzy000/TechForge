@@ -15,6 +15,7 @@ $sessionKey = $data['sessionKey'] ?? '';
 $productId = $data['productId'] ?? '';
 $productName = $data['productName'] ?? '';
 $productPrice = $data['productPrice'] ?? 0;
+$productImage = $data['productImage'] ?? '';
 
 if (!$sessionKey || !$productId) {
     echo json_encode(['error' => 'Dados inválidos']);
@@ -37,11 +38,11 @@ if (!isset($_SESSION['pc_build'])) {
     ];
 }
 
-// Save component to session
 $_SESSION['pc_build'][$sessionKey] = [
     'id' => $productId,
     'name' => $productName,
-    'price' => floatval($productPrice)
+    'price' => floatval($productPrice),
+    'image' => $productImage
 ];
 
 echo json_encode(['success' => true]);

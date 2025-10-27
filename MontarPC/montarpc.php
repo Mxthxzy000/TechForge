@@ -3,6 +3,9 @@ require '../config.php';
 require '../session.php';
 require '../flash.php';
 
+
+
+
 // Get selected components from session
 if (!isset($_SESSION['pc_build'])) {
     $_SESSION['pc_build'] = [
@@ -20,6 +23,26 @@ if (!isset($_SESSION['pc_build'])) {
 }
 
 $build = $_SESSION['pc_build'];
+// 🔧 Corrigir chave incorreta "your_session_key_here" que às vezes é criada por engano
+if (isset($build['your_session_key_here']) && is_array($build['your_session_key_here'])) {
+    // Vamos tentar adivinhar o tipo do componente pelo nome
+    $component = $build['your_session_key_here'];
+    $name = strtolower($component['name']);
+
+    if (str_contains($name, 'ryzen') || str_contains($name, 'intel')) {
+        $build['cpu'] = $component;
+    } elseif (str_contains($name, 'rtx') || str_contains($name, 'radeon') || str_contains($name, 'gtx')) {
+        $build['gpu'] = $component;
+    } else {
+        // Se não dá pra saber o tipo, coloca como CPU por padrão (ou muda conforme o caso)
+        $build['cpu'] = $component;
+    }
+
+    // Remove a chave inválida
+    unset($build['your_session_key_here']);
+    $_SESSION['pc_build'] = $build;
+}
+
 $totalPrice = 0;
 
 // Calculate total price
@@ -30,8 +53,15 @@ foreach ($build as $key => $component) {
 }
 ?>
 
+<?php
+echo '<pre>';
+print_r($_SESSION);
+echo '</pre>';
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,6 +69,7 @@ foreach ($build as $key => $component) {
     <link rel="stylesheet" href="montarpc.css">
     <title>Monte Seu PC - TechForge</title>
 </head>
+
 <body>
     <header>
         <div class="inicio-header">
@@ -61,10 +92,12 @@ foreach ($build as $key => $component) {
 
     <div class="dropdown-user">
         <?php if (!empty($_SESSION['idUsuario'])): ?>
-            <a href="../Perfil/perfil.php" class="menu-usuario" style="justify-content: space-between; align-items: center;">
+            <a href="../Perfil/perfil.php" class="menu-usuario"
+                style="justify-content: space-between; align-items: center;">
                 <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
                 <?php if (!empty($_SESSION['fotoUsuario'])): ?>
-                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário" class="foto-usuario" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
+                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário"
+                        class="foto-usuario" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
                 <?php else: ?>
                     <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
                 <?php endif; ?>
@@ -87,13 +120,15 @@ foreach ($build as $key => $component) {
         <ul>
             <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon></li>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon>
+            </li>
             <span class="linha"></span>
             <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon></li>
             <span class="linha"></span>
             <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon></li>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
+            </li>
         </ul>
     </nav>
 
@@ -116,7 +151,8 @@ foreach ($build as $key => $component) {
                         <h3>Processador (CPU)</h3>
                         <?php if ($build['cpu']): ?>
                             <p class="selected-component"><?php echo htmlspecialchars($build['cpu']['name']); ?></p>
-                            <p class="component-price-display">R$ <?php echo number_format($build['cpu']['price'], 2, ',', '.'); ?></p>
+                            <p class="component-price-display">R$
+                                <?php echo number_format($build['cpu']['price'], 2, ',', '.'); ?></p>
                         <?php else: ?>
                             <p class="no-selection">Clique para escolher</p>
                         <?php endif; ?>
@@ -135,7 +171,8 @@ foreach ($build as $key => $component) {
                         <h3>Placa de Vídeo (GPU)</h3>
                         <?php if ($build['gpu']): ?>
                             <p class="selected-component"><?php echo htmlspecialchars($build['gpu']['name']); ?></p>
-                            <p class="component-price-display">R$ <?php echo number_format($build['gpu']['price'], 2, ',', '.'); ?></p>
+                            <p class="component-price-display">R$
+                                <?php echo number_format($build['gpu']['price'], 2, ',', '.'); ?></p>
                         <?php else: ?>
                             <p class="no-selection">Clique para escolher</p>
                         <?php endif; ?>
@@ -154,7 +191,8 @@ foreach ($build as $key => $component) {
                         <h3>Placa-Mãe</h3>
                         <?php if ($build['placaMae']): ?>
                             <p class="selected-component"><?php echo htmlspecialchars($build['placaMae']['name']); ?></p>
-                            <p class="component-price-display">R$ <?php echo number_format($build['placaMae']['price'], 2, ',', '.'); ?></p>
+                            <p class="component-price-display">R$
+                                <?php echo number_format($build['placaMae']['price'], 2, ',', '.'); ?></p>
                         <?php else: ?>
                             <p class="no-selection">Clique para escolher</p>
                         <?php endif; ?>
@@ -173,7 +211,8 @@ foreach ($build as $key => $component) {
                         <h3>Memória RAM</h3>
                         <?php if ($build['ram']): ?>
                             <p class="selected-component"><?php echo htmlspecialchars($build['ram']['name']); ?></p>
-                            <p class="component-price-display">R$ <?php echo number_format($build['ram']['price'], 2, ',', '.'); ?></p>
+                            <p class="component-price-display">R$
+                                <?php echo number_format($build['ram']['price'], 2, ',', '.'); ?></p>
                         <?php else: ?>
                             <p class="no-selection">Clique para escolher</p>
                         <?php endif; ?>
@@ -191,8 +230,10 @@ foreach ($build as $key => $component) {
                     <div class="component-info">
                         <h3>Armazenamento (SSD/HD)</h3>
                         <?php if ($build['armazenamento']): ?>
-                            <p class="selected-component"><?php echo htmlspecialchars($build['armazenamento']['name']); ?></p>
-                            <p class="component-price-display">R$ <?php echo number_format($build['armazenamento']['price'], 2, ',', '.'); ?></p>
+                            <p class="selected-component"><?php echo htmlspecialchars($build['armazenamento']['name']); ?>
+                            </p>
+                            <p class="component-price-display">R$
+                                <?php echo number_format($build['armazenamento']['price'], 2, ',', '.'); ?></p>
                         <?php else: ?>
                             <p class="no-selection">Clique para escolher</p>
                         <?php endif; ?>
@@ -211,7 +252,8 @@ foreach ($build as $key => $component) {
                         <h3>Fonte de Alimentação</h3>
                         <?php if ($build['fonte']): ?>
                             <p class="selected-component"><?php echo htmlspecialchars($build['fonte']['name']); ?></p>
-                            <p class="component-price-display">R$ <?php echo number_format($build['fonte']['price'], 2, ',', '.'); ?></p>
+                            <p class="component-price-display">R$
+                                <?php echo number_format($build['fonte']['price'], 2, ',', '.'); ?></p>
                         <?php else: ?>
                             <p class="no-selection">Clique para escolher</p>
                         <?php endif; ?>
@@ -230,7 +272,8 @@ foreach ($build as $key => $component) {
                         <h3>Gabinete</h3>
                         <?php if ($build['gabinete']): ?>
                             <p class="selected-component"><?php echo htmlspecialchars($build['gabinete']['name']); ?></p>
-                            <p class="component-price-display">R$ <?php echo number_format($build['gabinete']['price'], 2, ',', '.'); ?></p>
+                            <p class="component-price-display">R$
+                                <?php echo number_format($build['gabinete']['price'], 2, ',', '.'); ?></p>
                         <?php else: ?>
                             <p class="no-selection">Clique para escolher</p>
                         <?php endif; ?>
@@ -249,7 +292,8 @@ foreach ($build as $key => $component) {
                         <h3>Cooler <span class="optional-badge">Opcional</span></h3>
                         <?php if ($build['cooler']): ?>
                             <p class="selected-component"><?php echo htmlspecialchars($build['cooler']['name']); ?></p>
-                            <p class="component-price-display">R$ <?php echo number_format($build['cooler']['price'], 2, ',', '.'); ?></p>
+                            <p class="component-price-display">R$
+                                <?php echo number_format($build['cooler']['price'], 2, ',', '.'); ?></p>
                         <?php else: ?>
                             <p class="no-selection">Clique para escolher</p>
                         <?php endif; ?>
@@ -263,10 +307,11 @@ foreach ($build as $key => $component) {
             <div class="summary-section">
                 <div class="summary-card">
                     <h2>Resumo da Montagem</h2>
-                    
+
                     <div class="setup-name-input">
                         <label>Nome do Setup</label>
-                        <input type="text" id="nomeSetup" placeholder="Ex: PC Gamer 2025" maxlength="100" value="<?php echo htmlspecialchars($build['nomeSetup']); ?>">
+                        <input type="text" id="nomeSetup" placeholder="Ex: PC Gamer 2025" maxlength="100"
+                            value="<?php echo htmlspecialchars($build['nomeSetup']); ?>">
                     </div>
 
                     <div class="summary-list" id="summaryList">
@@ -301,7 +346,8 @@ foreach ($build as $key => $component) {
 
                     <div class="observations">
                         <label>Observações (Opcional)</label>
-                        <textarea id="observacoes" placeholder="Adicione observações sobre sua montagem..." rows="4"><?php echo htmlspecialchars($build['observacoes']); ?></textarea>
+                        <textarea id="observacoes" placeholder="Adicione observações sobre sua montagem..."
+                            rows="4"><?php echo htmlspecialchars($build['observacoes']); ?></textarea>
                     </div>
 
                     <div class="total-price">
@@ -372,4 +418,5 @@ foreach ($build as $key => $component) {
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
+
 </html>

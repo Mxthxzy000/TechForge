@@ -77,14 +77,13 @@ if (!isset($conn)) {
         <ul>
             <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
+           <li><a href="../Catalogo/catalogo.php?tag=Ofertas">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
             <span class="linha"></span>
             <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
+            <li><a href="../Catalogo/catalogo.php?tag=Gamer">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
-            </li>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon></li>
         </ul>
     </nav>
 

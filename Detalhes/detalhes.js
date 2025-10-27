@@ -1,73 +1,17 @@
-/**
- * Slider automático de banners
- */
-let counter = 1
-const totalSlides = 4
-
-// Marca o primeiro slide como ativo
-const radio1 = document.getElementById("radio1")
-if (radio1) {
-  radio1.checked = true
-}
-
-/**
- * Avança para próxima imagem do slider
- */
-function nextImage() {
-  counter++
-  if (counter > totalSlides) {
-    counter = 1
-  }
-  const radioBtn = document.getElementById("radio" + counter)
-  if (radioBtn) {
-    radioBtn.checked = true
-  }
-}
-
-// Troca de slide a cada 6 segundos
-setInterval(nextImage, 6000)
-
 document.addEventListener("DOMContentLoaded", () => {
-  // Search functionality
-  const searchInput = document.querySelector(".barra-pesquisa")
-  const searchButton = document.getElementById("pesquisar")
-
-  function performSearch() {
-    const query = searchInput.value.trim()
-    if (query) {
-      window.location.href = `../Catalogo/catalogo.php?search=${encodeURIComponent(query)}`
-    }
-  }
-
-  if (searchButton) {
-    searchButton.addEventListener("click", performSearch)
-  }
-
-  if (searchInput) {
-    searchInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        performSearch()
-      }
-    })
-  }
-
   // Add to cart functionality
-  document.querySelectorAll(".btn-add-cart").forEach((button) => {
-    button.addEventListener("click", function () {
+  const btnAdicionarCarrinho = document.getElementById("btnAdicionarCarrinho")
+
+  if (btnAdicionarCarrinho) {
+    btnAdicionarCarrinho.addEventListener("click", function () {
       const productId = this.getAttribute("data-id")
       addToCart(productId)
     })
-  })
-
-  // See more functionality
-  document.querySelectorAll(".btn-see-more").forEach((button) => {
-    button.addEventListener("click", function () {
-      const productId = this.getAttribute("data-id")
-      window.location.href = `../Detalhes/detalhes.php?id=${productId}`
-    })
-  })
+  }
 
   function addToCart(productId) {
+    console.log("[v0] Adding product to cart:", productId)
+
     fetch("../Carrinho/cartAPI.php", {
       method: "POST",
       headers: {
@@ -99,10 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Erro ao adicionar ao carrinho:", error)
         showNotification("Erro ao adicionar ao carrinho", "error")
       })
-  }
-
-  function showProductDetails(productId) {
-    showNotification("Página de detalhes em desenvolvimento!", "info")
   }
 
   function showNotification(message, type = "success") {
@@ -149,5 +89,15 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((error) => console.error("Erro ao atualizar badge:", error))
   }
 
+  // Update cart badge on page load
   updateCartBadge()
+
+  // Tag click functionality - redirect to catalog with tag filter
+  const tagItems = document.querySelectorAll(".tag-item")
+  tagItems.forEach((tag) => {
+    tag.addEventListener("click", function () {
+      const tagText = this.textContent.trim()
+      window.location.href = `../Catalogo/catalogo.php?tag=${encodeURIComponent(tagText)}`
+    })
+  })
 })

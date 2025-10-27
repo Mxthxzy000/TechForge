@@ -82,11 +82,11 @@ if (empty($_SESSION['idUsuario'])) {
             <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon>
             </li>
             <span class="linha"></span>
-            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
+            <li><a href="../Catalogo/catalogo.php?tag=Ofertas">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="#">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
+            <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
+            <li><a href="../Catalogo/catalogo.php?tag=Gamer">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
             <span class="linha"></span>
             <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
             </li>

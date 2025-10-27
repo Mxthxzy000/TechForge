@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const urlParams = new URLSearchParams(window.location.search)
   const searchQuery = urlParams.get("search")
+  const tagFromUrl = urlParams.get("tag")
 
   // Elementos da pesquisa
   const searchInput = document.getElementById("searchInput")
@@ -113,6 +114,26 @@ document.addEventListener("DOMContentLoaded", () => {
   // Carregar todos os produtos inicialmente
   if (!searchQuery) {
     loadProducts()
+  }
+
+  if (tagFromUrl) {
+    // Find and activate the tag option that matches the URL parameter
+    let tagFound = false
+    allTagOptions.forEach((tagOption) => {
+      const tagText = tagOption.getAttribute("data-tag")
+      if (tagText === tagFromUrl) {
+        tagOption.classList.add("active")
+        tagFound = true
+      }
+    })
+
+    // Filter by the tag from URL
+    if (tagFound) {
+      filterByMultipleTags([tagFromUrl])
+    } else {
+      // If tag not found in popular tags, still try to filter by it
+      filterByMultipleTags([tagFromUrl])
+    }
   }
 
   // Eventos da pesquisa
@@ -272,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
     applyFilters()
   })
 
-  // EVENTOS PARA TAGS POPULARES - MÚLTIPLAS SELEÇÕES
+  // EVENTOS PARA TAGS POPULARES - MÚLTIPPLAS SELEÇÕES
   document.addEventListener("click", (e) => {
     if (e.target.classList.contains("tag-option")) {
       const tag = e.target.getAttribute("data-tag")
@@ -518,8 +539,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showProductDetails(productId) {
-    console.log("[v0] Showing product details:", productId)
-    showNotification("Página de detalhes em desenvolvimento!", "info")
+    window.location.href = `../Detalhes/detalhes.php?id=${productId}`
   }
 
   function showNotification(message, type = "success") {

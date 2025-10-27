@@ -79,17 +79,15 @@ if (empty($_SESSION['idUsuario'])) {
         <ul>
             <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon>
-            </li>
+            <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
+           <li><a href="../Catalogo/catalogo.php?tag=Ofertas">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
             <span class="linha"></span>
             <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
+            <li><a href="../Catalogo/catalogo.php?tag=Gamer">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
             <span class="linha"></span>
-            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
-            </li>
+            <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon></li>
         </ul>
     </nav>
 
@@ -138,6 +136,8 @@ if (empty($_SESSION['idUsuario'])) {
                     <h2>Método de Pagamento</h2>
                 </div>
 
+                <!-- Added container for new payment methods that can be hidden -->
+                <div id="newPaymentMethodsContainer">
                 <!-- PIX -->
                 <div class="payment-option">
                     <label class="payment-label">
@@ -145,16 +145,15 @@ if (empty($_SESSION['idUsuario'])) {
                         <span class="radio-custom"></span>
                         <span class="payment-text">PAGUE VIA PIX</span>
                         <div class="payment-icon pix-icon">
-                            <svg width="32" height="32" viewBox="0 0 32 32">
-                                <path d="M16 2L2 16L16 30L30 16L16 2Z" fill="#32BCAD" />
-                            </svg>
+                            <img src="../imagens/pix.png" alt="PIX" style="width: 32px; height: 32px; object-fit: contain;">
                         </div>
                     </label>
                     <div class="payment-details" id="pix-details">
                         <div class="pix-content">
                             <p>Escaneie o QR Code ou copie o código PIX para realizar o pagamento.</p>
+                            <!-- Replaced fake QR code with actual image -->
                             <div class="qr-code-placeholder">
-                                <div class="qr-grid"></div>
+                                <img src="../imagens/qrcode.jpg" alt="QR Code PIX" style="width: 100%; height: 100%; object-fit: contain;">
                             </div>
                             <button class="copy-code-btn">Copiar código PIX</button>
                         </div>
@@ -168,14 +167,7 @@ if (empty($_SESSION['idUsuario'])) {
                         <span class="radio-custom"></span>
                         <span class="payment-text">BOLETO BANCÁRIO</span>
                         <div class="payment-icon boleto-icon">
-                            <svg width="32" height="32" viewBox="0 0 32 32">
-                                <rect width="32" height="32" rx="4" fill="#9CA3AF" />
-                                <rect x="6" y="10" width="2" height="12" fill="white" />
-                                <rect x="10" y="10" width="2" height="12" fill="white" />
-                                <rect x="14" y="10" width="2" height="12" fill="white" />
-                                <rect x="18" y="10" width="2" height="12" fill="white" />
-                                <rect x="22" y="10" width="2" height="12" fill="white" />
-                            </svg>
+                            <img src="../imagens/boleto.png" alt="Boleto" style="width: 32px; height: 32px; object-fit: contain;">
                         </div>
                     </label>
                     <div class="payment-details" id="boleto-details">
@@ -289,6 +281,11 @@ if (empty($_SESSION['idUsuario'])) {
                         </form>
                     </div>
                 </div>
+                </div>
+                <!-- Added finalize order button (hidden by default) -->
+                <button type="button" id="finalizeOrderBtn" class="submit-btn" style="display: none; margin-top: 20px; background: #10B981;">
+                    Finalizar Pedido
+                </button>
             </div>
         </div>
 
@@ -320,7 +317,7 @@ if (empty($_SESSION['idUsuario'])) {
                 </div>
 
                 <div class="qr-code-section">
-                    <div class="qr-code-small"></div>
+                    <div class="qr-code-small"><img src="../imagens/qrcode.jpg" alt=""></div>
                     <a href="#" class="vista-link">À vista</a>
                 </div>
             </div>
@@ -385,135 +382,6 @@ if (empty($_SESSION['idUsuario'])) {
 
     <script src="../Comum/common.js"></script>
     <script src="out.js"></script>
-    <script>
-        let selectedPaymentMethod = null;
-        let selectedAddress = null;
-
-        // Load saved payment methods
-        async function loadSavedPaymentMethods() {
-            try {
-                const response = await fetch('../Perfil/paymentAPI.php?action=getPaymentMethods');
-                const data = await response.json();
-                
-                const container = document.getElementById('savedPaymentMethods');
-                
-                if (data.paymentMethods && data.paymentMethods.length > 0) {
-                    container.innerHTML = data.paymentMethods.map(payment => {
-                        let info = '';
-                        if (payment.tipoPagamento === 'cartao_credito') {
-                            info = `${payment.bandeiraCartao} •••• ${payment.numeroCartao.slice(-4)}`;
-                        } else if (payment.tipoPagamento === 'pix') {
-                            info = `PIX: ${payment.chavePix}`;
-                        } else {
-                            info = payment.tipoPagamento.toUpperCase();
-                        }
-                        
-                        return `
-                            <div class="payment-option" style="cursor: pointer;" onclick="selectPaymentMethod(${payment.idFormaPagamento}, '${payment.tipoPagamento}')">
-                                <label class="payment-label">
-                                    <input type="radio" name="saved-payment" value="${payment.idFormaPagamento}" class="payment-radio">
-                                    <span class="radio-custom"></span>
-                                    <span class="payment-text">${info}</span>
-                                </label>
-                            </div>
-                        `;
-                    }).join('');
-                } else {
-                    container.innerHTML = '<p style="color: #666;">Nenhuma forma de pagamento salva. Use os métodos abaixo.</p>';
-                }
-            } catch (error) {
-                console.error('Erro ao carregar formas de pagamento:', error);
-            }
-        }
-
-        // Load saved addresses
-        async function loadSavedAddresses() {
-            try {
-                const response = await fetch('../Perfil/addressAPI.php?action=getAddresses');
-                const data = await response.json();
-                
-                const container = document.getElementById('savedAddresses');
-                
-                if (data.addresses && data.addresses.length > 0) {
-                    container.innerHTML = data.addresses.map(addr => `
-                        <div class="payment-option" style="cursor: pointer;" onclick="selectAddress(${addr.idEndereco})">
-                            <label class="payment-label">
-                                <input type="radio" name="saved-address" value="${addr.idEndereco}" class="payment-radio">
-                                <span class="radio-custom"></span>
-                                <div class="payment-text">
-                                    <strong>${addr.rua}, ${addr.numero}</strong><br>
-                                    <small>${addr.bairro} - ${addr.cidade}/${addr.estado} - CEP: ${addr.cep}</small>
-                                </div>
-                            </label>
-                        </div>
-                    `).join('');
-                } else {
-                    container.innerHTML = '<p style="color: #666;">Nenhum endereço cadastrado.</p>';
-                }
-            } catch (error) {
-                console.error('Erro ao carregar endereços:', error);
-            }
-        }
-
-        function selectPaymentMethod(id, type) {
-            selectedPaymentMethod = { id, type };
-        }
-
-        function selectAddress(id) {
-            selectedAddress = id;
-        }
-
-        // Handle add new address button
-        document.getElementById('addNewAddress').addEventListener('click', () => {
-            window.location.href = '../Perfil/perfil.php';
-        });
-
-        // Handle form submission
-        document.getElementById('credit-card-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            if (!selectedAddress) {
-                Swal.fire('Atenção!', 'Por favor, selecione um endereço de entrega.', 'warning');
-                return;
-            }
-
-            // Create order
-            const formData = new FormData();
-            formData.append('action', 'createOrder');
-            formData.append('idEndereco', selectedAddress);
-            formData.append('metodoPagamento', selectedPaymentMethod ? selectedPaymentMethod.type : 'cartao');
-            formData.append('idFormaPagamento', selectedPaymentMethod ? selectedPaymentMethod.id : '');
-            
-            try {
-                const response = await fetch('checkoutAPI.php', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    Swal.fire({
-                        title: 'Pedido Realizado!',
-                        text: 'Seu pedido foi confirmado com sucesso!',
-                        icon: 'success',
-                        confirmButtonText: 'Ver Meus Pedidos'
-                    }).then(() => {
-                        window.location.href = '../Perfil/perfil.php';
-                    });
-                } else {
-                    Swal.fire('Erro!', result.message || 'Erro ao processar pedido', 'error');
-                }
-            } catch (error) {
-                console.error('Erro ao criar pedido:', error);
-                Swal.fire('Erro!', 'Erro ao processar pedido', 'error');
-            }
-        });
-
-        // Load data on page load
-        loadSavedPaymentMethods();
-        loadSavedAddresses();
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

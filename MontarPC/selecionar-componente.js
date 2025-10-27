@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const sessionKey = "your_session_key_here" // Declare sessionKey variable
   const productCards = document.querySelectorAll(".product-card")
-  const sessionKey = "your_session_key_here" // Declare sessionKey variable here
 
   productCards.forEach((card) => {
     const selectBtn = card.querySelector(".btn-select-product")
@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const productId = card.dataset.productId
       const productName = card.dataset.productName
       const productPrice = card.dataset.productPrice
+      const productImage = card.dataset.productImage
 
       // Save to session via API
       fetch("select-component.php", {
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
           productId: productId,
           productName: productName,
           productPrice: productPrice,
+          productImage: productImage,
         }),
       })
         .then((response) => response.json())
