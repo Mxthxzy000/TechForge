@@ -589,3 +589,35 @@
     height: 120px;
   }
 }
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #1e293b;
+  margin-bottom: 10px;
+  user-select: none;
+}
+
+.payment-option input[type="radio"] {
+  display: none;
+}
+
+.custom-radio {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.payment-option input[type="radio"]:checked + .custom-radio {
+  border-color: #facc15; /* amarelo */
+  background-color: #facc15;
+  box-shadow: 0 0 4px #facc15;
+}
+

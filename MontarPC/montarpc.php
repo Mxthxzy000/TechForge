@@ -53,12 +53,6 @@ foreach ($build as $key => $component) {
 }
 ?>
 
-<?php
-echo '<pre>';
-print_r($_SESSION);
-echo '</pre>';
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
