@@ -101,11 +101,7 @@ $stmt->close();
             <span class="linha"></span>
             <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon></li>
             <span class="linha"></span>
-           <li><a href="../Catalogo/catalogo.php?tag=Ofertas">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
-            <span class="linha"></span>
             <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
-            <span class="linha"></span>
-            <li><a href="../Catalogo/catalogo.php?tag=Gamer">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
             <span class="linha"></span>
             <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon></li>
         </ul>
@@ -236,7 +232,6 @@ $stmt->close();
                 <h3>SIGA-NOS</h3>
                 <div class="links-icon">
                     <ion-icon name="logo-instagram"></ion-icon>
-                    <ion-icon name="logo-twitter"></ion-icon>
                     <ion-icon name="logo-youtube"></ion-icon>
                     <ion-icon name="logo-linkedin"></ion-icon>
                 </div>
@@ -251,6 +246,7 @@ $stmt->close();
 
     <script src="../Comum/common.js"></script>
     <script src="perfil.js"></script>
+    <script src="../js/notification.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>

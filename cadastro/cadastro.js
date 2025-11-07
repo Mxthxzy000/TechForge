@@ -13,11 +13,11 @@ const nascimentoInput = document.getElementById("nascimento")
  */
 function validarSenhas(senha1, senha2) {
   if (senha1 !== senha2) {
-    alert("As senhas não conferem!")
+    window.showNotification("As senhas não conferem!", "error")
     return false
   }
   if (senha1.length < 6) {
-    alert("A senha deve ter pelo menos 6 caracteres!")
+    window.showNotification("A senha deve ter pelo menos 6 caracteres!", "error")
     return false
   }
   return true
@@ -31,7 +31,7 @@ function validarSenhas(senha1, senha2) {
 function validarEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(email)) {
-    alert("E-mail inválido!")
+    window.showNotification("E-mail inválido!", "error")
     return false
   }
   return true
@@ -49,7 +49,7 @@ function validarCampos() {
   const nascimento = nascimentoInput.value.trim()
 
   if (!email || !senha || !senhaCriada || !celular || !nascimento) {
-    alert("Preencha todos os campos!")
+    window.showNotification("Preencha todos os campos!", "warning")
     return false
   }
 

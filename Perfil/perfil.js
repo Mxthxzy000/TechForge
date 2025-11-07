@@ -70,7 +70,7 @@ if (editButton) {
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
-          alert(data.error)
+          showNotification(data.error, "error")
           return
         }
 
@@ -86,7 +86,7 @@ if (editButton) {
       })
       .catch((error) => {
         console.error("Erro ao carregar dados:", error)
-        alert("Erro ao carregar dados do perfil")
+        showNotification("Erro ao carregar dados do perfil", "error")
       })
   })
 }
@@ -128,21 +128,21 @@ editForm.addEventListener("submit", (e) => {
     .then((response) => response.json())
     .then((data) => {
       if (data.error) {
-        alert(data.error)
+        showNotification(data.error, "error")
         saveButton.disabled = false
         saveButton.textContent = "Salvar Alterações"
         return
       }
 
       if (data.success) {
-        alert(data.message)
+        showNotification(data.message, "success")
         modalOverlay.classList.remove("active")
         location.reload()
       }
     })
     .catch((error) => {
       console.error("Erro ao atualizar perfil:", error)
-      alert("Erro ao atualizar perfil")
+      showNotification("Erro ao atualizar perfil", "error")
       saveButton.disabled = false
       saveButton.textContent = "Salvar Alterações"
     })
@@ -210,11 +210,15 @@ addressModalOverlay.innerHTML = `
 document.body.appendChild(addressModalOverlay)
 
 function loadAddresses() {
-  fetch("addressAPI.php?action=getAddresses")
+  fetch("loadAddressesAPI.php")
     .then((response) => response.json())
     .then((data) => {
-      const container = document.getElementById("addressesContainer")
+      if (data.error) {
+        showNotification(data.error, "error")
+        return
+      }
 
+      const container = document.getElementById("addressesContainer")
       if (data.addresses && data.addresses.length > 0) {
         container.innerHTML = data.addresses
           .map(
@@ -246,7 +250,7 @@ function loadAddresses() {
       }
     })
     .catch((error) => {
-      console.error("Erro ao carregar endereços:", error)
+      showNotification("Erro ao carregar dados do perfil", "error")
     })
 }
 
@@ -281,7 +285,7 @@ document.getElementById("searchCEP").addEventListener("click", () => {
   const cep = document.getElementById("cep").value.replace(/\D/g, "")
 
   if (cep.length !== 8) {
-    alert("Digite um CEP válido com 8 dígitos")
+    showNotification("Digite um CEP válido com 8 dígitos", "error")
     return
   }
 
@@ -293,7 +297,7 @@ document.getElementById("searchCEP").addEventListener("click", () => {
     .then((response) => response.json())
     .then((data) => {
       if (data.error) {
-        alert(data.error)
+        showNotification(data.error, "error")
       } else {
         document.getElementById("rua").value = data.rua
         document.getElementById("bairro").value = data.bairro
@@ -305,7 +309,7 @@ document.getElementById("searchCEP").addEventListener("click", () => {
     })
     .catch((error) => {
       console.error("Erro ao buscar CEP:", error)
-      alert("Erro ao buscar CEP")
+      showNotification("Erro ao buscar CEP", "error")
       btn.textContent = "Buscar"
       btn.disabled = false
     })
@@ -344,21 +348,21 @@ document.getElementById("addressForm").addEventListener("submit", (e) => {
     .then((response) => response.json())
     .then((data) => {
       if (data.error) {
-        alert(data.error)
+        showNotification(data.error, "error")
         saveBtn.disabled = false
         saveBtn.textContent = "Salvar Endereço"
         return
       }
 
       if (data.success) {
-        alert(data.message)
+        showNotification(data.message, "success")
         addressModalOverlay.classList.remove("active")
         loadAddresses()
       }
     })
     .catch((error) => {
       console.error("Erro ao salvar endereço:", error)
-      alert("Erro ao salvar endereço")
+      showNotification("Erro ao salvar endereço", "error")
       saveBtn.disabled = false
       saveBtn.textContent = "Salvar Endereço"
     })
@@ -405,18 +409,18 @@ window.deleteAddress = (idEndereco) => {
     .then((response) => response.json())
     .then((data) => {
       if (data.error) {
-        alert(data.error)
+        showNotification(data.error, "error")
         return
       }
 
       if (data.success) {
-        alert(data.message)
+        showNotification(data.message, "success")
         loadAddresses()
       }
     })
     .catch((error) => {
       console.error("Erro ao excluir endereço:", error)
-      alert("Erro ao excluir endereço")
+      showNotification("Erro ao excluir endereço", "error")
     })
 }
 
@@ -475,7 +479,7 @@ function loadOrders() {
       loadBuilds()
     })
     .catch((error) => {
-      console.error("Erro ao carregar pedidos:", error)
+      showNotification("Erro ao carregar pedidos", "error")
     })
 }
 
@@ -531,7 +535,7 @@ function loadBuilds() {
       }
     })
     .catch((error) => {
-      console.error("Erro ao carregar montagens:", error)
+      showNotification("Erro ao carregar montagens", "error")
     })
 }
 
@@ -598,13 +602,13 @@ if (profilePhotoCircle && photoInput) {
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      alert("Por favor, selecione uma imagem válida")
+      showNotification("Por favor, selecione uma imagem válida", "error")
       return
     }
 
     // Validate file size (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert("A imagem deve ter no máximo 5MB")
+      showNotification("A imagem deve ter no máximo 5MB", "error")
       return
     }
 
@@ -623,19 +627,19 @@ if (profilePhotoCircle && photoInput) {
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
-          alert(data.error)
+          showNotification(data.error, "error")
           return
         }
 
         if (data.success) {
-          alert(data.message)
+          showNotification(data.message, "success")
           // Reload page to show new photo
           location.reload()
         }
       })
       .catch((error) => {
         console.error("Erro ao fazer upload da foto:", error)
-        alert("Erro ao fazer upload da foto")
+        showNotification("Erro ao fazer upload da foto", "error")
       })
       .finally(() => {
         profilePhotoCircle.style.opacity = "1"
@@ -799,19 +803,19 @@ document.getElementById("paymentForm").addEventListener("submit", (e) => {
       saveBtn.textContent = "Salvar"
 
       if (data.error) {
-        alert(data.error)
+        showNotification(data.error, "error")
         return
       }
 
       if (data.success) {
-        alert(data.message)
+        showNotification(data.message, "success")
         paymentModalOverlay.classList.remove("active")
         loadPaymentMethods()
       }
     })
     .catch((error) => {
       console.error("Erro ao salvar forma de pagamento:", error)
-      alert("Erro ao salvar forma de pagamento")
+      showNotification("Erro ao salvar forma de pagamento", "error")
       saveBtn.disabled = false
       saveBtn.textContent = "Salvar"
     })
@@ -873,7 +877,7 @@ function loadPaymentMethods() {
       }
     })
     .catch((error) => {
-      console.error("Erro ao carregar formas de pagamento:", error)
+      showNotification("Erro ao carregar formas de pagamento", "error")
     })
 }
 
@@ -903,18 +907,18 @@ window.deletePaymentMethod = (idFormaPagamento) => {
     .then((response) => response.json())
     .then((data) => {
       if (data.error) {
-        alert(data.error)
+        showNotification(data.error, "error")
         return
       }
 
       if (data.success) {
-        alert(data.message)
+        showNotification(data.message, "success")
         loadPaymentMethods()
       }
     })
     .catch((error) => {
       console.error("Erro ao excluir forma de pagamento:", error)
-      alert("Erro ao excluir forma de pagamento")
+      showNotification("Erro ao excluir forma de pagamento", "error")
     })
 }
 
@@ -923,3 +927,15 @@ loadPaymentMethods()
 
 loadAddresses()
 loadOrders()
+
+// Function to show notifications
+function showNotification(message, type) {
+  const notification = document.createElement("div")
+  notification.className = `notification notification-${type}`
+  notification.textContent = message
+  document.body.appendChild(notification)
+
+  setTimeout(() => {
+    document.body.removeChild(notification)
+  }, 3000)
+}

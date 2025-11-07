@@ -63,63 +63,41 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".btn-see-more").forEach((button) => {
     button.addEventListener("click", function () {
       const productId = this.getAttribute("data-id")
-      window.location.href = `../Detalhes/detalhes.php?id=${productId}`
+      viewDetails(productId)
     })
   })
 
   function addToCart(productId) {
-    fetch("../Carrinho/cartAPI.php", {
+    fetch("../Catalogo/addToCart.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `action=addToCart&idProduto=${productId}&quantidade=1`,
+      body: `idProduto=${productId}`,
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.needsLogin) {
-          showNotification("Faça login para adicionar produtos ao carrinho!", "warning")
-          setTimeout(() => {
-            window.location.href = "../Login/login.php"
-          }, 2000)
+          window.showNotification("Faça login para adicionar produtos ao carrinho!", "warning")
           return
         }
 
         if (data.error) {
-          showNotification(data.error, "error")
+          window.showNotification(data.error, "error")
           return
         }
 
-        if (data.success) {
-          showNotification(data.message, "success")
-          updateCartBadge()
+        if (data.message) {
+          window.showNotification(data.message, "success")
         }
       })
       .catch((error) => {
-        console.error("Erro ao adicionar ao carrinho:", error)
-        showNotification("Erro ao adicionar ao carrinho", "error")
+        window.showNotification("Erro ao adicionar ao carrinho", "error")
       })
   }
 
-  function showProductDetails(productId) {
-    showNotification("Página de detalhes em desenvolvimento!", "info")
-  }
-
-  function showNotification(message, type = "success") {
-    const Swal = window.Swal
-    if (typeof Swal !== "undefined") {
-      Swal.fire({
-        icon: type,
-        title: message,
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      })
-    } else {
-      alert(message)
-    }
+  function viewDetails(productId) {
+    window.showNotification("Página de detalhes em desenvolvimento!", "info")
   }
 
   function updateCartBadge() {

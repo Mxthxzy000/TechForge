@@ -303,7 +303,6 @@ $products = $result->fetch_all(MYSQLI_ASSOC);
                 <h3>SIGA-NOS</h3>
                 <div class="links-icon">
                     <ion-icon name="logo-instagram"></ion-icon>
-                    <ion-icon name="logo-twitter"></ion-icon>
                     <ion-icon name="logo-youtube"></ion-icon>
                     <ion-icon name="logo-linkedin"></ion-icon>
                 </div>

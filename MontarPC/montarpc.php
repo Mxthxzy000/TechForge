@@ -117,10 +117,7 @@ foreach ($build as $key => $component) {
             <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon>
             </li>
             <span class="linha"></span>
-            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon></li>
-            <span class="linha"></span>
-            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon></li>
-            <span class="linha"></span>
+            
             <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon>
             </li>
         </ul>
@@ -395,7 +392,6 @@ foreach ($build as $key => $component) {
                 <h3>SIGA-NOS</h3>
                 <div class="links-icon">
                     <ion-icon name="logo-instagram"></ion-icon>
-                    <ion-icon name="logo-twitter"></ion-icon>
                     <ion-icon name="logo-youtube"></ion-icon>
                     <ion-icon name="logo-linkedin"></ion-icon>
                 </div>

@@ -1,31 +1,76 @@
 <?php
 require '../config.php';
 require '../session.php';
-require '../flash.php';
 
-if (!isset($conn)) {
-    die("Erro: Conexão com banco de dados não estabelecida.");
+// Verificar se usuário está logado
+if (empty($_SESSION['idUsuario'])) {
+    header('Location: ../login/login.php');
+    exit;
 }
 
-// Verifica se o usuário está logado
-if (empty($_SESSION['idUsuario'])) {
-    // Redireciona para a página de login
-    header("Location: ../Login/login.php");
-    exit(); // sempre colocar exit após header para interromper o script
+$idUsuario = $_SESSION['idUsuario'];
+
+// Obter endereços salvos do usuário
+$queryEnderecos = "SELECT * FROM endereco WHERE idUsuario = ? ORDER BY tipoEndereco DESC, idEndereco ASC";
+$stmt = $conn->prepare($queryEnderecos);
+$stmt->bind_param('i', $idUsuario);
+$stmt->execute();
+$resultEnderecos = $stmt->get_result();
+$enderecos = [];
+while ($row = $resultEnderecos->fetch_assoc()) {
+    $enderecos[] = $row;
+}
+
+// Obter métodos de pagamento salvos
+$queryPagamentos = "SELECT * FROM formas_pagamento WHERE idUsuario = ? ORDER BY dataCadastro DESC";
+$stmt = $conn->prepare($queryPagamentos);
+$stmt->bind_param('i', $idUsuario);
+$stmt->execute();
+$resultPagamentos = $stmt->get_result();
+$pagamentos = [];
+while ($row = $resultPagamentos->fetch_assoc()) {
+    // Ocultar números de cartão por segurança
+    if (!empty($row['numeroCartao'])) {
+        $row['numeroCartao'] = '**** **** **** ' . substr($row['numeroCartao'], -4);
+    }
+    $pagamentos[] = $row;
+}
+
+// Obter total do carrinho
+$queryCarrinho = "SELECT SUM(ic.precoUnitario * ic.quantidade) as total 
+                 FROM carrinho c 
+                 JOIN item_carrinho ic ON c.idCarrinho = ic.idCarrinho 
+                 WHERE c.idUsuario = ? AND c.status = 'ativo'";
+$stmt = $conn->prepare($queryCarrinho);
+$stmt->bind_param('i', $idUsuario);
+$stmt->execute();
+$resultCarrinho = $stmt->get_result()->fetch_assoc();
+$totalCarrinho = isset($resultCarrinho['total']) ? $resultCarrinho['total'] : 0;
+
+// Obter dados de montagem de PC se houver na sessão
+$montagemId = $_GET['montagem_id'] ?? null;
+$pedidoMontagem = null;
+if ($montagemId) {
+    $queryMontagem = "SELECT * FROM servico_montagem WHERE idMontagem = ? AND idUsuario = ?";
+    $stmt = $conn->prepare($queryMontagem);
+    $stmt->bind_param('ii', $montagemId, $idUsuario);
+    $stmt->execute();
+    $resultMontagem = $stmt->get_result();
+    if ($row = $resultMontagem->fetch_assoc()) {
+        $pedidoMontagem = $row;
+    }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - TechForge</title>
     <link rel="stylesheet" href="../Comum/common.css">
     <link rel="stylesheet" href="out.css">
-    <title>Checkout</title>
 </head>
-
 <body>
     <header>
         <div class="inicio-header">
@@ -46,290 +91,260 @@ if (empty($_SESSION['idUsuario'])) {
         </div>
     </header>
 
-    <div class="dropdown-user">
-        <?php if (!empty($_SESSION['idUsuario'])): ?>
-            <a href="../Perfil/perfil.php" class="menu-usuario"
-                style="justify-content: space-between; align-items: center;">
-                <span>Olá, <?php echo htmlspecialchars($_SESSION['nomeUsuario']); ?>...</span>
-
-                <?php if (!empty($_SESSION['fotoUsuario'])): ?>
-                    <img src="<?php echo htmlspecialchars($_SESSION['fotoUsuario']); ?>" alt="Foto do Usuário"
-                        class="foto-usuario" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">
-                <?php else: ?>
-                    <ion-icon name="person-circle-outline" class="icon-user"></ion-icon>
-                <?php endif; ?>
-            </a>
-
-            <form method="POST" action="../logout.php">
-                <button type="submit" class="menu-usuario">
-                    Sair!
-                    <ion-icon name="log-out-outline" class="icon-user"></ion-icon>
-                </button>
-            </form>
-
-        <?php else: ?>
-            <a href="../Login/login.php" class="menu-usuario">
-                Fazer Login!
-                <ion-icon name="log-in-outline" class="icon-user"></ion-icon>
-            </a>
-        <?php endif; ?>
-    </div>
-
     <nav>
         <ul>
-            <li><a href="../Home/index.php">HOME</a> <ion-icon class="navicon" name="home-outline"></ion-icon> </li>
-            <span class="linha"></span>
             <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon></li>
             <span class="linha"></span>
-           <li><a href="../Catalogo/catalogo.php?tag=Ofertas">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon> </li>
-            <span class="linha"></span>
-            <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon> </li>
-            <span class="linha"></span>
-            <li><a href="../Catalogo/catalogo.php?tag=Gamer">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon> </li>
+            <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon></li>
             <span class="linha"></span>
             <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon></li>
         </ul>
     </nav>
 
-    <?php show_flash(); ?>
+    <div class="checkout-wrapper">
+        <div class="checkout-container">
+            <!-- Resumo do Pedido (Sidebar) -->
+            <aside class="checkout-sidebar">
+                <h2>Resumo do Pedido</h2>
+                
+                <?php if ($pedidoMontagem): ?>
+                    <div class="summary-section">
+                        <h3>Serviço de Montagem</h3>
+                        <div class="summary-item">
+                            <span><?php echo htmlspecialchars($pedidoMontagem['nomeSetup']); ?></span>
+                            <span id="subtotal-montagem">R$ <?php echo number_format($pedidoMontagem['precoEstimado'], 2, ',', '.'); ?></span>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="summary-section">
+                        <h3>Produtos</h3>
+                        <div id="resumo-produtos"></div>
+                    </div>
+                <?php endif; ?>
 
-    <div class="container">
-        <!-- Seção Principal - Métodos de Pagamento -->
-        <div class="main-section">
-            <!-- Saved Payment Methods -->
-            <div class="payment-section" style="margin-bottom: 20px;">
-                <div class="section-header">
-                    <svg class="icon-card" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <rect x="2" y="5" width="20" height="14" rx="2" stroke-width="2" />
-                        <line x1="2" y1="10" x2="22" y2="10" stroke-width="2" />
-                    </svg>
-                    <h2>Formas de Pagamento Salvas</h2>
+                <div class="summary-section">
+                    <div class="summary-item">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">R$ 0,00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Frete:</span>
+                        <span id="frete">R$ 0,00</span>
+                    </div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-item total">
+                        <span>Total:</span>
+                        <span id="total">R$ 0,00</span>
+                    </div>
                 </div>
-                <div id="savedPaymentMethods" style="display: grid; gap: 15px; margin-top: 15px;">
-                    <!-- Payment methods will be loaded here -->
-                </div>
-            </div>
+            </aside>
 
-            <!-- Delivery Address Selection -->
-            <div class="payment-section" style="margin-bottom: 20px;">
-                <div class="section-header">
-                    <svg class="icon-card" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke-width="2"/>
-                        <polyline points="9 22 9 12 15 12 15 22" stroke-width="2"/>
-                    </svg>
+            <!-- Conteúdo Principal -->
+            <main class="checkout-main">
+                <h1>Finalizar Compra</h1>
+
+                <!-- Seção de Endereço -->
+                <section class="checkout-section">
                     <h2>Endereço de Entrega</h2>
-                </div>
-                <div id="savedAddresses" style="display: grid; gap: 15px; margin-top: 15px;">
-                    <!-- Addresses will be loaded here -->
-                </div>
-                <button type="button" id="addNewAddress" class="submit-btn" style="margin-top: 15px; background: #64748b;">
-                    + Adicionar Novo Endereço
-                </button>
-            </div>
+                    
+                    <?php if (!empty($enderecos)): ?>
+                        <div class="endereco-salvo">
+                            <h3>Meus Endereços</h3>
+                            <div class="list-enderecos" id="listEnderecos">
+                                <?php foreach ($enderecos as $endereco): ?>
+                                    <label class="endereco-card">
+                                        <!-- Radio is now directly in label for native clickability -->
+                                        <input type="radio" name="endereco" value="<?php echo $endereco['idEndereco']; ?>" 
+                                               data-estado="<?php echo $endereco['estado']; ?>"
+                                               class="endereco-radio">
+                                        <div class="endereco-info">
+                                            <strong><?php echo htmlspecialchars($endereco['rua']); ?>, <?php echo htmlspecialchars($endereco['numero']); ?></strong>
+                                            <?php if ($endereco['complemento']): ?>
+                                                <p><?php echo htmlspecialchars($endereco['complemento']); ?></p>
+                                            <?php endif; ?>
+                                            <p><?php echo htmlspecialchars($endereco['bairro']); ?>, <?php echo htmlspecialchars($endereco['cidade']); ?> - <?php echo htmlspecialchars($endereco['estado']); ?></p>
+                                            <p class="cep">CEP: <?php echo htmlspecialchars($endereco['cep']); ?></p>
+                                        </div>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <p class="empty-message">Nenhum endereço salvo. Adicione um novo.</p>
+                    <?php endif; ?>
 
-            <div class="payment-section">
-                <div class="section-header">
-                    <svg class="icon-card" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <rect x="2" y="5" width="20" height="14" rx="2" stroke-width="2" />
-                        <line x1="2" y1="10" x2="22" y2="10" stroke-width="2" />
-                    </svg>
+                    <!-- Buscar novo endereço por CEP -->
+                    <div class="buscar-cep">
+                        <h3>Buscar Endereço por CEP</h3>
+                        <div class="cep-input-group">
+                            <input type="text" id="cepInput" placeholder="Digite seu CEP (ex: 12289-160)" class="cep-input">
+                            <button id="searchCepBtn" class="btn btn-primary">Buscar</button>
+                        </div>
+                        
+                        <div id="resultadoEndereco" class="resultado-endereco" style="display: none;">
+                            <div class="form-group">
+                                <label>Rua</label>
+                                <input type="text" id="street" class="form-input" readonly>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Número</label>
+                                    <input type="text" id="number" class="form-input" placeholder="123">
+                                </div>
+                                <div class="form-group">
+                                    <label>Complemento</label>
+                                    <input type="text" id="complement" class="form-input" placeholder="Apto, sala, etc">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Bairro</label>
+                                    <input type="text" id="neighborhood" class="form-input" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cidade</label>
+                                    <input type="text" id="city" class="form-input" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Estado</label>
+                                <input type="text" id="state" class="form-input" readonly>
+                            </div>
+                            <button type="button" id="usarNovoEndereco" class="btn btn-secondary">Usar Este Endereço</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Seção de Frete -->
+                <section class="checkout-section">
+                    <h2>Opções de Frete</h2>
+                    <div id="freteOptions" class="frete-options">
+                        <p class="loading-message">Selecione um endereço para ver opções de frete</p>
+                    </div>
+                </section>
+
+                <!-- Seção de Pagamento -->
+                <section class="checkout-section">
                     <h2>Método de Pagamento</h2>
-                </div>
-
-                <!-- Added container for new payment methods that can be hidden -->
-                <div id="newPaymentMethodsContainer">
-                <!-- PIX -->
-                <div class="payment-option">
-                    <label class="payment-label">
-                        <input type="radio" name="payment" value="pix" class="payment-radio">
-                        <span class="radio-custom"></span>
-                        <span class="payment-text">PAGUE VIA PIX</span>
-                        <div class="payment-icon pix-icon">
-                            <img src="../imagens/pix.png" alt="PIX" style="width: 32px; height: 32px; object-fit: contain;">
-                        </div>
-                    </label>
-                    <div class="payment-details" id="pix-details">
-                        <div class="pix-content">
-                            <p>Escaneie o QR Code ou copie o código PIX para realizar o pagamento.</p>
-                            <!-- Replaced fake QR code with actual image -->
-                            <div class="qr-code-placeholder">
-                                <img src="../imagens/qrcode.jpg" alt="QR Code PIX" style="width: 100%; height: 100%; object-fit: contain;">
+                    
+                    <?php if (!empty($pagamentos)): ?>
+                        <div class="pagamento-salvo">
+                            <h3>Meus Métodos</h3>
+                            <div class="list-pagamentos" id="listPagamentos">
+                                <?php foreach ($pagamentos as $pagamento): ?>
+                                    <label class="pagamento-card">
+                                        <!-- Radio is now directly in label for native clickability -->
+                                        <input type="radio" name="pagamento" value="<?php echo $pagamento['idFormaPagamento']; ?>" 
+                                               data-tipo="<?php echo htmlspecialchars($pagamento['tipoPagamento']); ?>"
+                                               class="pagamento-radio">
+                                        <div class="pagamento-info">
+                                            <strong><?php echo ucfirst(str_replace('_', ' ', $pagamento['tipoPagamento'])); ?></strong>
+                                            <p>
+                                                <?php 
+                                                    if ($pagamento['tipoPagamento'] === 'cartao_credito') {
+                                                        echo 'Cartão: ' . htmlspecialchars($pagamento['numeroCartao']);
+                                                        if ($pagamento['nomeTitular']) echo ' - ' . htmlspecialchars($pagamento['nomeTitular']);
+                                                    } elseif ($pagamento['tipoPagamento'] === 'pix') {
+                                                        echo 'Chave PIX: ' . substr(htmlspecialchars($pagamento['chavePix']), 0, 20) . '...';
+                                                    } else {
+                                                        echo htmlspecialchars($pagamento['nomeTitular'] ?? 'Sem nome');
+                                                    }
+                                                ?>
+                                            </p>
+                                        </div>
+                                    </label>
+                                <?php endforeach; ?>
                             </div>
-                            <button class="copy-code-btn">Copiar código PIX</button>
                         </div>
-                    </div>
-                </div>
+                    <?php else: ?>
+                        <p class="empty-message">Nenhum método de pagamento salvo. Adicione um novo.</p>
+                    <?php endif; ?>
 
-                <!-- Boleto Bancário -->
-                <div class="payment-option">
-                    <label class="payment-label">
-                        <input type="radio" name="payment" value="boleto" class="payment-radio">
-                        <span class="radio-custom"></span>
-                        <span class="payment-text">BOLETO BANCÁRIO</span>
-                        <div class="payment-icon boleto-icon">
-                            <img src="../imagens/boleto.png" alt="Boleto" style="width: 32px; height: 32px; object-fit: contain;">
-                        </div>
-                    </label>
-                    <div class="payment-details" id="boleto-details">
-                        <div class="boleto-content">
-                            <p>O boleto será gerado após a confirmação do pedido.</p>
-                            <p class="boleto-info">Prazo de pagamento: 3 dias úteis</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cartão de Crédito -->
-                <div class="payment-option">
-                    <label class="payment-label">
-                        <input type="radio" name="payment" value="credit-card" class="payment-radio" checked>
-                        <span class="radio-custom"></span>
-                        <span class="payment-text">CARTÃO DE CRÉDITO</span>
-                        <div class="card-brands">
-                            <img src="data:image/svg+xml,%3Csvg width='40' height='24' viewBox='0 0 40 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='40' height='24' rx='3' fill='%23E8E8E8'/%3E%3Ccircle cx='14' cy='12' r='6' fill='%23EB001B'/%3E%3Ccircle cx='26' cy='12' r='6' fill='%23F79E1B'/%3E%3C/svg%3E"
-                                alt="Mastercard">
-                            <img src="data:image/svg+xml,%3Csvg width='40' height='24' viewBox='0 0 40 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='40' height='24' rx='3' fill='%231434CB'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold' font-size='10'%3EVISA%3C/text%3E%3C/svg%3E"
-                                alt="Visa">
-                            <img src="data:image/svg+xml,%3Csvg width='40' height='24' viewBox='0 0 40 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='40' height='24' rx='3' fill='%23006FCF'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold' font-size='8'%3EAMEX%3C/text%3E%3C/svg%3E"
-                                alt="Amex">
-                            <img src="data:image/svg+xml,%3Csvg width='40' height='24' viewBox='0 0 40 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='40' height='24' rx='3' fill='%23FF6000'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold' font-size='7'%3EELO%3C/text%3E%3C/svg%3E"
-                                alt="Elo">
-                            <img src="data:image/svg+xml,%3Csvg width='40' height='24' viewBox='0 0 40 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='40' height='24' rx='3' fill='%23000000'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold' font-size='6'%3EHIPER%3C/text%3E%3C/svg%3E"
-                                alt="Hipercard">
-                            <img src="data:image/svg+xml,%3Csvg width='40' height='24' viewBox='0 0 40 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='40' height='24' rx='3' fill='%23808080'/%3E%3C/svg%3E"
-                                alt="Outros">
-                        </div>
-                    </label>
-                    <div class="payment-details active" id="credit-card-details">
-                        <div class="ssl-notice">
-                            <svg class="lock-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <rect x="4" y="7" width="8" height="6" rx="1" fill="#10B981" />
-                                <path d="M5 7V5C5 3.34315 6.34315 2 8 2C9.65685 2 11 3.34315 11 5V7" stroke="#10B981"
-                                    stroke-width="2" />
-                            </svg>
-                            <span>O nosso site utiliza o protocolo de encriptação SSL. Seu pagamento está seguro</span>
+                    <!-- Adicionar novo método -->
+                    <div class="adicionar-pagamento">
+                        <h3>Adicionar Método de Pagamento</h3>
+                        <div class="payment-method-selector">
+                            <label class="method-option">
+                                <input type="radio" name="novo_pagamento_tipo" value="cartao_credito">
+                                <span>Cartão de Crédito</span>
+                            </label>
+                            <label class="method-option">
+                                <input type="radio" name="novo_pagamento_tipo" value="pix">
+                                <span>PIX</span>
+                            </label>
+                            <label class="method-option">
+                                <input type="radio" name="novo_pagamento_tipo" value="boleto">
+                                <span>Boleto</span>
+                            </label>
                         </div>
 
-                        <form class="credit-card-form" id="credit-card-form">
-                            <div class="form-row">
-                                <div class="form-group cvv-group">
-                                    <input type="text" id="cvv" placeholder="CVV *" maxlength="4" required>
-                                    <svg class="card-icon-small" width="32" height="20" viewBox="0 0 32 20">
-                                        <rect width="32" height="20" rx="2" fill="#FFD700" />
-                                        <rect x="2" y="4" width="28" height="3" fill="#000" />
-                                    </svg>
-                                </div>
+                        <!-- Formulário Cartão -->
+                        <div id="cartaoForm" class="payment-form" style="display: none;">
+                            <div class="form-group">
+                                <label>Nome do Titular</label>
+                                <input type="text" id="nomeCartao" class="form-input" placeholder="Nome como aparece no cartão">
                             </div>
-
+                            <div class="form-group">
+                                <label>Número do Cartão</label>
+                                <input type="text" id="numeroCartao" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
+                            </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <select id="month" required>
-                                        <option value="">Mês Validade *</option>
-                                        <option value="01">01</option>
-                                        <option value="02">02</option>
-                                        <option value="03">03</option>
-                                        <option value="04">04</option>
-                                        <option value="05">05</option>
-                                        <option value="06">06</option>
-                                        <option value="07">07</option>
-                                        <option value="08">08</option>
-                                        <option value="09">09</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                    </select>
+                                    <label>Validade (MM/AA)</label>
+                                    <input type="text" id="validadeCartao" class="form-input" placeholder="12/28" maxlength="5">
                                 </div>
                                 <div class="form-group">
-                                    <select id="year" required>
-                                        <option value="">Ano Validade *</option>
-                                        <option value="2025">2025</option>
-                                        <option value="2026">2026</option>
-                                        <option value="2027">2027</option>
-                                        <option value="2028">2028</option>
-                                        <option value="2029">2029</option>
-                                        <option value="2030">2030</option>
-                                        <option value="2031">2031</option>
-                                        <option value="2032">2032</option>
-                                        <option value="2033">2033</option>
-                                        <option value="2034">2034</option>
-                                        <option value="2035">2035</option>
-                                    </select>
+                                    <label>CVV</label>
+                                    <input type="text" id="cvvCartao" class="form-input" placeholder="123" maxlength="4">
                                 </div>
                             </div>
+                            <label class="checkbox-save">
+                                <input type="checkbox" id="salvarCartao" checked>
+                                <span>Salvar este cartão para próximas compras</span>
+                            </label>
+                        </div>
 
-                            <div class="form-row">
-                                <div class="form-group full-width">
-                                    <input type="text" id="card-number" placeholder="Número do cartão *" maxlength="19"
-                                        required>
-                                </div>
+                        <!-- Formulário PIX -->
+                        <div id="pixForm" class="payment-form" style="display: none;">
+                            <div class="pix-info">
+                                <p>Use PIX para pagamento instantâneo. Você receberá um código QR para escanear.</p>
                             </div>
-
-                            <div class="form-row">
-                                <div class="form-group full-width">
-                                    <input type="text" id="card-name" placeholder="Nome do titular do cartão *"
-                                        required>
-                                </div>
+                            <div class="form-group">
+                                <label>Chave PIX</label>
+                                <input type="text" id="chavePix" class="form-input" placeholder="Email, CPF, telefone ou chave aleatória">
                             </div>
+                            <label class="checkbox-save">
+                                <input type="checkbox" id="salvarPix" checked>
+                                <span>Salvar este PIX para próximas compras</span>
+                            </label>
+                        </div>
 
-                            <div class="form-row">
-                                <div class="form-group full-width">
-                                    <input type="text" id="cpf" placeholder="9 x de R$ 24,88 (com 5% de desconto)"
-                                        required>
-                                </div>
+                        <!-- Formulário Boleto -->
+                        <div id="boletoForm" class="payment-form" style="display: none;">
+                            <div class="boleto-info">
+                                <p>O boleto será enviado para seu email após confirmar a compra.</p>
                             </div>
-
-                            <button type="submit" class="submit-btn">Confirmar e seguir para a entrega</button>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                </div>
-                <!-- Added finalize order button (hidden by default) -->
-                <button type="button" id="finalizeOrderBtn" class="submit-btn" style="display: none; margin-top: 20px; background: #10B981;">
-                    Finalizar Pedido
-                </button>
-            </div>
+                </section>
+
+                <!-- Botão Finalizar -->
+                <section class="checkout-actions">
+                    <button id="finalizarBtn" class="btn btn-success">Finalizar Compra</button>
+                    <a href="<?php echo $pedidoMontagem ? '../MontarPC/montarpc.php' : '../Carrinho/carrinho.php'; ?>" class="btn btn-cancel">Cancelar</a>
+                </section>
+            </main>
         </div>
+    </div>
 
-        <!-- Sidebar Direita -->
-        <div class="sidebar">
-            <!-- Resumo -->
-            <div class="summary-card">
-                <h3>RESUMO</h3>
-                <div class="product-info">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20tela%202025-10-20%20082254-Oj26I4mxtsOYIqCelXp3wG4OWvOknw.png"
-                        alt="Placa de Vídeo" class="product-image">
-                    <div class="product-details">
-                        <p class="product-name">Placa de Vídeo Gigabyte Aorus AMD Radeon RX 9070 XT Elite, 16GB, GDDR6,
-                            FSR, Ray Tracing, GV-R907XTAORUS E-16GD</p>
-                    </div>
-                </div>
-
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span class="price">R$ XXX,XX</span>
-                </div>
-                <div class="summary-row">
-                    <span>Desconto</span>
-                    <span class="price discount">R$ XXX,XX</span>
-                </div>
-                <div class="summary-row total-row">
-                    <span class="total-label">Total</span>
-                    <span class="total-price">R$ XXX,XX</span>
-                </div>
-
-                <div class="qr-code-section">
-                    <div class="qr-code-small"><img src="../imagens/qrcode.jpg" alt=""></div>
-                    <a href="#" class="vista-link">À vista</a>
-                </div>
-            </div>
-
-            <!-- Frete -->
-            <div class="shipping-card">
-                <h3>FRETE</h3>
-                <div class="shipping-form">
-                    <input type="text" id="cep" placeholder="CEP*" maxlength="9">
-                    <button type="button" id="calculate-shipping" class="calculate-btn">Calcular</button>
-                </div>
-                <div class="shipping-options" id="shipping-options"></div>
+    <!-- Modal de Confirmação -->
+    <div id="confirmModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Confirmar Pedido</h2>
+            <div id="modalResumo"></div>
+            <div class="modal-actions">
+                <button id="confirmarBtn" class="btn btn-success">Confirmar</button>
+                <button id="cancelarBtn" class="btn btn-cancel">Cancelar</button>
             </div>
         </div>
     </div>
@@ -367,7 +382,6 @@ if (empty($_SESSION['idUsuario'])) {
                 <h3>SIGA-NOS</h3>
                 <div class="links-icon">
                     <ion-icon name="logo-instagram"></ion-icon>
-                    <ion-icon name="logo-twitter"></ion-icon>
                     <ion-icon name="logo-youtube"></ion-icon>
                     <ion-icon name="logo-linkedin"></ion-icon>
                 </div>
@@ -382,9 +396,11 @@ if (empty($_SESSION['idUsuario'])) {
 
     <script src="../Comum/common.js"></script>
     <script src="out.js"></script>
+    <!-- added SweetAlert for success messages -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- incluir script de notificação centralizado -->
+    <script src="../js/notification.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
-
 </html>

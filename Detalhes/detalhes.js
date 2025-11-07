@@ -5,61 +5,34 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnAdicionarCarrinho) {
     btnAdicionarCarrinho.addEventListener("click", function () {
       const productId = this.getAttribute("data-id")
-      addToCart(productId)
+
+      fetch("../Catalogo/addToCart.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `idProduto=${productId}`,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.needsLogin) {
+            window.showNotification("Faça login para adicionar produtos ao carrinho!", "warning")
+            return
+          }
+
+          if (data.error) {
+            window.showNotification(data.error, "error")
+            return
+          }
+
+          if (data.message) {
+            window.showNotification(data.message, "success")
+          }
+        })
+        .catch((error) => {
+          window.showNotification("Erro ao adicionar ao carrinho", "error")
+        })
     })
-  }
-
-  function addToCart(productId) {
-    console.log("[v0] Adding product to cart:", productId)
-
-    fetch("../Carrinho/cartAPI.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: `action=addToCart&idProduto=${productId}&quantidade=1`,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.needsLogin) {
-          showNotification("Faça login para adicionar produtos ao carrinho!", "warning")
-          setTimeout(() => {
-            window.location.href = "../Login/login.php"
-          }, 2000)
-          return
-        }
-
-        if (data.error) {
-          showNotification(data.error, "error")
-          return
-        }
-
-        if (data.success) {
-          showNotification(data.message, "success")
-          updateCartBadge()
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao adicionar ao carrinho:", error)
-        showNotification("Erro ao adicionar ao carrinho", "error")
-      })
-  }
-
-  function showNotification(message, type = "success") {
-    const Swal = window.Swal
-    if (typeof Swal !== "undefined") {
-      Swal.fire({
-        icon: type,
-        title: message,
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      })
-    } else {
-      alert(message)
-    }
   }
 
   function updateCartBadge() {

@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   const discountPercent = 0.05 // 5% discount for PIX
-  const Swal = window.Swal
 
   function formatPrice(price) {
     return `R$ ${price.toFixed(2).replace(".", ",")}`
@@ -42,16 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          if (Swal) {
-            Swal.fire({
-              icon: "success",
-              title: "Item removido do carrinho!",
-              toast: true,
-              position: "top-end",
-              showConfirmButton: false,
-              timer: 2000,
-            })
-          }
+          window.showNotification("Item removido do carrinho!", "success")
           loadCartItems()
         }
       })
@@ -159,15 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => response.json())
         .then((data) => {
           if (data.produtos.length === 0) {
-            if (Swal) {
-              Swal.fire({
-                icon: "warning",
-                title: "Carrinho vazio!",
-                text: "Adicione produtos ao carrinho antes de finalizar o pedido.",
-              })
-            } else {
-              alert("Adicione produtos ao carrinho antes de finalizar o pedido.")
-            }
+            window.showNotification("Adicione produtos ao carrinho antes de finalizar o pedido.", "warning")
             return
           }
 
@@ -177,4 +159,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   loadCartItems()
+
+  // Declaration of showNotification function
+  window.showNotification = (message, type) => {
+    // Implementation of showNotification function
+    console.log(`Notification (${type}): ${message}`)
+  }
 })

@@ -23,14 +23,14 @@ const handleLoginSubmit = (e) => {
   // Validação básica
   if (!email || !password) {
     e.preventDefault()
-    alert("Por favor, preencha todos os campos.")
+    window.showNotification("Por favor, preencha todos os campos.", "warning")
     return
   }
 
   // Validação de email
   if (!isValidEmail(email)) {
     e.preventDefault()
-    alert("Por favor, insira um e-mail válido.")
+    window.showNotification("Por favor, insira um e-mail válido.", "error")
     return
   }
 }

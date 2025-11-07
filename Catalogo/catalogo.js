@@ -18,6 +18,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const tagSearchInput = document.getElementById("tagSearchInput")
   const allTagOptions = document.querySelectorAll(".tag-option")
 
+  const showNotification = (message, type) => {
+    console.log(`Notification (${type}): ${message}`)
+    // Implement notification logic here
+  }
+
   if (tagSearchInput) {
     const suggestionsContainer = document.createElement("div")
     suggestionsContainer.className = "tag-suggestions"
@@ -368,6 +373,18 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById("pageTitle").textContent = `Nenhum produto com as tags selecionadas`
         } else {
           document.getElementById("pageTitle").textContent = `Tags: ${tags.join(", ")}`
+
+          // Limpa filtros de tipo ao usar tags
+          document.querySelectorAll(".tipoFiltro").forEach((checkbox) => {
+            checkbox.checked = false
+          })
+          currentFilters.tag = ""
+
+          // Limpa filtro de linha
+          document.querySelectorAll(".marca-option").forEach((option) => {
+            option.classList.remove("active")
+          })
+          currentFilters.linha = ""
         }
       })
       .catch((error) => {
@@ -502,23 +519,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Função para adicionar ao carrinho
   function addToCart(productId) {
-    console.log("[v0] Adding product to cart:", productId)
-
-    // Send to database
-    fetch("../Carrinho/cartAPI.php", {
+    fetch("addToCart.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `action=addToCart&idProduto=${productId}&quantidade=1`,
+      body: `idProduto=${productId}`,
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.needsLogin) {
           showNotification("Faça login para adicionar produtos ao carrinho!", "warning")
-          setTimeout(() => {
-            window.location.href = "../login/login.php"
-          }, 2000)
           return
         }
 
@@ -527,37 +538,17 @@ document.addEventListener("DOMContentLoaded", () => {
           return
         }
 
-        if (data.success) {
+        if (data.message) {
           showNotification(data.message, "success")
-          updateCartBadge()
         }
       })
       .catch((error) => {
-        console.error("Erro ao adicionar ao carrinho:", error)
         showNotification("Erro ao adicionar ao carrinho", "error")
       })
   }
 
   function showProductDetails(productId) {
     window.location.href = `../Detalhes/detalhes.php?id=${productId}`
-  }
-
-  function showNotification(message, type = "success") {
-    // Check if SweetAlert2 is available
-    const Swal = window.Swal // Declare Swal variable here
-    if (typeof Swal !== "undefined") {
-      Swal.fire({
-        icon: type,
-        title: message,
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      })
-    } else {
-      alert(message)
-    }
   }
 
   // Função para atualizar o badge do carrinho usando a API do banco de dados

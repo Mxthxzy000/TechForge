@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const nomeSetup = nomeSetupInput.value.trim()
 
       if (!nomeSetup) {
-        alert("Por favor, dê um nome para sua montagem")
+        window.showNotification("Por favor, dê um nome para sua montagem", "warning")
         nomeSetupInput.focus()
         return
       }
@@ -73,20 +73,20 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => response.json())
         .then((data) => {
           if (data.needsLogin) {
-            alert("Você precisa fazer login para salvar sua montagem")
+            window.showNotification("Você precisa fazer login para salvar sua montagem", "warning")
             window.location.href = "../Login/login.php"
             return
           }
 
           if (data.error) {
-            alert(data.error)
+            window.showNotification(data.error, "error")
             saveBtn.disabled = false
             saveBtn.innerHTML = '<ion-icon name="checkmark-circle-outline"></ion-icon> Salvar Montagem'
             return
           }
 
           if (data.success) {
-            alert(data.message)
+            window.showNotification(data.message, "success")
             // Clear build after saving
             fetch("clear-build.php", { method: "POST" }).then(() => {
               window.location.href = "../Perfil/perfil.php"
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch((error) => {
           console.error("Erro ao salvar montagem:", error)
-          alert("Erro ao salvar montagem")
+          window.showNotification("Erro ao salvar montagem", "error")
           saveBtn.disabled = false
           saveBtn.innerHTML = '<ion-icon name="checkmark-circle-outline"></ion-icon> Salvar Montagem'
         })

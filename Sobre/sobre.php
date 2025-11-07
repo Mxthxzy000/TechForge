@@ -78,12 +78,9 @@ if (!isset($conn)) {
             <span class="linha"></span>
             <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon class="navicon" name="bag-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon></li>
-            <span class="linha"></span>
             <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon></li>
-        </ul>
+           </ul>
     </nav>
 
     <?php show_flash(); ?>
@@ -207,7 +204,6 @@ if (!isset($conn)) {
                 <h3>SIGA-NOS</h3>
                 <div class="links-icon">
                     <ion-icon name="logo-instagram"></ion-icon>
-                    <ion-icon name="logo-twitter"></ion-icon>
                     <ion-icon name="logo-youtube"></ion-icon>
                     <ion-icon name="logo-linkedin"></ion-icon>
                 </div>

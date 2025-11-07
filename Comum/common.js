@@ -1,4 +1,12 @@
 /**
+ * Notificação Centralizada
+ * Importa o sistema de notificações padronizado
+ */
+const notificationScript = document.createElement("script")
+notificationScript.src = "../js/notification.js"
+document.head.appendChild(notificationScript)
+
+/**
  * Menu Hamburguer - Usado em todas as páginas
  */
 const hamburguer = document.querySelector(".hamburguer-menu")
@@ -34,11 +42,10 @@ document.addEventListener("click", (e) => {
   }
 })
 
-const carrinho = document.getElementById("carrinho");
+const carrinho = document.getElementById("carrinho")
 
 if (carrinho) {
-    carrinho.addEventListener("click", () => {
-        window.location.href = "../Carrinho/carrinho.php"; // link da página do carrinho
-    });
+  carrinho.addEventListener("click", () => {
+    window.location.href = "../Carrinho/carrinho.php" // link da página do carrinho
+  })
 }
-
