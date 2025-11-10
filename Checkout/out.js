@@ -13,18 +13,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // === Helper: habilitar toggle em radio buttons ===
   function enableRadioToggle(selector, onChange) {
     document.querySelectorAll(selector).forEach((radio) => {
-      radio.addEventListener("mousedown", function () {
-        this.wasChecked = this.checked
+      radio.addEventListener("mousedown", function (e) {
+        this.checked = false;
+        e.stopPropagation()
       })
+      
       radio.addEventListener("click", function (e) {
         if (this.wasChecked) {
           this.checked = false
           e.preventDefault()
           if (onChange) onChange(this, false)
         }
+        this.wasChecked = this.checked
       })
+      
       radio.addEventListener("change", function () {
         if (onChange) onChange(this, this.checked)
+          
       })
     })
   }
@@ -141,8 +146,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     enableRadioToggle('input[name="frete"]', (radio, checked) => {
       document.querySelectorAll(".frete-option").forEach((el) => el.classList.remove("selected"))
-      if (checked) radio.closest(".frete-option").classList.add("selected")
-      updateTotals()
+      if (checked) {
+        radio.closest(".frete-option").classList.add("selected")
+        updateTotals()
+      }
     })
   }
 
@@ -157,7 +164,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (cep) document.getElementById("cepInput").value = cep.replace(/(\d{5})(\d{3})/, "$1-$2")
       selectedEndereco = { type: "saved", idEndereco: radio.value }
       updateShippingOptions(radio.dataset.estado)
-    } else selectedEndereco = null
+    } else {
+      selectedEndereco = null
+    }
   })
 
   // === PAGAMENTO SALVO ===
@@ -171,35 +180,39 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("pixForm").style.display = "none"
       document.getElementById("boletoForm").style.display = "none"
       selectedPagamento = { type: "saved", id: radio.value }
-    } else selectedPagamento = null
+    } else {
+      selectedPagamento = null
+    }
   })
 
   // === NOVO PAGAMENTO ===
   enableRadioToggle('input[name="novo_pagamento_tipo"]', (radio, checked) => {
     document.querySelectorAll(".pagamento-card").forEach((c) => c.classList.remove("selected"))
-    document.querySelectorAll(".pagamento-novo").forEach((c) => c.classList.remove("selected"))
+    document.querySelectorAll(".method-option").forEach((c) => c.classList.remove("selected"))
     document.getElementById("cartaoForm").style.display = "none"
     document.getElementById("pixForm").style.display = "none"
     document.getElementById("boletoForm").style.display = "none"
 
     if (checked) {
-      const card = radio.closest(".pagamento-novo")
+      const card = radio.closest(".method-option")
       card.classList.add("selected")
       if (radio.value === "cartao_credito") document.getElementById("cartaoForm").style.display = "block"
       else if (radio.value === "pix") document.getElementById("pixForm").style.display = "block"
       else if (radio.value === "boleto") document.getElementById("boletoForm").style.display = "block"
       selectedPagamento = { type: "new", metodo: radio.value }
-    } else selectedPagamento = null
+    } else {
+      selectedPagamento = null
+    }
   })
 
   // === FORMATADORES ===
-  document.getElementById("numeroCartao").addEventListener("input", function () {
+  document.getElementById("numeroCartao")?.addEventListener("input", function () {
     this.value = this.value.replace(/\D/g, "").replace(/(\d{4})/g, "$1 ").trim()
   })
-  document.getElementById("validadeCartao").addEventListener("input", function () {
+  document.getElementById("validadeCartao")?.addEventListener("input", function () {
     this.value = this.value.replace(/\D/g, "").replace(/(\d{2})(\d{2})/, "$1/$2")
   })
-  document.getElementById("cvvCartao").addEventListener("input", function () {
+  document.getElementById("cvvCartao")?.addEventListener("input", function () {
     this.value = this.value.replace(/\D/g, "")
   })
 

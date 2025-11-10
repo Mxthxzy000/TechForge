@@ -1,3 +1,4 @@
+
 <?php
 require '../config.php';
 require '../session.php';
@@ -61,7 +62,6 @@ if ($montagemId) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -153,7 +153,6 @@ if ($montagemId) {
                             <div class="list-enderecos" id="listEnderecos">
                                 <?php foreach ($enderecos as $endereco): ?>
                                     <label class="endereco-card">
-                                        <!-- Radio is now directly in label for native clickability -->
                                         <input type="radio" name="endereco" value="<?php echo $endereco['idEndereco']; ?>" 
                                                data-estado="<?php echo $endereco['estado']; ?>"
                                                class="endereco-radio">
@@ -233,7 +232,6 @@ if ($montagemId) {
                             <div class="list-pagamentos" id="listPagamentos">
                                 <?php foreach ($pagamentos as $pagamento): ?>
                                     <label class="pagamento-card">
-                                        <!-- Radio is now directly in label for native clickability -->
                                         <input type="radio" name="pagamento" value="<?php echo $pagamento['idFormaPagamento']; ?>" 
                                                data-tipo="<?php echo htmlspecialchars($pagamento['tipoPagamento']); ?>"
                                                class="pagamento-radio">

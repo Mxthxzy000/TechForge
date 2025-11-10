@@ -115,6 +115,7 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
+  position: relative;
 }
 
 .endereco-card:hover,
@@ -124,29 +125,17 @@ body {
   background: #fffbf0;
 }
 
-.endereco-card input[type="radio"]:checked,
-.pagamento-card input[type="radio"]:checked,
-.frete-option input[type="radio"]:checked {
-  accent-color: #facc15;
-}
-
-.endereco-card input[type="radio"]:checked ~ .endereco-info,
-.pagamento-card input[type="radio"]:checked ~ .pagamento-info,
-.frete-option input[type="radio"]:checked ~ .frete-info {
-  color: #111827;
-  font-weight: 500;
-}
-
-.endereco-card:has(input[type="radio"]:checked),
-.pagamento-card:has(input[type="radio"]:checked),
-.frete-option:has(input[type="radio"]:checked) {
+.endereco-card.selected,
+.pagamento-card.selected,
+.frete-option.selected {
   border-color: #facc15;
   background: #fffbf0;
   box-shadow: 0 4px 12px rgba(250, 204, 21, 0.2);
 }
 
 .endereco-card input[type="radio"],
-.pagamento-card input[type="radio"] {
+.pagamento-card input[type="radio"],
+.frete-option input[type="radio"] {
   margin-top: 2px;
   cursor: pointer;
   accent-color: #facc15;
@@ -332,6 +321,12 @@ body {
   margin: 15px 0;
 }
 
+.checkout-section input:focus {
+  border-color: white;
+  border-style: none;
+  box-shadow: none;
+}
+
 .method-option {
   display: flex;
   align-items: center;
@@ -353,7 +348,6 @@ body {
 
 .method-option input[type="radio"] {
   cursor: pointer;
-  accent-color: #facc15;
 }
 
 .method-option span {
@@ -393,7 +387,6 @@ body {
 
 .checkbox-save input[type="checkbox"] {
   cursor: pointer;
-  accent-color: #facc15;
   width: 18px;
   height: 18px;
 }
@@ -447,6 +440,12 @@ body {
 .btn-cancel {
   background-color: #e53935;
   color: white;
+  width: 100%;
+  font-size: 16px;
+  padding: 16px;
+  margin-top: 20px;
+  text-align: center;
+  
 }
 
 .btn-cancel:hover {
