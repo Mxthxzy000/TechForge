@@ -278,16 +278,12 @@
   opacity: 1;
 }
 
-.marca-option.selected {
-  border-color: #f8c10d;
+.marca-option.active {
   box-shadow: 0 0 10px #f8c10d;
   background-color: #1a2a3c;
 }
 
-.marca-option.selected img {
-  opacity: 1;
-  transform: scale(1.08);
-}
+
 
 /* === CHECKBOXES DE PEÇAS === */
 .tipos-pecas {
