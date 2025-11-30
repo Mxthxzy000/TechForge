@@ -187,12 +187,6 @@ $products = $result->fetch_all(MYSQLI_ASSOC);
             <span class="linha"></span>
             <li><a href="../Catalogo/catalogo.php">PRODUTOS</a> <ion-icon name="bag-outline" class="navicon"></ion-icon></li>
             <span class="linha"></span>
-            <li><a href="#">OFERTAS</a> <ion-icon class="navicon" name="pricetags-outline"></ion-icon></li>
-            <span class="linha"></span>
-            <li><a href="../MontarPC/montarpc.php">MONTE SEU PC</a> <ion-icon class="navicon" name="desktop-outline"></ion-icon></li>
-            <span class="linha"></span>
-            <li><a href="#">GAMER</a> <ion-icon class="navicon" name="game-controller-outline"></ion-icon></li>
-            <span class="linha"></span>
             <li><a href="../Sobre/sobre.php">SOBRE NÓS</a> <ion-icon class="navicon" name="business-outline"></ion-icon></li>
         </ul>
     </nav>
@@ -280,14 +274,12 @@ $products = $result->fetch_all(MYSQLI_ASSOC);
                 <div class="links">
                     <li><a href="../Sobre/sobre.php">Sobre nós</a></li>
                     <li><a href="#">Política De Privacidade</a></li>
-                    <li><a href="#">Parceiros</a></li>
                 </div>
             </ul>
             <ul>
                 <h3>AJUDA</h3>
                 <div class="links">
                     <li><a href="../Fale Conosco/fale.php">Fale Conosco</a></li>
-                    <li><a href="#">Chat Suporte</a></li>
                     <li><a href="../Perfil/perfil.php">Sua Conta</a></li>
                 </div>
             </ul>
@@ -296,7 +288,6 @@ $products = $result->fetch_all(MYSQLI_ASSOC);
                 <div class="links">
                     <li><a href="../Catalogo/catalogo.php">Catálogo</a></li>
                     <li><a href="../Fale Conosco/fale.php">Suporte</a></li>
-                    <li><a href="#">Como Escolher</a></li>
                 </div>
             </ul>
             <ul>
@@ -315,9 +306,12 @@ $products = $result->fetch_all(MYSQLI_ASSOC);
     </footer>
 
     <script src="../Comum/common.js"></script>
+    <!-- CRITICAL: Define sessionKey BEFORE loading selecionar-componente.js -->
     <script>
-        const componentType = '<?php echo $tipo; ?>';
-        const sessionKey = '<?php echo $component['session']; ?>';
+        window.sessionKey = '<?php echo addslashes($component['session']); ?>';
+        window.componentType = '<?php echo addslashes($tipo); ?>';
+        console.log('Session key definida:', window.sessionKey);
+        console.log('Component type:', window.componentType);
     </script>
     <script src="selecionar-componente.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
