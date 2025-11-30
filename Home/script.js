@@ -67,66 +67,82 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   })
 
-
-function addToCart(productId) {
-  fetch("../Catalogo/addToCart.php", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: `idProduto=${productId}`,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.needsLogin) {
-        window.showNotification("Faça login para adicionar produtos ao carrinho!", "warning")
-        return
-      }
-
-      if (data.error) {
-        window.showNotification(data.error, "error")
-        return
-      }
-
-      if (data.message) {
-        window.showNotification(data.message, "success")
-      }
+  /**
+   * Adiciona produto ao carrinho
+   * @param {string} productId - ID do produto
+   */
+  function addToCart(productId) {
+    fetch("../Carrinho/cartAPI.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `action=addToCart&idProduto=${productId}&quantidade=1`,
     })
-    .catch((error) => {
-      window.showNotification("Erro ao adicionar ao carrinho", "error")
-    })
-}
-
-function viewDetails(productId) {
-  window.showNotification("Página de detalhes em desenvolvimento!", "info")
-}
-
-function updateCartBadge() {
-  fetch("../Carrinho/cartAPI.php?action=getCart")
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.needsLogin) return
-
-      const totalItems = data.produtos.reduce((sum, item) => sum + item.quantidade, 0)
-
-      const cartButton = document.getElementById("carrinho")
-      if (cartButton) {
-        const existingBadge = cartButton.querySelector(".cart-badge")
-        if (existingBadge) {
-          existingBadge.remove()
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.needsLogin) {
+          window.showNotification("Faça login para adicionar produtos ao carrinho!", "warning")
+          setTimeout(() => {
+            window.location.href = "../Login/login.php"
+          }, 2000)
+          return
         }
 
-        if (totalItems > 0) {
-          const badge = document.createElement("span")
-          badge.className = "cart-badge"
-          badge.textContent = totalItems
-          cartButton.style.position = "relative"
-          cartButton.appendChild(badge)
+        if (data.error) {
+          window.showNotification(data.error, "error")
+          return
         }
-      }
-    })
-    .catch((error) => console.error("Erro ao atualizar badge:", error))
-}
 
-updateCartBadge()
+        if (data.success) {
+          window.showNotification(data.message || "Produto adicionado ao carrinho!", "success")
+          updateCartBadge()
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao adicionar ao carrinho:", error)
+        window.showNotification("Erro ao adicionar ao carrinho. Tente novamente.", "error")
+      })
+  }
+
+  /**
+   * Redireciona para página de detalhes do produto
+   * @param {string} productId - ID do produto
+   */
+  function showProductDetails(productId) {
+    window.location.href = `../Detalhes/detalhes.php?id=${productId}`
+  }
+
+  /**
+   * Atualiza o badge do carrinho com quantidade total
+   */
+  function updateCartBadge() {
+    fetch("../Carrinho/cartAPI.php?action=getCart")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.needsLogin) return
+
+        const totalItems = data.produtos.reduce((sum, item) => sum + item.quantidade, 0)
+
+        const cartButton = document.getElementById("carrinho")
+        if (cartButton) {
+          const existingBadge = cartButton.querySelector(".cart-badge")
+          if (existingBadge) {
+            existingBadge.remove()
+          }
+
+          if (totalItems > 0) {
+            const badge = document.createElement("span")
+            badge.className = "cart-badge"
+            badge.textContent = totalItems
+            cartButton.style.position = "relative"
+            cartButton.appendChild(badge)
+          }
+        }
+      })
+      .catch((error) => console.error("Erro ao atualizar badge:", error))
+  }
+
+  // Atualiza badge ao carregar a página
+  updateCartBadge()
 })

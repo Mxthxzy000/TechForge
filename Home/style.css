@@ -120,7 +120,7 @@
 
 /* primeira leva de cards */
 .card1 {
-  background-color: #ffffff;
+  background-color: #1a2a3c;
   width: 275px;
   height: 125px;
   border-radius: 15px;
@@ -209,7 +209,7 @@
 }
 
 .btn-see-more {
-  background-color: #ffffff;
+  background-color: #2b3640;
   color: #fff;
 }
 

@@ -2,11 +2,20 @@
 require '../config.php';
 require '../session.php';
 
+// Garantir que não há saída antes do JSON
+ob_start();
+
 header('Content-Type: application/json; charset=utf-8');
 
-if (empty($_SESSION['idUsuario'])) {
-    echo json_encode(['error' => 'Usuário não autenticado']);
+// Função para enviar resposta JSON limpa
+function sendResponse($data) {
+    ob_clean(); // Limpa qualquer saída anterior
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit;
+}
+
+if (empty($_SESSION['idUsuario'])) {
+    sendResponse(['error' => 'Usuário não autenticado']);
 }
 
 $idUsuario = $_SESSION['idUsuario'];
@@ -23,8 +32,7 @@ if ($action === 'getAddresses') {
         $addresses[] = $row;
     }
     
-    echo json_encode(['addresses' => $addresses]);
-    exit;
+    sendResponse(['addresses' => $addresses]);
 }
 
 if ($action === 'addAddress') {
@@ -38,19 +46,17 @@ if ($action === 'addAddress') {
     $tipoEndereco = trim($_POST['tipoEndereco'] ?? 'entrega');
     
     if (empty($cep) || empty($rua) || empty($bairro) || empty($cidade) || empty($estado)) {
-        echo json_encode(['error' => 'CEP, rua, bairro, cidade e estado são obrigatórios']);
-        exit;
+        sendResponse(['error' => 'CEP, rua, bairro, cidade e estado são obrigatórios']);
     }
     
     $stmt = $conn->prepare("INSERT INTO endereco (idUsuario, cep, rua, numero, complemento, bairro, cidade, estado, tipoEndereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param('issssssss', $idUsuario, $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $tipoEndereco);
     
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Endereço adicionado com sucesso!']);
+        sendResponse(['success' => true, 'message' => 'Endereço adicionado com sucesso!']);
     } else {
-        echo json_encode(['error' => 'Erro ao adicionar endereço']);
+        sendResponse(['error' => 'Erro ao adicionar endereço: ' . $stmt->error]);
     }
-    exit;
 }
 
 if ($action === 'updateAddress') {
@@ -65,78 +71,145 @@ if ($action === 'updateAddress') {
     $tipoEndereco = trim($_POST['tipoEndereco'] ?? 'entrega');
     
     if ($idEndereco <= 0) {
-        echo json_encode(['error' => 'ID de endereço inválido']);
-        exit;
+        sendResponse(['error' => 'ID de endereço inválido']);
     }
     
     if (empty($cep) || empty($rua) || empty($bairro) || empty($cidade) || empty($estado)) {
-        echo json_encode(['error' => 'CEP, rua, bairro, cidade e estado são obrigatórios']);
-        exit;
+        sendResponse(['error' => 'CEP, rua, bairro, cidade e estado são obrigatórios']);
     }
     
     $stmt = $conn->prepare("UPDATE endereco SET cep = ?, rua = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, estado = ?, tipoEndereco = ? WHERE idEndereco = ? AND idUsuario = ?");
     $stmt->bind_param('ssssssssii', $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $tipoEndereco, $idEndereco, $idUsuario);
     
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Endereço atualizado com sucesso!']);
+        sendResponse(['success' => true, 'message' => 'Endereço atualizado com sucesso!']);
     } else {
-        echo json_encode(['error' => 'Erro ao atualizar endereço']);
+        sendResponse(['error' => 'Erro ao atualizar endereço: ' . $stmt->error]);
     }
-    exit;
 }
 
 if ($action === 'deleteAddress') {
+    // Log para debug
+    error_log("=== DELETE ADDRESS ===");
+    error_log("POST: " . print_r($_POST, true));
+    error_log("ID Usuario: $idUsuario");
+    
     $idEndereco = intval($_POST['idEndereco'] ?? 0);
     
+    error_log("ID Endereco: $idEndereco");
+    
     if ($idEndereco <= 0) {
-        echo json_encode(['error' => 'ID de endereço inválido']);
-        exit;
+        sendResponse([
+            'error' => 'ID de endereço inválido',
+            'debug' => [
+                'idEndereco_recebido' => $_POST['idEndereco'] ?? 'não enviado',
+                'idEndereco_processado' => $idEndereco
+            ]
+        ]);
     }
     
-    $stmt = $conn->prepare("DELETE FROM endereco WHERE idEndereco = ? AND idUsuario = ?");
-    $stmt->bind_param('ii', $idEndereco, $idUsuario);
+    // Verificar se o endereço existe e pertence ao usuário
+    $checkStmt = $conn->prepare("SELECT idEndereco, rua, cidade FROM endereco WHERE idEndereco = ? AND idUsuario = ?");
+    if (!$checkStmt) {
+        sendResponse(['error' => 'Erro ao preparar consulta: ' . $conn->error]);
+    }
     
-    if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Endereço removido com sucesso!']);
+    $checkStmt->bind_param('ii', $idEndereco, $idUsuario);
+    
+    if (!$checkStmt->execute()) {
+        sendResponse(['error' => 'Erro ao executar consulta: ' . $checkStmt->error]);
+    }
+    
+    $result = $checkStmt->get_result();
+    $endereco = $result->fetch_assoc();
+    
+    error_log("Endereço encontrado: " . ($endereco ? "SIM" : "NÃO"));
+    if ($endereco) {
+        error_log("Detalhes: " . print_r($endereco, true));
+    }
+    
+    if (!$endereco) {
+        sendResponse([
+            'error' => 'Endereço não encontrado ou você não tem permissão',
+            'debug' => [
+                'idEndereco' => $idEndereco,
+                'idUsuario' => $idUsuario,
+                'encontrado' => false
+            ]
+        ]);
+    }
+    
+    $checkStmt->close();
+    
+    // Executar a exclusão
+    $deleteStmt = $conn->prepare("DELETE FROM endereco WHERE idEndereco = ? AND idUsuario = ?");
+    if (!$deleteStmt) {
+        sendResponse(['error' => 'Erro ao preparar DELETE: ' . $conn->error]);
+    }
+    
+    $deleteStmt->bind_param('ii', $idEndereco, $idUsuario);
+    
+    if (!$deleteStmt->execute()) {
+        error_log("Erro ao executar DELETE: " . $deleteStmt->error);
+        sendResponse([
+            'error' => 'Erro ao executar DELETE',
+            'debug' => [
+                'mysql_error' => $deleteStmt->error,
+                'mysql_errno' => $deleteStmt->errno
+            ]
+        ]);
+    }
+    
+    $affected = $deleteStmt->affected_rows;
+    error_log("Linhas afetadas: $affected");
+    
+    $deleteStmt->close();
+    
+    if ($affected > 0) {
+        sendResponse([
+            'success' => true,
+            'message' => 'Endereço removido com sucesso!'
+        ]);
     } else {
-        echo json_encode(['error' => 'Erro ao remover endereço']);
+        sendResponse([
+            'error' => 'Nenhuma linha foi afetada',
+            'debug' => [
+                'affected_rows' => $affected,
+                'idEndereco' => $idEndereco,
+                'idUsuario' => $idUsuario
+            ]
+        ]);
     }
-    exit;
 }
 
 if ($action === 'searchCEP') {
     $cep = preg_replace('/[^0-9]/', '', $_GET['cep'] ?? '');
     
     if (strlen($cep) !== 8) {
-        echo json_encode(['error' => 'CEP inválido']);
-        exit;
+        sendResponse(['error' => 'CEP inválido']);
     }
     
     $url = "https://viacep.com.br/ws/{$cep}/json/";
     $response = @file_get_contents($url);
     
     if ($response === false) {
-        echo json_encode(['error' => 'Erro ao buscar CEP']);
-        exit;
+        sendResponse(['error' => 'Erro ao buscar CEP']);
     }
     
     $data = json_decode($response, true);
     
     if (isset($data['erro'])) {
-        echo json_encode(['error' => 'CEP não encontrado']);
-        exit;
+        sendResponse(['error' => 'CEP não encontrado']);
     }
     
-    echo json_encode([
+    sendResponse([
         'success' => true,
         'rua' => $data['logradouro'] ?? '',
         'bairro' => $data['bairro'] ?? '',
         'cidade' => $data['localidade'] ?? '',
         'estado' => $data['uf'] ?? ''
     ]);
-    exit;
 }
 
-echo json_encode(['error' => 'Ação inválida']);
-exit;
+sendResponse(['error' => 'Ação inválida', 'action_received' => $action]);
 ?>

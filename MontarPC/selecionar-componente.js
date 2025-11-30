@@ -1,5 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const sessionKey = "your_session_key_here" // Declare sessionKey variable
+  // Get sessionKey from the page (defined in PHP)
+  const sessionKey = window.sessionKey || '';
+  
+  if (!sessionKey) {
+    console.error('Session key não encontrada');
+    return;
+  }
+
   const productCards = document.querySelectorAll(".product-card")
 
   productCards.forEach((card) => {
@@ -11,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const productId = card.dataset.productId
       const productName = card.dataset.productName
       const productPrice = card.dataset.productPrice
-      const productImage = card.dataset.productImage
+      const productImage = card.querySelector('.product-image img')?.src || ''
 
       // Save to session via API
       fetch("select-component.php", {
@@ -37,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
               window.location.href = "montarpc.php"
             }, 800)
           } else {
-            alert("Erro ao selecionar componente")
+            alert("Erro ao selecionar componente: " + (data.error || 'Erro desconhecido'))
           }
         })
         .catch((error) => {

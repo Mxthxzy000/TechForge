@@ -19,8 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const allTagOptions = document.querySelectorAll(".tag-option")
 
   const showNotification = (message, type) => {
-    console.log(`Notification (${type}): ${message}`)
-    // Implement notification logic here
+    if (window.showNotification) {
+      window.showNotification(message, type)
+    } else {
+      console.log(`Notification (${type}): ${message}`)
+    }
   }
 
   if (tagSearchInput) {
@@ -303,14 +306,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.classList.contains("tag-option")) {
       const tag = e.target.getAttribute("data-tag")
 
-      console.log("Tag clicada:", tag)
-
       // Toggle da tag individual
       if (e.target.classList.contains("active")) {
-        // Se já está ativa, desmarca
         e.target.classList.remove("active")
       } else {
-        // Se não está ativa, marca
         e.target.classList.add("active")
       }
 
@@ -332,14 +331,10 @@ document.addEventListener("DOMContentLoaded", () => {
         activeTags.push(tagEl.getAttribute("data-tag"))
       })
 
-      console.log("Tags ativas:", activeTags)
-
       if (activeTags.length === 0) {
-        // Se não há tags selecionadas, volta para todos os produtos
         loadProducts()
         document.getElementById("pageTitle").textContent = "Produtos"
       } else {
-        // Filtra por múltiplas tags
         filterByMultipleTags(activeTags)
       }
     }
@@ -347,21 +342,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Função para filtrar por múltiplas tags
   function filterByMultipleTags(tags) {
-    console.log("Filtrando por múltiplas tags:", tags)
-
     let url = `funcionalidadesCatalogo.php?action=filterMultipleTags`
 
     tags.forEach((tag, index) => {
       url += `&tags[]=${encodeURIComponent(tag)}`
     })
 
-    console.log("URL da requisição:", url)
-
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        console.log(`Resultados para tags "${tags.join(", ")}":`, data)
-
         if (data.error) {
           console.error("Erro:", data.error)
           return
@@ -396,14 +385,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function applyFilters() {
     manterTamanhoFiltro()
 
-    console.log("Filtros ativos:", currentFilters)
-
     // Verifica se há algum filtro ativo
     const hasActiveFilter =
       currentFilters.linha || currentFilters.tag || currentFilters.precoMin || currentFilters.precoMax
 
     if (!hasActiveFilter) {
-      // Se não há filtros ativos, carrega todos os produtos
       loadProducts()
       document.getElementById("pageTitle").textContent = "Produtos"
       return
@@ -428,12 +414,9 @@ document.addEventListener("DOMContentLoaded", () => {
       url += `&precoMax=${encodeURIComponent(currentFilters.precoMax)}`
     }
 
-    console.log("URL da requisição:", url)
-
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Resposta do servidor:", data)
         if (data.error) {
           console.error("Erro:", data.error)
           return
@@ -463,10 +446,9 @@ document.addEventListener("DOMContentLoaded", () => {
       })
   }
 
-  // Exibir produtos - FORMATAÇÃO IDÊNTICA À HOME
+  // Exibir produtos
   function displayProducts(products) {
     const container = document.getElementById("products")
-    const resultCount = document.getElementById("resultCount")
 
     if (products.length === 0) {
       container.innerHTML = "<p>Nenhum produto encontrado.</p>"
@@ -502,33 +484,40 @@ document.addEventListener("DOMContentLoaded", () => {
       )
       .join("")
 
+    // CRÍTICO: Adicionar event listeners após criar HTML
     container.querySelectorAll(".btn-see-more").forEach((button) => {
       button.addEventListener("click", function () {
         const productId = this.getAttribute("data-id")
         showProductDetails(productId)
       })
     })
+
+    container.querySelectorAll(".btn-add-cart").forEach((button) => {
+      button.addEventListener("click", function () {
+        const productId = this.getAttribute("data-id")
+        addToCart(productId)
+      })
+    })
   }
 
-  container.querySelectorAll(".btn-add-cart").forEach((button) => {
-    button.addEventListener("click", function () {
-      const productId = this.getAttribute("data-id")
-      addToCart(productId)
-    })
-  })
-
+  /**
+   * Adiciona produto ao carrinho
+   */
   function addToCart(idProduto) {
     fetch("../Carrinho/cartAPI.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `action=addToCart&idProduto=${idProduto}`,
+      body: `action=addToCart&idProduto=${idProduto}&quantidade=1`,
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.needsLogin) {
           showNotification("Faça login para adicionar produtos ao carrinho!", "warning")
+          setTimeout(() => {
+            window.location.href = "../Login/login.php"
+          }, 2000)
           return
         }
 
@@ -537,21 +526,27 @@ document.addEventListener("DOMContentLoaded", () => {
           return
         }
 
-        if (data.message) {
-          showNotification(data.message, "success")
+        if (data.success) {
+          showNotification(data.message || "Produto adicionado ao carrinho!", "success")
+          updateCartBadge()
         }
       })
-      .catch(() => {
-        showNotification("Erro ao adicionar ao carrinho", "error")
+      .catch((error) => {
+        console.error("Erro ao adicionar ao carrinho:", error)
+        showNotification("Erro ao adicionar ao carrinho. Tente novamente.", "error")
       })
   }
 
-
+  /**
+   * Redireciona para detalhes do produto
+   */
   function showProductDetails(productId) {
     window.location.href = `../Detalhes/detalhes.php?id=${productId}`
   }
 
-  // Função para atualizar o badge do carrinho usando a API do banco de dados
+  /**
+   * Atualiza o badge do carrinho
+   */
   function updateCartBadge() {
     fetch("../Carrinho/cartAPI.php?action=getCart")
       .then((response) => response.json())
@@ -591,6 +586,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Executar quando a DOM carregar
   manterTamanhoFiltro()
 })

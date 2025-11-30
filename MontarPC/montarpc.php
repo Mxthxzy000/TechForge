@@ -369,14 +369,12 @@ foreach ($build as $key => $component) {
                 <div class="links">
                     <li><a href="../Sobre/sobre.php">Sobre nós</a></li>
                     <li><a href="#">Política De Privacidade</a></li>
-                    <li><a href="#">Parceiros</a></li>
                 </div>
             </ul>
             <ul>
                 <h3>AJUDA</h3>
                 <div class="links">
                     <li><a href="../Fale Conosco/fale.php">Fale Conosco</a></li>
-                    <li><a href="#">Chat Suporte</a></li>
                     <li><a href="../Perfil/perfil.php">Sua Conta</a></li>
                 </div>
             </ul>
@@ -385,7 +383,6 @@ foreach ($build as $key => $component) {
                 <div class="links">
                     <li><a href="../Catalogo/catalogo.php">Catálogo</a></li>
                     <li><a href="../Fale Conosco/fale.php">Suporte</a></li>
-                    <li><a href="#">Como Escolher</a></li>
                 </div>
             </ul>
             <ul>
