@@ -502,13 +502,6 @@ document.addEventListener("DOMContentLoaded", () => {
       )
       .join("")
 
-    container.querySelectorAll(".btn-add-cart").forEach((button) => {
-      button.addEventListener("click", function () {
-        const productId = this.getAttribute("data-id")
-        addToCart(productId)
-      })
-    })
-
     container.querySelectorAll(".btn-see-more").forEach((button) => {
       button.addEventListener("click", function () {
         const productId = this.getAttribute("data-id")
@@ -517,14 +510,20 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  // Função para adicionar ao carrinho
-  function addToCart(productId) {
-    fetch("addToCart.php", {
+  container.querySelectorAll(".btn-add-cart").forEach((button) => {
+    button.addEventListener("click", function () {
+      const productId = this.getAttribute("data-id")
+      addToCart(productId)
+    })
+  })
+
+  function addToCart(idProduto) {
+    fetch("../Carrinho/cartAPI.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `idProduto=${productId}`,
+      body: `action=addToCart&idProduto=${idProduto}`,
     })
       .then((response) => response.json())
       .then((data) => {
@@ -542,10 +541,11 @@ document.addEventListener("DOMContentLoaded", () => {
           showNotification(data.message, "success")
         }
       })
-      .catch((error) => {
+      .catch(() => {
         showNotification("Erro ao adicionar ao carrinho", "error")
       })
   }
+
 
   function showProductDetails(productId) {
     window.location.href = `../Detalhes/detalhes.php?id=${productId}`

@@ -63,69 +63,70 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".btn-see-more").forEach((button) => {
     button.addEventListener("click", function () {
       const productId = this.getAttribute("data-id")
-      viewDetails(productId)
+      showProductDetails(productId)
     })
   })
 
-  function addToCart(productId) {
-    fetch("../Catalogo/addToCart.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: `idProduto=${productId}`,
+
+function addToCart(productId) {
+  fetch("../Catalogo/addToCart.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `idProduto=${productId}`,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.needsLogin) {
+        window.showNotification("Faça login para adicionar produtos ao carrinho!", "warning")
+        return
+      }
+
+      if (data.error) {
+        window.showNotification(data.error, "error")
+        return
+      }
+
+      if (data.message) {
+        window.showNotification(data.message, "success")
+      }
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.needsLogin) {
-          window.showNotification("Faça login para adicionar produtos ao carrinho!", "warning")
-          return
+    .catch((error) => {
+      window.showNotification("Erro ao adicionar ao carrinho", "error")
+    })
+}
+
+function viewDetails(productId) {
+  window.showNotification("Página de detalhes em desenvolvimento!", "info")
+}
+
+function updateCartBadge() {
+  fetch("../Carrinho/cartAPI.php?action=getCart")
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.needsLogin) return
+
+      const totalItems = data.produtos.reduce((sum, item) => sum + item.quantidade, 0)
+
+      const cartButton = document.getElementById("carrinho")
+      if (cartButton) {
+        const existingBadge = cartButton.querySelector(".cart-badge")
+        if (existingBadge) {
+          existingBadge.remove()
         }
 
-        if (data.error) {
-          window.showNotification(data.error, "error")
-          return
+        if (totalItems > 0) {
+          const badge = document.createElement("span")
+          badge.className = "cart-badge"
+          badge.textContent = totalItems
+          cartButton.style.position = "relative"
+          cartButton.appendChild(badge)
         }
+      }
+    })
+    .catch((error) => console.error("Erro ao atualizar badge:", error))
+}
 
-        if (data.message) {
-          window.showNotification(data.message, "success")
-        }
-      })
-      .catch((error) => {
-        window.showNotification("Erro ao adicionar ao carrinho", "error")
-      })
-  }
-
-  function viewDetails(productId) {
-    window.showNotification("Página de detalhes em desenvolvimento!", "info")
-  }
-
-  function updateCartBadge() {
-    fetch("../Carrinho/cartAPI.php?action=getCart")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.needsLogin) return
-
-        const totalItems = data.produtos.reduce((sum, item) => sum + item.quantidade, 0)
-
-        const cartButton = document.getElementById("carrinho")
-        if (cartButton) {
-          const existingBadge = cartButton.querySelector(".cart-badge")
-          if (existingBadge) {
-            existingBadge.remove()
-          }
-
-          if (totalItems > 0) {
-            const badge = document.createElement("span")
-            badge.className = "cart-badge"
-            badge.textContent = totalItems
-            cartButton.style.position = "relative"
-            cartButton.appendChild(badge)
-          }
-        }
-      })
-      .catch((error) => console.error("Erro ao atualizar badge:", error))
-  }
-
-  updateCartBadge()
+updateCartBadge()
 })

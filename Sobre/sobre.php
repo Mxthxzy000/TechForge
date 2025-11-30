@@ -150,7 +150,7 @@ if (!isset($conn)) {
 
         <div class="structure-grid">
             <div class="structure-card">
-                <div class="structure-image img-1"></div>
+                <div class="structure-image img-1"><img src="../imagens/Pré" alt=""></div>
                 <div class="structure-caption">TechForge - Loja Matriz - São Paulo, SP</div>
             </div>
 
