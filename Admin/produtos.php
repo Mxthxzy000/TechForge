@@ -96,14 +96,15 @@ $produtos = $conn->query("SELECT * FROM produtos ORDER BY idProduto DESC");
                                     <td>
                                         <img src="<?php echo htmlspecialchars($produto['imagem']); ?>" 
                                              alt="<?php echo htmlspecialchars($produto['nomeProduto']); ?>" 
-                                             class="product-thumb">
+                                             class="product-thumb"
+                                             onerror="this.src='../imagens/placeholder.png'">
                                     </td>
                                     <td><?php echo htmlspecialchars($produto['nomeProduto']); ?></td>
                                     <td>R$ <?php echo number_format($produto['valorProduto'], 2, ',', '.'); ?></td>
                                     <td><?php echo $produto['quantidadeProduto']; ?></td>
                                     <td><?php echo htmlspecialchars($produto['tipoProduto']); ?></td>
                                     <td>
-                                        <button onclick='editProduct(<?php echo json_encode($produto); ?>)' class="btn-icon" title="Editar">
+                                        <button onclick='editProduct(<?php echo json_encode($produto, JSON_HEX_APOS | JSON_HEX_QUOT); ?>)' class="btn-icon" title="Editar">
                                             <ion-icon name="create-outline"></ion-icon>
                                         </button>
                                         <button onclick="deleteProduct(<?php echo $produto['idProduto']; ?>)" class="btn-icon danger" title="Excluir">
@@ -143,25 +144,41 @@ $produtos = $conn->query("SELECT * FROM produtos ORDER BY idProduto DESC");
                     
                     <div class="form-group">
                         <label for="precoProduto">Preço (R$) *</label>
-                        <input type="number" id="precoProduto" name="precoProduto" step="0.01" required>
+                        <input type="number" id="precoProduto" name="valorProduto" step="0.01" min="0" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="estoqueProduto">Estoque *</label>
-                        <input type="number" id="estoqueProduto" name="estoqueProduto" required>
+                        <input type="number" id="estoqueProduto" name="quantidadeProduto" min="0" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="categoriaProduto">Categoria *</label>
-                        <input type="text" id="categoriaProduto" name="categoriaProduto" required>
+                        <input type="text" id="categoriaProduto" name="tipoProduto" required placeholder="Ex: Processador, Placa de Vídeo">
                     </div>
                 </div>
 
                 <div class="form-group">
+                    <label for="linhaProduto">Linha do Produto</label>
+                    <select id="linhaProduto" name="linhaProduto" class="form-input">
+                        <option value="Genérico">Genérico</option>
+                        <option value="Intel">Intel</option>
+                        <option value="AMD">AMD</option>
+                        <option value="NVIDIA">NVIDIA</option>
+                        <option value="Corsair">Corsair</option>
+                        <option value="Kingston">Kingston</option>
+                        <option value="Samsung">Samsung</option>
+                        <option value="ASUS">ASUS</option>
+                        <option value="MSI">MSI</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label for="descricaoProduto">Descrição</label>
-                    <textarea id="descricaoProduto" name="descricaoProduto" rows="4"></textarea>
+                    <textarea id="descricaoProduto" name="descricaoProduto" rows="4" placeholder="Descreva as características do produto"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -170,25 +187,14 @@ $produtos = $conn->query("SELECT * FROM produtos ORDER BY idProduto DESC");
                 </div>
 
                 <div class="form-group">
-                    <label for="linhaProduto">Linha do Produto</label>
-                    <select id="linhaProduto" name="linhaProduto" class="form-input">
-                        <option value="">Selecione...</option>
-                        <option value="Intel">Intel</option>
-                        <option value="AMD">AMD</option>
-                        <option value="NVIDIA">NVIDIA</option>
-                        <option value="Outro">Outro</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
                     <label>Imagem do Produto *</label>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <button type="button" onclick="toggleImageInput('url')" class="btn-secondary" id="btnUrlInput">URL</button>
+                        <button type="button" onclick="toggleImageInput('url')" class="btn-secondary active" id="btnUrlInput">URL</button>
                         <button type="button" onclick="toggleImageInput('file')" class="btn-secondary" id="btnFileInput">Upload</button>
                     </div>
                     
                     <div id="urlImageInput">
-                        <input type="text" id="imagemProdutoUrl" name="imagemProdutoUrl" placeholder="Cole a URL da imagem">
+                        <input type="url" id="imagemProdutoUrl" name="imagemProdutoUrl" placeholder="Cole a URL da imagem">
                     </div>
                     
                     <div id="fileImageInput" style="display: none;">
@@ -201,7 +207,7 @@ $produtos = $conn->query("SELECT * FROM produtos ORDER BY idProduto DESC");
 
                 <div class="modal-footer">
                     <button type="button" onclick="closeProductModal()" class="btn-secondary">Cancelar</button>
-                    <button type="submit" class="btn-primary">Salvar</button>
+                    <button type="submit" class="btn-primary">Salvar Produto</button>
                 </div>
             </form>
         </div>

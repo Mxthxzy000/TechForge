@@ -7,6 +7,7 @@ function openProductModal() {
   document.getElementById("modalTitle").textContent = "Novo Produto"
   document.getElementById("productForm").reset()
   document.getElementById("productId").value = ""
+  toggleImageInput("url")
 }
 
 function closeProductModal() {
@@ -61,10 +62,11 @@ if (document.getElementById("productForm")) {
         if (uploadResult.success) {
           formData.set("imagemProduto", uploadResult.imagePath)
         } else {
-          Swal.fire("Erro!", uploadResult.error, "error")
+          Swal.fire("Erro!", uploadResult.error || "Erro ao fazer upload da imagem", "error")
           return
         }
       } catch (error) {
+        console.error("Erro no upload:", error)
         Swal.fire("Erro!", "Erro ao fazer upload da imagem", "error")
         return
       }
@@ -81,15 +83,18 @@ if (document.getElementById("productForm")) {
       })
 
       const result = await response.json()
+      
+      console.log("Resposta da API:", result)
 
       if (result.success) {
         Swal.fire("Sucesso!", result.message, "success").then(() => {
           location.reload()
         })
       } else {
-        Swal.fire("Erro!", result.message, "error")
+        Swal.fire("Erro!", result.message || "Erro desconhecido", "error")
       }
     } catch (error) {
+      console.error("Erro na requisição:", error)
       Swal.fire("Erro!", "Erro ao processar requisição", "error")
     }
   })
@@ -190,12 +195,12 @@ async function viewOrderDetails(idPedido) {
                     <h3>Informações do Cliente</h3>
                     <p><strong>Nome:</strong> ${pedido.nomeUsuario}</p>
                     <p><strong>E-mail:</strong> ${pedido.emailUsuario}</p>
-                    <p><strong>Telefone:</strong> ${pedido.telefoneUsuario || "N/A"}</p>
+                    <p><strong>Telefone:</strong> ${pedido.celularUsuario || "N/A"}</p>
                     
                     <h3 style="margin-top: 20px;">Endereço de Entrega</h3>
-                    <p>${pedido.ruaEndereco}, ${pedido.numeroEndereco}</p>
-                    <p>${pedido.bairroEndereco} - ${pedido.cidadeEndereco}/${pedido.estadoEndereco}</p>
-                    <p>CEP: ${pedido.cepEndereco}</p>
+                    <p>${pedido.rua}, ${pedido.numero}</p>
+                    <p>${pedido.bairro} - ${pedido.cidade}/${pedido.estado}</p>
+                    <p>CEP: ${pedido.cep}</p>
                     
                     <h3 style="margin-top: 20px;">Itens do Pedido</h3>
                     <table style="width: 100%; border-collapse: collapse;">
@@ -224,7 +229,7 @@ async function viewOrderDetails(idPedido) {
                     </table>
                     
                     <div style="margin-top: 20px; text-align: right;">
-                        <h3>Total: R$ ${Number.parseFloat(pedido.valorTotal).toFixed(2)}</h3>
+                        <h3>Total: R$ ${Number.parseFloat(pedido.total).toFixed(2)}</h3>
                     </div>
                 </div>
             `
@@ -308,7 +313,7 @@ async function viewUserDetails(idUsuario) {
   }
 }
 
-// Montagens
+// Montagens - CORRIGIDO
 async function deleteBuild(id) {
   const result = await Swal.fire({
     title: "Tem certeza?",
@@ -324,7 +329,7 @@ async function deleteBuild(id) {
   if (result.isConfirmed) {
     const formData = new FormData()
     formData.append("action", "deleteBuild")
-    formData.append("idServico", id)
+    formData.append("idMontagem", id)
 
     try {
       const response = await fetch("adminAPI.php", {
@@ -347,9 +352,9 @@ async function deleteBuild(id) {
   }
 }
 
-async function viewBuildDetails(idServico) {
+async function viewBuildDetails(idMontagem) {
   try {
-    const response = await fetch(`adminAPI.php?action=getBuildDetails&idServico=${idServico}`)
+    const response = await fetch(`adminAPI.php?action=getBuildDetails&idMontagem=${idMontagem}`)
     const result = await response.json()
 
     if (result.success) {
@@ -360,25 +365,25 @@ async function viewBuildDetails(idServico) {
                     <h3>Informações do Cliente</h3>
                     <p><strong>Nome:</strong> ${build.nomeUsuario}</p>
                     <p><strong>E-mail:</strong> ${build.emailUsuario}</p>
-                    <p><strong>Telefone:</strong> ${build.telefoneUsuario || "N/A"}</p>
+                    <p><strong>Telefone:</strong> ${build.celularUsuario || "N/A"}</p>
                     
                     <h3 style="margin-top: 20px;">Detalhes do Build</h3>
-                    <p><strong>Nome:</strong> ${build.nomeBuild}</p>
+                    <p><strong>Nome:</strong> ${build.nomeSetup}</p>
                     <p><strong>Data:</strong> ${new Date(build.dataSolicitacao).toLocaleString("pt-BR")}</p>
                     <p><strong>Observações:</strong> ${build.observacoes || "Nenhuma"}</p>
                     
                     <h3 style="margin-top: 20px;">Componentes</h3>
-                    <p><strong>Processador:</strong> ${build.processador || "Não selecionado"}</p>
-                    <p><strong>Placa de Vídeo:</strong> ${build.placaVideo || "Não selecionado"}</p>
+                    <p><strong>Processador:</strong> ${build.cpu || "Não selecionado"}</p>
+                    <p><strong>Placa de Vídeo:</strong> ${build.gpu || "Não selecionado"}</p>
                     <p><strong>Placa-Mãe:</strong> ${build.placaMae || "Não selecionado"}</p>
-                    <p><strong>Memória RAM:</strong> ${build.memoriaRam || "Não selecionado"}</p>
+                    <p><strong>Memória RAM:</strong> ${build.ram || "Não selecionado"}</p>
                     <p><strong>Armazenamento:</strong> ${build.armazenamento || "Não selecionado"}</p>
                     <p><strong>Fonte:</strong> ${build.fonte || "Não selecionado"}</p>
                     <p><strong>Gabinete:</strong> ${build.gabinete || "Não selecionado"}</p>
                     <p><strong>Cooler:</strong> ${build.cooler || "Não selecionado"}</p>
                     
                     <div style="margin-top: 20px; text-align: right;">
-                        <h3>Valor Total: R$ ${Number.parseFloat(build.valorTotal).toFixed(2)}</h3>
+                        <h3>Valor Total: R$ ${Number.parseFloat(build.precoEstimado).toFixed(2)}</h3>
                     </div>
                 </div>
             `
@@ -395,7 +400,7 @@ function closeBuildModal() {
   document.getElementById("buildModal").classList.remove("active")
 }
 
-// Contatos
+// Contatos - CORRIGIDO
 async function deleteMessage(id) {
   const result = await Swal.fire({
     title: "Tem certeza?",
@@ -411,7 +416,7 @@ async function deleteMessage(id) {
   if (result.isConfirmed) {
     const formData = new FormData()
     formData.append("action", "deleteMessage")
-    formData.append("idContato", id)
+    formData.append("id", id)
 
     try {
       const response = await fetch("adminAPI.php", {
@@ -437,13 +442,13 @@ async function deleteMessage(id) {
 function viewMessage(contato) {
   const html = `
         <div style="text-align: left;">
-            <p><strong>Nome:</strong> ${contato.nomeContato}</p>
-            <p><strong>E-mail:</strong> ${contato.emailContato}</p>
-            <p><strong>Assunto:</strong> ${contato.assuntoContato}</p>
-            <p><strong>Data:</strong> ${new Date(contato.dataContato).toLocaleString("pt-BR")}</p>
+            <p><strong>Nome:</strong> ${contato.nome}</p>
+            <p><strong>E-mail:</strong> ${contato.email}</p>
+            <p><strong>Assunto:</strong> ${contato.assunto}</p>
+            <p><strong>Data:</strong> ${new Date(contato.data_envio).toLocaleString("pt-BR")}</p>
             <hr style="margin: 20px 0;">
             <p><strong>Mensagem:</strong></p>
-            <p style="white-space: pre-wrap;">${contato.mensagemContato}</p>
+            <p style="white-space: pre-wrap;">${contato.mensagem}</p>
         </div>
     `
 

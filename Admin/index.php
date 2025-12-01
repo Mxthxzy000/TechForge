@@ -18,7 +18,7 @@ $stats['pedidos'] = $conn->query("SELECT COUNT(*) as total FROM pedido")->fetch_
 $stats['montagens'] = $conn->query("SELECT COUNT(*) as total FROM servico_montagem")->fetch_assoc()['total'];
 $stats['contatos'] = $conn->query("SELECT COUNT(*) as total FROM contatos")->fetch_assoc()['total'];
 
-// Pedidos recentes
+// Pedidos recentes - CORRIGIDO
 $pedidosRecentes = $conn->query("
     SELECT p.*, u.nomeUsuario 
     FROM pedido p 
@@ -74,7 +74,6 @@ $pedidosRecentes = $conn->query("
             <div class="sidebar-footer">
                 <div class="admin-info">
                     <ion-icon name="person-circle-outline"></ion-icon>
-                    <!-- Corrigido de nomeAdmin para nomeAdm -->
                     <span><?php echo htmlspecialchars($_SESSION['nomeAdm']); ?></span>
                 </div>
                 <a href="../logout.php" class="btn-logout">
@@ -170,10 +169,10 @@ $pedidosRecentes = $conn->query("
                                         <td>#<?php echo $pedido['idPedido']; ?></td>
                                         <td><?php echo htmlspecialchars($pedido['nomeUsuario'] ?? 'N/A'); ?></td>
                                         <td><?php echo date('d/m/Y', strtotime($pedido['dataPedido'])); ?></td>
-                                        <td>R$ <?php echo number_format($pedido['valorTotal'], 2, ',', '.'); ?></td>
+                                        <td>R$ <?php echo number_format($pedido['total'] ?? 0, 2, ',', '.'); ?></td>
                                         <td>
-                                            <span class="status-badge <?php echo strtolower($pedido['statusPedido']); ?>">
-                                                <?php echo htmlspecialchars($pedido['statusPedido']); ?>
+                                            <span class="status-badge <?php echo strtolower($pedido['status'] ?? 'pendente'); ?>">
+                                                <?php echo htmlspecialchars($pedido['status'] ?? 'Pendente'); ?>
                                             </span>
                                         </td>
                                         <td>

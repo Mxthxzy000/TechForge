@@ -10,44 +10,83 @@ try {
     switch ($action) {
         // PRODUTOS
         case 'addProduct':
-            $stmt = $conn->prepare("INSERT INTO produtos (nomeProduto, valorProduto, quantidadeProduto, tipoProduto, linhaProduto, descricaoProduto, imagem, tagsProduto, idAdm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            // Validação dos campos obrigatórios
+            if (empty($_POST['nomeProduto']) || empty($_POST['valorProduto']) || empty($_POST['quantidadeProduto']) || empty($_POST['tipoProduto'])) {
+                echo json_encode(['success' => false, 'message' => 'Campos obrigatórios não preenchidos']);
+                break;
+            }
+            
+            $linhaProduto = !empty($_POST['linhaProduto']) ? $_POST['linhaProduto'] : 'Genérico';
+            $descricao = !empty($_POST['descricaoProduto']) ? $_POST['descricaoProduto'] : '';
+            $tags = !empty($_POST['tagsProduto']) ? $_POST['tagsProduto'] : '';
+            $imagem = !empty($_POST['imagemProduto']) ? $_POST['imagemProduto'] : '';
+            
+            $stmt = $conn->prepare("INSERT INTO produtos (nomeProduto, valorProduto, quantidadeProduto, tipoProduto, linhaProduto, descricaoProduto, imagem, tagsProduto, idAdm, vendasProduto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)");
             $stmt->bind_param("sdisssssi", 
                 $_POST['nomeProduto'],
                 $_POST['valorProduto'],
                 $_POST['quantidadeProduto'],
                 $_POST['tipoProduto'],
-                $_POST['linhaProduto'] ?? 'Genérico',
-                $_POST['descricaoProduto'],
-                $_POST['imagem'],
-                $_POST['tagsProduto'],
+                $linhaProduto,
+                $descricao,
+                $imagem,
+                $tags,
                 $_SESSION['idAdm']
             );
-            $stmt->execute();
-            echo json_encode(['success' => true, 'message' => 'Produto adicionado com sucesso!']);
+            
+            if ($stmt->execute()) {
+                echo json_encode(['success' => true, 'message' => 'Produto adicionado com sucesso!']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Erro ao adicionar produto: ' . $stmt->error]);
+            }
             break;
 
         case 'updateProduct':
+            // Validação dos campos obrigatórios
+            if (empty($_POST['idProduto']) || empty($_POST['nomeProduto']) || empty($_POST['valorProduto']) || empty($_POST['quantidadeProduto']) || empty($_POST['tipoProduto'])) {
+                echo json_encode(['success' => false, 'message' => 'Campos obrigatórios não preenchidos']);
+                break;
+            }
+            
+            $linhaProduto = !empty($_POST['linhaProduto']) ? $_POST['linhaProduto'] : 'Genérico';
+            $descricao = !empty($_POST['descricaoProduto']) ? $_POST['descricaoProduto'] : '';
+            $tags = !empty($_POST['tagsProduto']) ? $_POST['tagsProduto'] : '';
+            $imagem = !empty($_POST['imagemProduto']) ? $_POST['imagemProduto'] : '';
+            
             $stmt = $conn->prepare("UPDATE produtos SET nomeProduto=?, valorProduto=?, quantidadeProduto=?, tipoProduto=?, linhaProduto=?, descricaoProduto=?, imagem=?, tagsProduto=? WHERE idProduto=?");
             $stmt->bind_param("sdisssssi",
                 $_POST['nomeProduto'],
                 $_POST['valorProduto'],
                 $_POST['quantidadeProduto'],
                 $_POST['tipoProduto'],
-                $_POST['linhaProduto'] ?? 'Genérico',
-                $_POST['descricaoProduto'],
-                $_POST['imagem'],
-                $_POST['tagsProduto'],
+                $linhaProduto,
+                $descricao,
+                $imagem,
+                $tags,
                 $_POST['idProduto']
             );
-            $stmt->execute();
-            echo json_encode(['success' => true, 'message' => 'Produto atualizado com sucesso!']);
+            
+            if ($stmt->execute()) {
+                echo json_encode(['success' => true, 'message' => 'Produto atualizado com sucesso!']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Erro ao atualizar produto: ' . $stmt->error]);
+            }
             break;
 
         case 'deleteProduct':
+            if (empty($_POST['idProduto'])) {
+                echo json_encode(['success' => false, 'message' => 'ID do produto não fornecido']);
+                break;
+            }
+            
             $stmt = $conn->prepare("DELETE FROM produtos WHERE idProduto=?");
             $stmt->bind_param("i", $_POST['idProduto']);
-            $stmt->execute();
-            echo json_encode(['success' => true, 'message' => 'Produto excluído com sucesso!']);
+            
+            if ($stmt->execute()) {
+                echo json_encode(['success' => true, 'message' => 'Produto excluído com sucesso!']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Erro ao excluir produto: ' . $stmt->error]);
+            }
             break;
 
         // PEDIDOS
@@ -87,8 +126,29 @@ try {
 
         // USUÁRIOS
         case 'addUser':
-            // Hash the password
+            // Validação dos campos obrigatórios
+            if (empty($_POST['nomeUsuario']) || empty($_POST['sobrenomeUsuario']) || empty($_POST['emailUsuario']) || empty($_POST['senhaUsuario'])) {
+                echo json_encode(['success' => false, 'message' => 'Campos obrigatórios não preenchidos']);
+                break;
+            }
+            
+            // Verificar se email já existe
+            $checkEmail = $conn->prepare("SELECT idUsuario FROM usuario WHERE emailUsuario = ?");
+            $checkEmail->bind_param("s", $_POST['emailUsuario']);
+            $checkEmail->execute();
+            $checkEmail->store_result();
+            
+            if ($checkEmail->num_rows > 0) {
+                echo json_encode(['success' => false, 'message' => 'Este e-mail já está cadastrado']);
+                break;
+            }
+            
+            // Hash da senha
             $hashedPassword = password_hash($_POST['senhaUsuario'], PASSWORD_DEFAULT);
+            
+            $cpf = !empty($_POST['cpfUsuario']) ? $_POST['cpfUsuario'] : NULL;
+            $celular = !empty($_POST['celularUsuario']) ? $_POST['celularUsuario'] : '';
+            $nascimento = !empty($_POST['nascimentoUsuario']) ? $_POST['nascimentoUsuario'] : '0000-00-00';
             
             $stmt = $conn->prepare("INSERT INTO usuario (nomeUsuario, sobrenomeUsuario, emailUsuario, senhaUsuario, cpfUsuario, celularUsuario, nascimentoUsuario, dataCadastro) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
             $stmt->bind_param("sssssss", 
@@ -96,19 +156,38 @@ try {
                 $_POST['sobrenomeUsuario'],
                 $_POST['emailUsuario'],
                 $hashedPassword,
-                $_POST['cpfUsuario'],
-                $_POST['celularUsuario'],
-                $_POST['nascimentoUsuario']
+                $cpf,
+                $celular,
+                $nascimento
             );
-            $stmt->execute();
-            echo json_encode(['success' => true, 'message' => 'Usuário criado com sucesso!']);
+            
+            if ($stmt->execute()) {
+                echo json_encode(['success' => true, 'message' => 'Usuário criado com sucesso!']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Erro ao criar usuário: ' . $stmt->error]);
+            }
             break;
 
         case 'deleteUser':
+            if (empty($_POST['idUsuario'])) {
+                echo json_encode(['success' => false, 'message' => 'ID do usuário não fornecido']);
+                break;
+            }
+            
+            // Não permitir excluir o próprio usuário admin logado
+            if (isset($_SESSION['idUsuario']) && $_POST['idUsuario'] == $_SESSION['idUsuario']) {
+                echo json_encode(['success' => false, 'message' => 'Você não pode excluir seu próprio usuário']);
+                break;
+            }
+            
             $stmt = $conn->prepare("DELETE FROM usuario WHERE idUsuario=?");
             $stmt->bind_param("i", $_POST['idUsuario']);
-            $stmt->execute();
-            echo json_encode(['success' => true, 'message' => 'Usuário excluído com sucesso!']);
+            
+            if ($stmt->execute()) {
+                echo json_encode(['success' => true, 'message' => 'Usuário excluído com sucesso!']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Erro ao excluir usuário: ' . $stmt->error]);
+            }
             break;
 
         case 'getUserDetails':
@@ -125,7 +204,7 @@ try {
             echo json_encode(['success' => true, 'usuario' => $usuario]);
             break;
 
-        // MONTAGENS
+        // MONTAGENS - CORRIGIDO
         case 'deleteBuild':
             $stmt = $conn->prepare("DELETE FROM servico_montagem WHERE idMontagem=?");
             $stmt->bind_param("i", $_POST['idMontagem']);
@@ -146,7 +225,7 @@ try {
             echo json_encode(['success' => true, 'build' => $build]);
             break;
 
-        // CONTATOS
+        // CONTATOS - CORRIGIDO
         case 'deleteMessage':
             $stmt = $conn->prepare("DELETE FROM contatos WHERE id=?");
             $stmt->bind_param("i", $_POST['id']);
