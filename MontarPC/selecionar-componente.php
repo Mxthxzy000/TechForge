@@ -10,7 +10,7 @@ $componentMap = [
     'placa-video' => ['db' => 'placa de vídeo', 'session' => 'gpu', 'title' => 'Placa de Vídeo (GPU)', 'icon' => 'desktop-outline'],
     'placa-mae' => ['db' => 'placa-mãe', 'session' => 'placaMae', 'title' => 'Placa-Mãe', 'icon' => 'grid-outline'],
     'memoria' => ['db' => 'memória', 'session' => 'ram', 'title' => 'Memória RAM', 'icon' => 'albums-outline'],
-    'armazenamento' => ['db' => 'armazenamento', 'session' => 'armazenamento', 'title' => 'Armazenamento', 'icon' => 'save-outline'],
+    'armazenamento' => ['db' => 'ssd', 'session' => 'armazenamento', 'title' => 'Armazenamento', 'icon' => 'save-outline'], // CORRIGIDO: mudado de 'armazenamento' para 'ssd'
     'fonte' => ['db' => 'fonte', 'session' => 'fonte', 'title' => 'Fonte de Alimentação', 'icon' => 'flash-outline'],
     'gabinete' => ['db' => 'gabinete', 'session' => 'gabinete', 'title' => 'Gabinete', 'icon' => 'cube-outline'],
     'cooler' => ['db' => 'cooler', 'session' => 'cooler', 'title' => 'Cooler', 'icon' => 'snow-outline']
@@ -117,13 +117,22 @@ $educationalContent = [
 
 $content = $educationalContent[$tipo] ?? null;
 
-// Fetch products from database
+// Fetch products from database - CORRIGIDO: busca por SSD OU qualquer produto com armazenamento no tipo
 $dbType = $component['db'];
-$query = "SELECT * FROM produtos WHERE LOWER(tipoProduto) LIKE LOWER(?) AND quantidadeProduto > 0 ORDER BY vendasProduto DESC";
-$stmt = $conn->prepare($query);
-$searchTerm = "%{$dbType}%";
-$stmt->bind_param("s", $searchTerm);
-$stmt->execute();
+
+// Para armazenamento, buscar tanto SSD quanto produtos que contenham "armazenamento" no tipo
+if ($tipo === 'armazenamento') {
+    $query = "SELECT * FROM produtos WHERE (LOWER(tipoProduto) LIKE '%ssd%' OR LOWER(tipoProduto) LIKE '%armazenamento%' OR LOWER(tipoProduto) LIKE '%hd%') AND quantidadeProduto > 0 ORDER BY vendasProduto DESC";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+} else {
+    $query = "SELECT * FROM produtos WHERE LOWER(tipoProduto) LIKE LOWER(?) AND quantidadeProduto > 0 ORDER BY vendasProduto DESC";
+    $stmt = $conn->prepare($query);
+    $searchTerm = "%{$dbType}%";
+    $stmt->bind_param("s", $searchTerm);
+    $stmt->execute();
+}
+
 $result = $stmt->get_result();
 $products = $result->fetch_all(MYSQLI_ASSOC);
 ?>

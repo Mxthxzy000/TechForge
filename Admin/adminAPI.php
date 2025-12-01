@@ -180,13 +180,61 @@ try {
                 break;
             }
             
-            $stmt = $conn->prepare("DELETE FROM usuario WHERE idUsuario=?");
-            $stmt->bind_param("i", $_POST['idUsuario']);
+            $idUsuario = $_POST['idUsuario'];
             
-            if ($stmt->execute()) {
-                echo json_encode(['success' => true, 'message' => 'Usuário excluído com sucesso!']);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Erro ao excluir usuário: ' . $stmt->error]);
+            // Iniciar transação para garantir integridade
+            $conn->begin_transaction();
+            
+            try {
+                // 1. Buscar todos os endereços do usuário
+                $stmtEnderecos = $conn->prepare("SELECT idEndereco FROM endereco WHERE idUsuario = ?");
+                $stmtEnderecos->bind_param("i", $idUsuario);
+                $stmtEnderecos->execute();
+                $resultEnderecos = $stmtEnderecos->get_result();
+                $enderecos = [];
+                while ($row = $resultEnderecos->fetch_assoc()) {
+                    $enderecos[] = $row['idEndereco'];
+                }
+                
+                // 2. Deletar itens de pedidos relacionados aos pedidos do usuário
+                $conn->query("DELETE ip FROM item_pedido ip 
+                             INNER JOIN pedido p ON ip.idPedido = p.idPedido 
+                             WHERE p.idUsuario = $idUsuario");
+                
+                // 3. Deletar pedidos do usuário
+                $stmtPedidos = $conn->prepare("DELETE FROM pedido WHERE idUsuario = ?");
+                $stmtPedidos->bind_param("i", $idUsuario);
+                $stmtPedidos->execute();
+                
+                // 4. Deletar solicitações de montagem
+                $stmtMontagens = $conn->prepare("DELETE FROM servico_montagem WHERE idUsuario = ?");
+                $stmtMontagens->bind_param("i", $idUsuario);
+                $stmtMontagens->execute();
+                
+                // 5. Deletar endereços do usuário
+                $stmtDelEnderecos = $conn->prepare("DELETE FROM endereco WHERE idUsuario = ?");
+                $stmtDelEnderecos->bind_param("i", $idUsuario);
+                $stmtDelEnderecos->execute();
+                
+                // 6. Deletar itens do carrinho
+                $stmtCarrinho = $conn->prepare("DELETE FROM carrinho WHERE idUsuario = ?");
+                $stmtCarrinho->bind_param("i", $idUsuario);
+                $stmtCarrinho->execute();
+                
+                // 7. Finalmente, deletar o usuário
+                $stmtUsuario = $conn->prepare("DELETE FROM usuario WHERE idUsuario = ?");
+                $stmtUsuario->bind_param("i", $idUsuario);
+                $stmtUsuario->execute();
+                
+                // Commit da transação
+                $conn->commit();
+                
+                echo json_encode(['success' => true, 'message' => 'Usuário e todos os dados relacionados foram excluídos com sucesso!']);
+                
+            } catch (Exception $e) {
+                // Rollback em caso de erro
+                $conn->rollback();
+                echo json_encode(['success' => false, 'message' => 'Erro ao excluir usuário: ' . $e->getMessage()]);
             }
             break;
 
