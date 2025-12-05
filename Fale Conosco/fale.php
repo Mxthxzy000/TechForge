@@ -174,6 +174,50 @@ if (empty($_SESSION['idUsuario'])) {
         </div>
     </div>
 
+    <button class="chat-toggle-button" id="chatToggleButton">
+        <ion-icon name="chatbox-outline"></ion-icon>
+    </button>
+
+    <div class="chat-container" id="chatContainer" style="display: none;">
+        <div class="chat-header">
+            <button class="close-button" id="closeButton">
+               <ion-icon name="close-outline"></ion-icon>
+            </button>
+            <h1>ChatBot</h1>
+            <p>Techforge Assistant</p>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message assistant">
+                <div class="message-content">
+                    Bem-vindo ao suporte da TechForge! 🔧💻 Aqui você encontra as melhores soluções em hardware e acessórios de alta performance. Como posso te ajudar hoje? - ❓ Dúvidas sobre produtos - 🚚 Status ou rastreio do seu pedido - 🛠️ Garantia e suporte técnico - 🛒 Ajuda para realizar uma compra Estou aqui para garantir que você tenha a melhor experiência com a TechForge. Me diga, em que podemos ajudar?
+                    <div class="message-time">
+                        <?php echo date('H:i'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <form class="chat-input-form" id="chatForm">
+                <input type="text" class="chat-input" id="messageInput" placeholder="Digite sua mensagem..."
+                    autocomplete="off" required>
+                <button type="submit" class="send-button" id="sendButton">
+                    Enviar
+                </button>
+            </form>
+        </div>
+    </div>
+    <script src="../chatbot/script.js"></script>
+
     <footer>
         <div class="container-footer">
             <ul>
